@@ -24,6 +24,7 @@ Rashina Hoda - for being our project supervisor and organising us to start befor
 
 ## Flowchart
 ![Flowchart](http://i.imgur.com/qPdle7k.png)
+<!-- Deletion link http://imgur.com/delete/xSnezkHdYyRWu16 -->
 
 ## Changelog
 
