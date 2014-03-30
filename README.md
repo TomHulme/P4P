@@ -22,6 +22,9 @@ Rashina Hoda - Project Supervisor.
 ## Thanks
 Rashina Hoda - for being our project supervisor and organising us to start before anyone else. WE. WILL. FINISH!
 
+## Flowchart
+![Flowchart](http://i.imgur.com/qPdle7k.png)
+
 ## Changelog
 
 You can view the changes made to our project by using github's commit tracker!
