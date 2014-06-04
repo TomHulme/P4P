@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 
-namespace SurfaceApplication1
+namespace SharksWithLazsers
 {
     /// <summary>
     /// Interaction logic for App.xaml
