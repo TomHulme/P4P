@@ -11,7 +11,7 @@ User Manual, which outlines how to use this repository. | Our Wiki, which contai
 
 ## Ideas Page
 
-![This page is used to temporarily store ideas between meeting up.](https://github.com/TomHulme/P4P/wiki/Ideas)
+[This page is used to temporarily store ideas between meeting up.](https://github.com/TomHulme/P4P/wiki/Ideas)
 
 ## Project Information
 
