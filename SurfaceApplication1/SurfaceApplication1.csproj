@@ -59,6 +59,14 @@
     <Compile Include="Game.xaml.cs">
       <DependentUpon>Game.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GameLogic\FENConverter.cs" />
+    <Compile Include="GameLogic\FENParserError.cs" />
+    <Compile Include="GameLogic\Move.cs" />
+    <Compile Include="GameLogic\MoveGenerator.cs" />
+    <Compile Include="GameLogic\MoveInfo.cs" />
+    <Compile Include="GameLogic\PieceType.cs" />
+    <Compile Include="GameLogic\Position.cs" />
+    <Compile Include="GameLogic\CommandLineInterface.cs" />
     <Compile Include="Tutorial.xaml.cs">
       <DependentUpon>Tutorial.xaml</DependentUpon>
     </Compile>

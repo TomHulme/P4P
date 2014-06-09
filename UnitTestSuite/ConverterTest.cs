@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GameLogic;
 
-namespace ChessUnitTests
+namespace GameLogicUnitTests
 {
     [TestClass]
     public class ConverterTest

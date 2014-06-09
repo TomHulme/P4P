@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>c0d299d9-6a77-4514-9359-6dda652b6d92</ProjectGuid>
+    <ProjectGuid>{73FF251F-D286-4CBA-AE93-380950E2DC11}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UnitTestSuite</RootNamespace>
@@ -50,8 +50,16 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="ConverterTest.cs" />
+    <Compile Include="PieceTest.cs" />
+    <Compile Include="PositionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SurfaceApplication1\SurfaceApplication1.csproj">
+      <Project>{e8b44420-d614-4d66-8e44-eac415da9fd7}</Project>
+      <Name>SurfaceApplication1</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
