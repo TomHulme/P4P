@@ -75,7 +75,7 @@ namespace GameLogic
                     case 'r': setPieceSafely(position, file, rank, PieceType.r); file++; break;
                     case 'q': setPieceSafely(position, file, rank, PieceType.q); file++; break;
                     case 'k': setPieceSafely(position, file, rank, PieceType.k); file++; break;
-                    default: throw new FENParserError("Invalid Piece", position);
+                    default: throw new ParserError("Invalid Piece", position);
                 }
             }
 
@@ -88,13 +88,13 @@ namespace GameLogic
                 {
                     case 'w': whiteToMove = true; break;
                     case 'b': whiteToMove = false; break;
-                    default: throw new FENParserError("Invalid Active Colour", position);
+                    default: throw new ParserError("Invalid Active Colour", position);
                 }
                 position.setWhiteMove(whiteToMove);
             }
             else
             {
-                throw new FENParserError("Invalid Active Colour", position);
+                throw new ParserError("Invalid Active Colour", position);
             }
 
             //Castling Rights
@@ -121,7 +121,7 @@ namespace GameLogic
                         case '-':
                             break;
                         default:
-                            throw new FENParserError("Invalid castling flags", position);
+                            throw new ParserError("Invalid castling flags", position);
                     }
 
                 }
@@ -137,7 +137,7 @@ namespace GameLogic
                 {
                     if (epString.Length < 2)
                     {
-                        throw new FENParserError("Invalid En Passent Square", position);
+                        throw new ParserError("Invalid En Passent Square", position);
                     }
                     position.setEpSquare(getSquare(epString));
                 }
@@ -177,11 +177,11 @@ namespace GameLogic
             }
             if (numPieces[(int)PieceType.K] != 1)
             {
-                throw new FENParserError("Too many white kings", position);
+                throw new ParserError("Too many white kings", position);
             }
             if (numPieces[(int)PieceType.k] != 1)
             {
-                throw new FENParserError("Too many black kings", position);
+                throw new ParserError("Too many black kings", position);
             }
 
             //White must not have too many pieces
@@ -192,7 +192,7 @@ namespace GameLogic
             maxWPawns -= Math.Max(0, numPieces[(int)PieceType.Q] - 1);
             if (numPieces[(int)PieceType.P] > maxWPawns)
             {
-                throw new FENParserError("Too many white pieces", position);
+                throw new ParserError("Too many white pieces", position);
             }
 
             //Black must not have too many pieces
@@ -207,7 +207,7 @@ namespace GameLogic
             pos2.setWhiteMove(!position.whiteMove);
             if (MoveGenerator.inCheck(pos2))
             {
-                throw new FENParserError("King capture possible", position);
+                throw new ParserError("King capture possible", position);
             }
 
             fixupEPSquare(position);
@@ -302,7 +302,7 @@ namespace GameLogic
                             case PieceType.b:   feNotation.Append('b'); break;
                             case PieceType.n:   feNotation.Append('n'); break;
                             case PieceType.p:   feNotation.Append('p'); break;
-                            default: throw new FENParserError("Error creating FEN String");
+                            default: throw new ParserError("Error creating FEN String");
                         }
                     }
                 }
@@ -375,13 +375,13 @@ namespace GameLogic
          */
         private static void setPieceSafely(Position position, int file, int rank, PieceType piece)
         {
-            if (rank < 0) throw new FENParserError("Too many ranks");
-            if (file > 7) throw new FENParserError("Too many columns");
+            if (rank < 0) throw new ParserError("Too many ranks");
+            if (file > 7) throw new ParserError("Too many columns");
             if ((piece == PieceType.P) || (piece == PieceType.p))
             {
                 if ((rank == 0) || (rank == 7))
                 {
-                    throw new FENParserError("Pawn of first or last rank");
+                    throw new ParserError("Pawn of first or last rank");
                 }
             }
             position.setPiece(Position.getSquare(file, rank), piece);
