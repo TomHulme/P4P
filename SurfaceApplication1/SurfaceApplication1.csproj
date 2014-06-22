@@ -8,8 +8,8 @@
     <ProjectGuid>{E8B44420-D614-4D66-8E44-EAC415DA9FD7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharksWithLazsers</RootNamespace>
-    <AssemblyName>SharksWithLazsers</AssemblyName>
+    <RootNamespace>Part4Chess</RootNamespace>
+    <AssemblyName>Chess</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -59,14 +59,15 @@
     <Compile Include="Game.xaml.cs">
       <DependentUpon>Game.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GameLogic\CommandLineInterface.cs" />
     <Compile Include="GameLogic\FENConverter.cs" />
-    <Compile Include="GameLogic\FENParserError.cs" />
     <Compile Include="GameLogic\Move.cs" />
     <Compile Include="GameLogic\MoveGenerator.cs" />
-    <Compile Include="GameLogic\MoveInfo.cs" />
+    <Compile Include="GameLogic\MoveParser.cs" />
+    <Compile Include="GameLogic\ParserError.cs" />
     <Compile Include="GameLogic\PieceType.cs" />
     <Compile Include="GameLogic\Position.cs" />
-    <Compile Include="GameLogic\CommandLineInterface.cs" />
+    <Compile Include="GameLogic\UnMakeInfo.cs" />
     <Compile Include="Tutorial.xaml.cs">
       <DependentUpon>Tutorial.xaml</DependentUpon>
     </Compile>
@@ -124,6 +125,7 @@
     </EmbeddedResource>
     <Content Include="SurfaceApplication1.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

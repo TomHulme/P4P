@@ -216,6 +216,146 @@ namespace GameLogic
         }
 
         /*
+         * Convert a piece placement string to a position object
+         * This does not have to adhere to the strict rules of how
+         * many pieces a player must have. i.e.(player may have no king)
+         * This is primarily used for testing purposes, as well as tutorial
+         * scenarios.
+         */
+        public static Position convertPiecePlacementToPosition(String fen)
+        {
+            Position position = new Position();
+            String[] terms = fen.Split(' ');
+            if (terms.Length < 2)
+            {
+                System.Console.WriteLine("Too few terms");
+            }
+            for (int i = 0; i < terms.Length; i++)
+            {
+                terms[i] = terms[i].Trim();
+            }
+
+            //Piece placement
+            int rank = 7;
+            int file = 0;
+            for (int i = 0; i < terms[0].Length; i++)
+            {
+                char c = (char)terms[0].ToCharArray().GetValue(i);
+                switch (c)
+                {
+                    case '1': file += 1; break;
+                    case '2': file += 2; break;
+                    case '3': file += 3; break;
+                    case '4': file += 4; break;
+                    case '5': file += 5; break;
+                    case '6': file += 6; break;
+                    case '7': file += 7; break;
+                    case '8': file += 8; break;
+                    case '/': rank--; file = 0; break;
+                    case 'P': setPieceSafely(position, file, rank, PieceType.P); file++; break;
+                    case 'N': setPieceSafely(position, file, rank, PieceType.N); file++; break;
+                    case 'B': setPieceSafely(position, file, rank, PieceType.B); file++; break;
+                    case 'R': setPieceSafely(position, file, rank, PieceType.R); file++; break;
+                    case 'Q': setPieceSafely(position, file, rank, PieceType.Q); file++; break;
+                    case 'K': setPieceSafely(position, file, rank, PieceType.K); file++; break;
+                    case 'p': setPieceSafely(position, file, rank, PieceType.p); file++; break;
+                    case 'n': setPieceSafely(position, file, rank, PieceType.n); file++; break;
+                    case 'b': setPieceSafely(position, file, rank, PieceType.b); file++; break;
+                    case 'r': setPieceSafely(position, file, rank, PieceType.r); file++; break;
+                    case 'q': setPieceSafely(position, file, rank, PieceType.q); file++; break;
+                    case 'k': setPieceSafely(position, file, rank, PieceType.k); file++; break;
+                    default: throw new ParserError("Invalid Piece", position);
+                }
+            }
+
+            //Active Colour
+            if (terms[1].Length > 0)
+            {
+                Boolean whiteToMove;
+                char c = (char)terms[1].ToCharArray().GetValue(0);
+                switch (c)
+                {
+                    case 'w': whiteToMove = true; break;
+                    case 'b': whiteToMove = false; break;
+                    default: throw new ParserError("Invalid Active Colour", position);
+                }
+                position.setWhiteMove(whiteToMove);
+            }
+            else
+            {
+                throw new ParserError("Invalid Active Colour", position);
+            }
+
+            //Castling Rights
+            int castleMask = 0;
+            if (terms.Length > 2)
+            {
+                for (int i = 0; i < terms[2].Length; i++)
+                {
+                    char c = (char)terms[2].ToCharArray().GetValue(i);
+                    switch (c)
+                    {
+                        case 'K':
+                            castleMask |= (1 << Position.H1_CASTLE);
+                            break;
+                        case 'Q':
+                            castleMask |= (1 << Position.A1_CASTLE);
+                            break;
+                        case 'k':
+                            castleMask |= (1 << Position.H8_CASTLE);
+                            break;
+                        case 'q':
+                            castleMask |= (1 << Position.A8_CASTLE);
+                            break;
+                        case '-':
+                            break;
+                        default:
+                            throw new ParserError("Invalid castling flags", position);
+                    }
+
+                }
+            }
+            position.setCastleMask(castleMask);
+            removeInvalidCastleFlags(position);
+
+            //En Passant Target Square
+            if (terms.Length > 3)
+            {
+                String epString = terms[3];
+                if (!epString.Equals("-"))
+                {
+                    if (epString.Length < 2)
+                    {
+                        throw new ParserError("Invalid En Passent Square", position);
+                    }
+                    position.setEpSquare(getSquare(epString));
+                }
+            }
+
+            try
+            {
+                //Halfmove Clock
+                if (terms.Length > 4)
+                {
+                    position.halfMoveClock = Convert.ToInt32(terms[4]);
+                }
+                //Full Move Counter
+                if (terms.Length > 5)
+                {
+                    position.fullMoveCounter = Convert.ToInt32(terms[5]);
+                }
+            }
+            catch (ArgumentException ae)
+            {
+                //Ignore errors here since fields are optional
+            }
+
+            fixupEPSquare(position);
+
+            return position;
+        }
+
+        /*
          * Remove castling flags that arent valid
          */
         private static void removeInvalidCastleFlags(Position position)

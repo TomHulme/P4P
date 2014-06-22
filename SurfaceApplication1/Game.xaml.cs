@@ -16,7 +16,7 @@ using Microsoft.Surface.Presentation;
 using Microsoft.Surface.Presentation.Controls;
 using Microsoft.Surface.Presentation.Input;
 
-namespace SharksWithLazsers
+namespace Chess
 {
     /// <summary>
     /// Interaction logic for SurfaceWindow2.xaml

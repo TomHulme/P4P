@@ -77,5 +77,13 @@ namespace GameLogic
         {
             return base.GetHashCode();
         }
+
+        /*
+         * Returns a string representation of a move
+         */
+        public override string ToString()
+        {
+            return MoveParser.moveObjectToString(this);
+        }
     }
 }

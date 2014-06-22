@@ -19,7 +19,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
-namespace SharksWithLazsers
+namespace Chess
 {
     /// <summary>
     /// Interaction logic for SurfaceWindow1.xaml
@@ -173,7 +173,7 @@ namespace SharksWithLazsers
                 myProcess.StartInfo.UseShellExecute = false;
                 // You can start any process, HelloWorld is a do-nothing example.
                 /* CHANGE THIS */
-                myProcess.StartInfo.FileName = "D:/stockfish-dd-32.exe";
+                myProcess.StartInfo.FileName = "J:/GitHub Projects/P4P/SurfaceApplication1/Resources/stockfish-dd-32.exe";
                 myProcess.StartInfo.CreateNoWindow = true;
                 myProcess.StartInfo.RedirectStandardInput = true;
                 myProcess.StartInfo.RedirectStandardOutput = true;
@@ -187,7 +187,6 @@ namespace SharksWithLazsers
                 // on the desktop, it must terminate itself or you can do it programmatically 
                 // from this application using the Kill method.
                 myStreamWriter.WriteLine("position fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-
             }
             catch (Exception ex)
             {
