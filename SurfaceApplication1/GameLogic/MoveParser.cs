@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GameLogic
 {
-    class MoveParser
+    public class MoveParser
     {
         private class MoveComposition
         {
@@ -310,6 +310,37 @@ namespace GameLogic
         }
 
         /*
+         * Convert a move object to UCI string format
+         */
+        public static String moveObjectToString(Move move)
+        {
+            String moveString = squareToString(move.origin);
+            moveString += (squareToString(move.destination));
+            switch (move.promoteTo)
+            {
+                case PieceType.Q:
+                case PieceType.q:
+                    moveString += "q";
+                    break;
+                case PieceType.R:
+                case PieceType.r:
+                    moveString += "r";
+                    break;
+                case PieceType.B:
+                case PieceType.b:
+                    moveString += "b";
+                    break;
+                case PieceType.N:
+                case PieceType.n:
+                    moveString += "n";
+                    break;
+                default:
+                    break;
+            }
+            return moveString;
+        }
+
+        /*
          * Returns true if a move is valid for a given position
          */
         public static Boolean isMoveValid(Move move, Position position)
@@ -378,6 +409,19 @@ namespace GameLogic
                 case 'p': return PieceType.p;
                 default: return PieceType.Empty;
             }
+        }
+
+        /*
+         * Return a string representing a square number
+         */
+        public static String squareToString(int square)
+        {
+            StringBuilder squareString = new StringBuilder();
+            int file = Position.getFile(square);
+            int rank = Position.getRank(square);
+            squareString.Append((char)(file + 'a'));
+            squareString.Append((char)(rank + '1'));
+            return squareString.ToString();
         }
     }
 }
