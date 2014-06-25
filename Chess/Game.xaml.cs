@@ -24,16 +24,59 @@ namespace Chess
     /// </summary>
     public partial class Game : SurfaceWindow
     {
+        Canvas board;
         /// <summary>
         /// Default constructor.
         /// </summary>
         public Game()
         {
             InitializeComponent();
-            Canvas board = drawBoard(true);
+            board = drawBoard(false);
             game.Content = board;
+            drawPieces(false);
+            arrangePieces(false);
+            board.UpdateLayout();
             // Add handlers for window availability events
             AddWindowAvailabilityHandlers();
+        }
+
+        private void arrangePieces(bool p)
+        {
+            foreach (UIElement piece in board.Children)
+            {
+                if (piece.GetValue(TextBlock.TextProperty).ToString().Length > 0)
+                {
+                    switch (piece.GetValue(TextBlock.TextProperty).ToString())
+                    {
+                        case "a8":
+                            ((Canvas)piece).VerticalAlignment = System.Windows.VerticalAlignment.Top;
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void drawPieces(bool flipped)
+        {
+            string[] pieces = { "black_king", "black_queen", "black_rook", "black_bishop", "black_knight", "black_pawn", "white_king", "white_queen", "white_rook", "white_bishop", "white_knight", "white_pawn" };
+            foreach(String piece in pieces.AsEnumerable()){
+                // Create Image Element
+                Image myImage = new Image();
+                myImage.Width = 100;
+
+                // Create source
+                BitmapImage myBitmapImage = new BitmapImage();
+
+                // BitmapImage.UriSource must be in a BeginInit/EndInit block
+                myBitmapImage.BeginInit();
+                myBitmapImage.UriSource = new Uri(@"C:\Users\Tom\Documents\GitHub\P4P\Chess\Images\" + piece + ".jpg");
+                myBitmapImage.DecodePixelWidth = 100;
+                if(flipped)myBitmapImage.Rotation = Rotation.Rotate90;
+                myBitmapImage.EndInit();
+                myImage.Source = myBitmapImage;
+                board.Children.Add(myImage);
+                myImage.SetValue(TextBlock.TextProperty, piece);
+            }
         }
 
         private Canvas drawBoard(bool flipped)
@@ -46,6 +89,7 @@ namespace Chess
             {
                 squares[i*8] = new Canvas();
                 squares[i * 8].Uid = getSquareName(i, 0, flipped);
+                squares[i * 8].SetValue(TextBlock.TextProperty, getSquareName(i, 0, flipped));
                 squares[i * 8].Width = 75;
                 squares[i * 8].Height = 75;
                 squares[i * 8].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
@@ -56,6 +100,7 @@ namespace Chess
                 {
                     squares[i * 8 + j] = new Canvas();
                     squares[i * 8 + j].Uid = getSquareName(i, j, flipped);
+                    squares[i * 8 + j].SetValue(TextBlock.TextProperty,getSquareName(i, j, flipped));
                     squares[i * 8 + j].Width = 75;
                     squares[i * 8 + j].Height = 75;
                     squares[i * 8 + j].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
