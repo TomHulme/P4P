@@ -178,7 +178,7 @@ namespace Chess
                 myProcess.StartInfo.UseShellExecute = false;
                 // You can start any process, HelloWorld is a do-nothing example.
                 // CHANGE THIS 
-                myProcess.StartInfo.FileName = "C:/stockfish-dd-32.exe";
+                myProcess.StartInfo.FileName = App.getPath() + @"Resources\stockfish-dd-32.exe";
                 myProcess.StartInfo.CreateNoWindow = true;
                 myProcess.StartInfo.RedirectStandardInput = true;
                 myProcess.StartInfo.RedirectStandardOutput = true;
