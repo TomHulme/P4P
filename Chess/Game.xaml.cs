@@ -31,10 +31,10 @@ namespace Chess
         public Game()
         {
             InitializeComponent();
-            board = drawBoard(false);
+            board = drawBoard(true);
             game.Content = board;
-            drawPieces(false);
-            arrangePieces(false);
+            drawPieces(true);
+            arrangePieces(true);
             board.UpdateLayout();
             // Add handlers for window availability events
             AddWindowAvailabilityHandlers();
@@ -60,20 +60,22 @@ namespace Chess
         {
             string[] pieces = { "black_king", "black_queen", "black_rook", "black_bishop", "black_knight", "black_pawn", "white_king", "white_queen", "white_rook", "white_bishop", "white_knight", "white_pawn" };
             foreach(String piece in pieces.AsEnumerable()){
+                // From site
                 // Create Image Element
                 Image myImage = new Image();
-                myImage.Width = 100;
+                myImage.Width = 75;
 
                 // Create source
                 BitmapImage myBitmapImage = new BitmapImage();
 
                 // BitmapImage.UriSource must be in a BeginInit/EndInit block
                 myBitmapImage.BeginInit();
-                myBitmapImage.UriSource = new Uri(@"C:\Users\Tom\Documents\GitHub\P4P\Chess\Images\" + piece + ".jpg");
-                myBitmapImage.DecodePixelWidth = 100;
+                myBitmapImage.UriSource = new Uri(App.getPath() + @"Images\" + piece + ".jpg");
+                myBitmapImage.DecodePixelWidth = 75;
                 if(flipped)myBitmapImage.Rotation = Rotation.Rotate90;
                 myBitmapImage.EndInit();
                 myImage.Source = myBitmapImage;
+                //myImage.
                 board.Children.Add(myImage);
                 myImage.SetValue(TextBlock.TextProperty, piece);
             }
