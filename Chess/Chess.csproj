@@ -60,6 +60,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Board.cs" />
     <Compile Include="Game.xaml.cs">
       <DependentUpon>Game.xaml</DependentUpon>
     </Compile>
@@ -74,6 +75,7 @@
     <Compile Include="MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Square.cs" />
     <Compile Include="Tutorial.xaml.cs">
       <DependentUpon>Tutorial.xaml</DependentUpon>
     </Compile>

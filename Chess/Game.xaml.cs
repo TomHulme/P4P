@@ -16,6 +16,7 @@ using Microsoft.Surface.Presentation;
 using Microsoft.Surface.Presentation.Controls;
 using Microsoft.Surface.Presentation.Input;
 using System.Windows.Controls.Primitives;
+using GameLogic;
 
 namespace Chess
 {
@@ -24,192 +25,24 @@ namespace Chess
     /// </summary>
     public partial class Game : SurfaceWindow
     {
-        Canvas board;
+        public static Position position = new Position(FENConverter.convertFENToPosition(FENConverter.startPosition));
+        Board board = new Board(false, position);
         /// <summary>
         /// Default constructor.
         /// </summary>
         public Game()
         {
             InitializeComponent();
-            board = drawBoard(true);
+            board.setup(position);
             game.Content = board;
-            drawPieces(true);
-            arrangePieces(true);
             board.UpdateLayout();
+            for (int i = 0; i < 64; i++)
+            {
+                Console.Write(position.getPiece(i) + " ");
+                if ((i+1) % 8 == 0) Console.WriteLine();
+            }
             // Add handlers for window availability events
             AddWindowAvailabilityHandlers();
-        }
-
-        private void arrangePieces(bool p)
-        {
-            foreach (UIElement piece in board.Children)
-            {
-                if (piece.GetValue(TextBlock.TextProperty).ToString().Length > 0)
-                {
-                    switch (piece.GetValue(TextBlock.TextProperty).ToString())
-                    {
-                        case "a8":
-                            ((Canvas)piece).VerticalAlignment = System.Windows.VerticalAlignment.Top;
-                            break;
-                    }
-                }
-            }
-        }
-
-        private void drawPieces(bool flipped)
-        {
-            string[] pieces = { "black_king", "black_queen", "black_rook", "black_bishop", "black_knight", "black_pawn", "white_king", "white_queen", "white_rook", "white_bishop", "white_knight", "white_pawn" };
-            foreach(String piece in pieces.AsEnumerable()){
-                // From site
-                // Create Image Element
-                Image myImage = new Image();
-                myImage.Width = 75;
-
-                // Create source
-                BitmapImage myBitmapImage = new BitmapImage();
-
-                // BitmapImage.UriSource must be in a BeginInit/EndInit block
-                myBitmapImage.BeginInit();
-                myBitmapImage.UriSource = new Uri(App.getPath() + @"Images\" + piece + ".jpg");
-                myBitmapImage.DecodePixelWidth = 75;
-                if(flipped)myBitmapImage.Rotation = Rotation.Rotate90;
-                myBitmapImage.EndInit();
-                myImage.Source = myBitmapImage;
-                //myImage.
-                board.Children.Add(myImage);
-                myImage.SetValue(TextBlock.TextProperty, piece);
-            }
-        }
-
-        private Canvas drawBoard(bool flipped)
-        {
-            Canvas board = new Canvas();
-            board.Width = 600;
-            board.Height = 600;
-            Canvas[] squares = new Canvas[64];
-            for (int i = 0; i < 8; i++)
-            {
-                squares[i*8] = new Canvas();
-                squares[i * 8].Uid = getSquareName(i, 0, flipped);
-                squares[i * 8].SetValue(TextBlock.TextProperty, getSquareName(i, 0, flipped));
-                squares[i * 8].Width = 75;
-                squares[i * 8].Height = 75;
-                squares[i * 8].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
-                board.Children.Add(squares[i * 8]);
-                Canvas.SetTop(squares[i * 8], i*75);
-                Canvas.SetLeft(squares[i * 8], 0);
-                for (int j = 1; j < 8; j++)
-                {
-                    squares[i * 8 + j] = new Canvas();
-                    squares[i * 8 + j].Uid = getSquareName(i, j, flipped);
-                    squares[i * 8 + j].SetValue(TextBlock.TextProperty,getSquareName(i, j, flipped));
-                    squares[i * 8 + j].Width = 75;
-                    squares[i * 8 + j].Height = 75;
-                    squares[i * 8 + j].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
-                    board.Children.Add(squares[i * 8 + j]);
-                    Canvas.SetTop(squares[i * 8 + j], i*75);
-                    Canvas.SetLeft(squares[i * 8 + j], j*75);
-                }
-            }
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    if (flipped)
-                    {
-                        if ((i+j) % 2 == 0) { squares[i * 8 + j].Background = Brushes.Black; }
-                        else { squares[i * 8 + j].Background = Brushes.White; }
-                    }
-                    else
-                    {
-                        if ((i+j) % 2 == 0) { squares[i * 8 + j].Background = Brushes.White; }
-                        else { squares[i * 8 + j].Background = Brushes.Black; }
-                    }
-                }
-            }
-            return board;
-        }
-
-        private string getSquareName(int i, int j, bool flipped)
-        {
-            int row, col;
-            if (flipped)
-            {
-                row = i;
-                col = 7-j;
-            }
-            else
-            {
-                row = j;
-                col = i;
-            }
-
-            string name = "";
-
-            switch (row)
-            {
-                case 0:
-                    name = string.Concat(name,"a");
-                    break;
-                case 1:
-                    name = string.Concat(name,"b");
-                    break;
-                case 2:
-                    name = string.Concat(name,"c");
-                    break;
-                case 3:
-                    name = string.Concat(name,"d");
-                    break;
-                case 4:
-                    name = string.Concat(name,"e");
-                    break;
-                case 5:
-                    name = string.Concat(name,"f");
-                    break;
-                case 6:
-                    name = string.Concat(name,"g");
-                    break;
-                case 7:
-                    name = string.Concat(name,"h");
-                    break;
-                default:
-                    break;
-            }
-            switch (col)
-            {
-                case 0:
-                    name = string.Concat(name,"8");
-                    break;
-                case 1:
-                    name = string.Concat(name,"7");
-                    break;
-                case 2:
-                    name = string.Concat(name,"6");
-                    break;
-                case 3:
-                    name = string.Concat(name,"5");
-                    break;
-                case 4:
-                    name = string.Concat(name,"4");
-                    break;
-                case 5:
-                    name = string.Concat(name,"3");
-                    break;
-                case 6:
-                    name = string.Concat(name,"2");
-                    break;
-                case 7:
-                    name = string.Concat(name,"1");
-                    break;
-                default:
-                    break;
-            }
-            return name;
-        }
-
-        private void TappedSquare(object sender, RoutedEventArgs e)
-        {
-            Console.WriteLine(((Canvas)sender).Uid);
         }
 
         /// <summary>

@@ -12,6 +12,7 @@ namespace Chess
     /// </summary>
     public partial class App : Application
     {
+
         //public MainMenu mainmenu = new MainMenu();
         //public Game game = new Game();
         public static string getPath(){
