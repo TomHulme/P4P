@@ -26,16 +26,19 @@ namespace Chess
     public partial class Game : SurfaceWindow
     {
         public static Position position = new Position(FENConverter.convertFENToPosition(FENConverter.startPosition));
-        Board board = new Board(false, position);
+        //Board board = new Board(false, position);
+
+        GameScreen gameScreen = new GameScreen(false, position);
+
         /// <summary>
         /// Default constructor.
         /// </summary>
         public Game()
         {
             InitializeComponent();
-            board.setup(position);
-            game.Content = board;
-            board.UpdateLayout();
+            //board.setup();
+
+            game.Content = gameScreen;
             // Add handlers for window availability events
             AddWindowAvailabilityHandlers();
         }

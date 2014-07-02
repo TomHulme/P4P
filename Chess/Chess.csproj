@@ -72,6 +72,7 @@
     <Compile Include="GameLogic\PieceType.cs" />
     <Compile Include="GameLogic\Position.cs" />
     <Compile Include="GameLogic\CommandLineInterface.cs" />
+    <Compile Include="GameScreen.cs" />
     <Compile Include="MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
     </Compile>
