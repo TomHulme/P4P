@@ -36,11 +36,6 @@ namespace Chess
             board.setup(position);
             game.Content = board;
             board.UpdateLayout();
-            for (int i = 0; i < 64; i++)
-            {
-                Console.Write(position.getPiece(i) + " ");
-                if ((i+1) % 8 == 0) Console.WriteLine();
-            }
             // Add handlers for window availability events
             AddWindowAvailabilityHandlers();
         }

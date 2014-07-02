@@ -19,11 +19,13 @@ namespace Chess
         public bool flipped;
         private Position position;
         private UnMakeInfo unmake = new UnMakeInfo();
+        private MoveGenerator movegen;
         
         public Board(bool b, Position pos)
         {
             this.flipped = b;
             this.position = pos;
+            this.movegen = new MoveGenerator();
         }
 
 
@@ -82,12 +84,13 @@ namespace Chess
 
         private void addPiece(Square sq, PieceType p)
         {
-            
+            this.drawPiece(this.flipped, p, sq);
         }
 
         private void removePiece(Square sq)
         {
-            
+            sq.Children.Clear();
+            sq.setPiece(PieceType.Empty);
         }
 
         private void drawPieces(bool flipped)
@@ -160,7 +163,11 @@ namespace Chess
                     pieceString = "white_pawn";
                     break;
             }
-            if (pieceString.Length == 0) return;
+            if (pieceString.Length == 0) 
+            {
+                sq.setPiece(PieceType.Empty);
+                return;
+            }
             // From site
             // Create Image Element
             Image myImage = new Image();
@@ -179,6 +186,7 @@ namespace Chess
             myImage.IsHitTestVisible = false;
             //myImage.
             sq.Children.Add(myImage);
+            sq.setPiece(piece);
             myImage.SetValue(TextBlock.TextProperty, pieceString);
             
         }
@@ -328,12 +336,48 @@ namespace Chess
             moveQueue.Enqueue(tapped);
             if (this.oneClick)
             {
-                Move current = new Move(moveQueue.Dequeue().getSquareNumber(), moveQueue.Dequeue().getSquareNumber(), tapped.getPiece());
+                Square orig = moveQueue.Dequeue();
+                Square dest = moveQueue.Dequeue();
+                
+                // Debug prints origin and destination piece types contained in squares
+                Console.WriteLine("Origin: " + orig.getPiece());
+                Console.WriteLine("Destination: " + dest.getPiece());
+                
+                PieceType promoteTo = ((dest.getSquareNumber() <= 7 | dest.getSquareNumber() > 55) & (orig.getPiece().Equals(PieceType.p) | orig.getPiece().Equals(PieceType.P))) ? getPromotion(orig.getPiece()) : PieceType.Empty;
+                
+                // Debug prints promotion piece
+                Console.WriteLine("Promote To: " + promoteTo);
+                Move current = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promoteTo);
                 if (MoveCheck(current))
                 {
                     Console.WriteLine("AN ACTUAL VALID MOVE");
                     this.position.makeMove(current, this.unmake);
-                    this.movePiece(current.origin, current.destination);
+                    if (current.promoteTo != PieceType.Empty)
+                    {
+                        this.removePiece(orig);
+                        this.addPiece(dest, current.promoteTo);
+                    }
+                    else
+                    {
+                        this.movePiece(current.origin, current.destination);
+                    }
+                    if (movegen.legalMoves(this.position).Count == 0)
+                    {
+                        Console.WriteLine("CHECKMATE!" + ((this.position.whiteMove) ? "\nBlack wins!" : "\nWhite wins!"));
+                        Canvas winScreen = new Canvas();
+                        winScreen.Width = 600;
+                        winScreen.Height = 300;
+                        winScreen.Background = Brushes.GreenYellow;
+                        TextBlock winText = new TextBlock();
+                        winText.Text = "CHECKMATE!" + ((this.position.whiteMove) ? "\nBlack wins!" : "\nWhite wins!");
+                        winText.FontSize = 80;
+                        winText.TextAlignment = TextAlignment.Center;
+                        winText.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                        winText.Foreground = ((this.position.whiteMove) ? Brushes.Black : Brushes.White);
+                        winScreen.Children.Add(winText);
+                        winScreen.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                        this.Children.Add(winScreen);
+                    }
                 }
                 else
                 {
@@ -350,6 +394,16 @@ namespace Chess
             }
         }
 
+        private PieceType getPromotion(PieceType piece)
+        {
+            if (piece.Equals(PieceType.p)){
+                return PieceType.q;
+            }else{
+                return PieceType.Q;
+            }
+            //return PieceType.Empty;
+        }
+
         internal void setup(Position pos)
         {
             this.drawBoard(this.flipped);
@@ -361,12 +415,20 @@ namespace Chess
 
         private bool MoveCheck(Move m)
         {
-            return (new MoveGenerator().legalMoves(new Position(FENConverter.convertFENToPosition(FENConverter.startPosition)))).Contains(m);
+            // Prints move tested
+            //Console.WriteLine("Testing move from " + m.origin + " to " + m.destination + " with promoteTo " + m.promoteTo);
+            return (movegen.legalMoves(this.position).Contains(m));
         }
 
         private void printNextTurn()
         {
             Console.WriteLine(this.position.whiteMove ? "White to move." : "Black to move.");
+
+            // Prints legal moves.
+            Console.WriteLine("Legal moves are:");
+            foreach(Move x in new MoveGenerator().legalMoves(this.position)){
+                Console.WriteLine("\t" + x.origin + " to " + x.destination + " with promoteTo " + x.promoteTo);
+            }
         }
     }
 }

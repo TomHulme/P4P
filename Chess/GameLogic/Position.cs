@@ -79,6 +79,11 @@ namespace GameLogic
          */
         public PieceType getPiece(int square)
         {
+            if (square > 63 | square < 0)
+            {
+                Console.WriteLine("SQUARE " + square + " DOESNT EXIST!");
+                return pieceLayout[0];
+            }
             return pieceLayout[square];
         }
 
