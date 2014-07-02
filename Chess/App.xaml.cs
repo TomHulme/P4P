@@ -14,5 +14,12 @@ namespace Chess
     {
         //public MainMenu mainmenu = new MainMenu();
         //public Game game = new Game();
+        public static String getPath()
+        {
+            String PATH = System.Reflection.Assembly.GetAssembly(typeof(Game)).Location;
+            int index = PATH.LastIndexOf("bin\\Debug\\Chess.exe");
+            String p = PATH.Remove(index);
+            return p;
+        }
     }
 }
