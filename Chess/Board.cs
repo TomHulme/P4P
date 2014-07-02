@@ -20,6 +20,7 @@ namespace Chess
         private Position position;
         private UnMakeInfo unmake = new UnMakeInfo();
         private MoveGenerator movegen;
+        public event EventHandler<BoardEvent> RaiseBoardEvent;
         
         public Board(bool b, Position pos)
         {
@@ -352,6 +353,7 @@ namespace Chess
                 {
                     Console.WriteLine("AN ACTUAL VALID MOVE");
                     this.position.makeMove(current, this.unmake);
+                    OnRaiseBoardEvent(new BoardEvent(current));
                     if (current.promoteTo != PieceType.Empty)
                     {
                         this.removePiece(orig);
@@ -404,10 +406,10 @@ namespace Chess
             //return PieceType.Empty;
         }
 
-        internal void setup(Position pos)
+        internal void setup()
         {
             this.drawBoard(this.flipped);
-            this.placePieces(pos);
+            this.placePieces(this.position);
             this.printNextTurn();
             //this.drawPieces(this.flipped);
             //this.arrangePieces(this.flipped);
@@ -430,5 +432,34 @@ namespace Chess
                 Console.WriteLine("\t" + x.origin + " to " + x.destination + " with promoteTo " + x.promoteTo);
             }
         }
+
+        // Event handling best practice from http://msdn.microsoft.com/en-us/library/w369ty8x.aspx
+        protected virtual void OnRaiseBoardEvent(BoardEvent e)
+        {
+            // Make a temporary copy of the event to avoid possibility of 
+            // a race condition if the last subscriber unsubscribes 
+            // immediately after the null check and before the event is raised.
+            EventHandler<BoardEvent> handler = RaiseBoardEvent;
+
+            // Event will be null if there are no subscribers 
+            if (handler != null)
+            {
+                // Use the () operator to raise the event.
+                handler(this, e);
+            }
+        }
+    }
+}
+
+public class BoardEvent : EventArgs
+{
+    public BoardEvent(Move m)
+    {
+        move = m;
+    }
+    private Move move;
+    public Move Move
+    {
+        get { return move; }
     }
 }
