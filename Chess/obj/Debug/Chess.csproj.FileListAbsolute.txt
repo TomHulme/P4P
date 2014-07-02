@@ -64,3 +64,25 @@ H:\Desktop\GitHub\P4P\Chess\obj\Debug\Chess_MarkupCompile.cache
 H:\Desktop\GitHub\P4P\Chess\obj\Debug\Chess.g.resources
 H:\Desktop\GitHub\P4P\Chess\obj\Debug\Chess.Properties.Resources.resources
 H:\Desktop\GitHub\P4P\Chess\obj\Debug\Chess.csproj.GenerateResource.Cache
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\Chess.exe
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\Chess.pdb
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\Chess.csprojResolveAssemblyReference.cache
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\Game.baml
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\MainMenu.baml
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\SurfaceWindow1.baml
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\Tutorial.baml
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\App.baml
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\Game.g.cs
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\MainMenu.g.cs
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\SurfaceWindow1.g.cs
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\Tutorial.g.cs
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\App.g.cs
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\Chess_Content.g.cs
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\Chess_MarkupCompile.cache
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\Chess.g.resources
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\Chess.Properties.Resources.resources
+H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\Chess.csproj.GenerateResource.Cache
+H:\4TH YEAR\P4P\Chess\Chess\bin\Debug\Resources\icon.png
+H:\4TH YEAR\P4P\Chess\Chess\bin\Debug\Chess.xml
+H:\4TH YEAR\P4P\Chess\Chess\bin\Debug\Chess.exe
+H:\4TH YEAR\P4P\Chess\Chess\bin\Debug\Chess.pdb
