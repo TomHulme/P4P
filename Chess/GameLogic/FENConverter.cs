@@ -75,7 +75,7 @@ namespace GameLogic
                     case 'r': setPieceSafely(position, file, rank, PieceType.r); file++; break;
                     case 'q': setPieceSafely(position, file, rank, PieceType.q); file++; break;
                     case 'k': setPieceSafely(position, file, rank, PieceType.k); file++; break;
-                    default: throw new FENParserError("Invalid Piece", position);
+                    default: throw new ParserError("Invalid Piece", position);
                 }
             }
 
@@ -88,13 +88,13 @@ namespace GameLogic
                 {
                     case 'w': whiteToMove = true; break;
                     case 'b': whiteToMove = false; break;
-                    default: throw new FENParserError("Invalid Active Colour", position);
+                    default: throw new ParserError("Invalid Active Colour", position);
                 }
                 position.setWhiteMove(whiteToMove);
             }
             else
             {
-                throw new FENParserError("Invalid Active Colour", position);
+                throw new ParserError("Invalid Active Colour", position);
             }
 
             //Castling Rights
@@ -121,7 +121,7 @@ namespace GameLogic
                         case '-':
                             break;
                         default:
-                            throw new FENParserError("Invalid castling flags", position);
+                            throw new ParserError("Invalid castling flags", position);
                     }
 
                 }
@@ -137,7 +137,7 @@ namespace GameLogic
                 {
                     if (epString.Length < 2)
                     {
-                        throw new FENParserError("Invalid En Passent Square", position);
+                        throw new ParserError("Invalid En Passent Square", position);
                     }
                     position.setEpSquare(getSquare(epString));
                 }
@@ -177,11 +177,11 @@ namespace GameLogic
             }
             if (numPieces[(int)PieceType.K] != 1)
             {
-                throw new FENParserError("Too many white kings", position);
+                throw new ParserError("Too many white kings", position);
             }
             if (numPieces[(int)PieceType.k] != 1)
             {
-                throw new FENParserError("Too many black kings", position);
+                throw new ParserError("Too many black kings", position);
             }
 
             //White must not have too many pieces
@@ -192,7 +192,7 @@ namespace GameLogic
             maxWPawns -= Math.Max(0, numPieces[(int)PieceType.Q] - 1);
             if (numPieces[(int)PieceType.P] > maxWPawns)
             {
-                throw new FENParserError("Too many white pieces", position);
+                throw new ParserError("Too many white pieces", position);
             }
 
             //Black must not have too many pieces
@@ -207,7 +207,147 @@ namespace GameLogic
             pos2.setWhiteMove(!position.whiteMove);
             if (MoveGenerator.inCheck(pos2))
             {
-                throw new FENParserError("King capture possible", position);
+                throw new ParserError("King capture possible", position);
+            }
+
+            fixupEPSquare(position);
+
+            return position;
+        }
+
+        /*
+         * Convert a piece placement string to a position object
+         * This does not have to adhere to the strict rules of how
+         * many pieces a player must have. i.e.(player may have no king)
+         * This is primarily used for testing purposes, as well as tutorial
+         * scenarios.
+         */
+        public static Position convertPiecePlacementToPosition(String fen)
+        {
+            Position position = new Position();
+            String[] terms = fen.Split(' ');
+            if (terms.Length < 2)
+            {
+                System.Console.WriteLine("Too few terms");
+            }
+            for (int i = 0; i < terms.Length; i++)
+            {
+                terms[i] = terms[i].Trim();
+            }
+
+            //Piece placement
+            int rank = 7;
+            int file = 0;
+            for (int i = 0; i < terms[0].Length; i++)
+            {
+                char c = (char)terms[0].ToCharArray().GetValue(i);
+                switch (c)
+                {
+                    case '1': file += 1; break;
+                    case '2': file += 2; break;
+                    case '3': file += 3; break;
+                    case '4': file += 4; break;
+                    case '5': file += 5; break;
+                    case '6': file += 6; break;
+                    case '7': file += 7; break;
+                    case '8': file += 8; break;
+                    case '/': rank--; file = 0; break;
+                    case 'P': setPieceSafely(position, file, rank, PieceType.P); file++; break;
+                    case 'N': setPieceSafely(position, file, rank, PieceType.N); file++; break;
+                    case 'B': setPieceSafely(position, file, rank, PieceType.B); file++; break;
+                    case 'R': setPieceSafely(position, file, rank, PieceType.R); file++; break;
+                    case 'Q': setPieceSafely(position, file, rank, PieceType.Q); file++; break;
+                    case 'K': setPieceSafely(position, file, rank, PieceType.K); file++; break;
+                    case 'p': setPieceSafely(position, file, rank, PieceType.p); file++; break;
+                    case 'n': setPieceSafely(position, file, rank, PieceType.n); file++; break;
+                    case 'b': setPieceSafely(position, file, rank, PieceType.b); file++; break;
+                    case 'r': setPieceSafely(position, file, rank, PieceType.r); file++; break;
+                    case 'q': setPieceSafely(position, file, rank, PieceType.q); file++; break;
+                    case 'k': setPieceSafely(position, file, rank, PieceType.k); file++; break;
+                    default: throw new ParserError("Invalid Piece", position);
+                }
+            }
+
+            //Active Colour
+            if (terms[1].Length > 0)
+            {
+                Boolean whiteToMove;
+                char c = (char)terms[1].ToCharArray().GetValue(0);
+                switch (c)
+                {
+                    case 'w': whiteToMove = true; break;
+                    case 'b': whiteToMove = false; break;
+                    default: throw new ParserError("Invalid Active Colour", position);
+                }
+                position.setWhiteMove(whiteToMove);
+            }
+            else
+            {
+                throw new ParserError("Invalid Active Colour", position);
+            }
+
+            //Castling Rights
+            int castleMask = 0;
+            if (terms.Length > 2)
+            {
+                for (int i = 0; i < terms[2].Length; i++)
+                {
+                    char c = (char)terms[2].ToCharArray().GetValue(i);
+                    switch (c)
+                    {
+                        case 'K':
+                            castleMask |= (1 << Position.H1_CASTLE);
+                            break;
+                        case 'Q':
+                            castleMask |= (1 << Position.A1_CASTLE);
+                            break;
+                        case 'k':
+                            castleMask |= (1 << Position.H8_CASTLE);
+                            break;
+                        case 'q':
+                            castleMask |= (1 << Position.A8_CASTLE);
+                            break;
+                        case '-':
+                            break;
+                        default:
+                            throw new ParserError("Invalid castling flags", position);
+                    }
+
+                }
+            }
+            position.setCastleMask(castleMask);
+            removeInvalidCastleFlags(position);
+
+            //En Passant Target Square
+            if (terms.Length > 3)
+            {
+                String epString = terms[3];
+                if (!epString.Equals("-"))
+                {
+                    if (epString.Length < 2)
+                    {
+                        throw new ParserError("Invalid En Passent Square", position);
+                    }
+                    position.setEpSquare(getSquare(epString));
+                }
+            }
+
+            try
+            {
+                //Halfmove Clock
+                if (terms.Length > 4)
+                {
+                    position.halfMoveClock = Convert.ToInt32(terms[4]);
+                }
+                //Full Move Counter
+                if (terms.Length > 5)
+                {
+                    position.fullMoveCounter = Convert.ToInt32(terms[5]);
+                }
+            }
+            catch (ArgumentException ae)
+            {
+                //Ignore errors here since fields are optional
             }
 
             fixupEPSquare(position);
@@ -302,7 +442,7 @@ namespace GameLogic
                             case PieceType.b:   feNotation.Append('b'); break;
                             case PieceType.n:   feNotation.Append('n'); break;
                             case PieceType.p:   feNotation.Append('p'); break;
-                            default: throw new FENParserError("Error creating FEN String");
+                            default: throw new ParserError("Error creating FEN String");
                         }
                     }
                 }
@@ -375,13 +515,13 @@ namespace GameLogic
          */
         private static void setPieceSafely(Position position, int file, int rank, PieceType piece)
         {
-            if (rank < 0) throw new FENParserError("Too many ranks");
-            if (file > 7) throw new FENParserError("Too many columns");
+            if (rank < 0) throw new ParserError("Too many ranks");
+            if (file > 7) throw new ParserError("Too many columns");
             if ((piece == PieceType.P) || (piece == PieceType.p))
             {
                 if ((rank == 0) || (rank == 7))
                 {
-                    throw new FENParserError("Pawn of first or last rank");
+                    throw new ParserError("Pawn of first or last rank");
                 }
             }
             position.setPiece(Position.getSquare(file, rank), piece);
