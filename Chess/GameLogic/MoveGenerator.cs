@@ -395,7 +395,7 @@ namespace GameLogic
         private void addPawnMoves(ArrayList moveList, int square1, int square2)
         {
             //White Promotion
-            if (square1 >= 56)
+            if (square2 >= 56)
             {
                 moveList.Add(getMoveObject(square1, square2, PieceType.Q));
                 moveList.Add(getMoveObject(square1, square2, PieceType.N));
@@ -403,7 +403,7 @@ namespace GameLogic
                 moveList.Add(getMoveObject(square1, square2, PieceType.B));
             }
             //Black Promotion
-            else if (square1 < 8)
+            else if (square2 < 8)
             {
                 moveList.Add(getMoveObject(square1, square2, PieceType.q));
                 moveList.Add(getMoveObject(square1, square2, PieceType.n));
