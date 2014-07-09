@@ -2,8 +2,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:s="http://schemas.microsoft.com/surface/2008"
+    xmlns:Chess="clr-namespace:Chess"
     Title="Chess" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignHeight="768" d:DesignWidth="1024" SizeToContent="WidthAndHeight">
-    <Grid Name="GameScreen" Height="768" Width="1024" Background="Gray" >
+    <Grid Name="GameScreen" Height="720" Width="1280" Background="Gray" >
         <ContentControl Name="game" />
     </Grid>
 </s:SurfaceWindow>

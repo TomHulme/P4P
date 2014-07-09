@@ -13,8 +13,10 @@ namespace Chess
     public partial class App : Application
     {
 
-        //public MainMenu mainmenu = new MainMenu();
-        //public Game game = new Game();
+        public static readonly int Height = 720;
+        public static readonly int Width = 1280;
+
+
         public static string getPath(){
             string PATH = System.Reflection.Assembly.GetAssembly(typeof(Game)).Location;
             int index = PATH.LastIndexOf("bin\\Debug\\Chess.exe");
