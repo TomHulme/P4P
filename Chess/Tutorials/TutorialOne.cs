@@ -154,30 +154,36 @@ namespace Tutorials
          * Highlight File
          * Takes as input letter of file
          */
-        private void HighLightFile(String fileLetter)
+        private String[] HighLightFile(String fileLetter)
         {
+            String[] squares = new String[8];
+
             for (int i = 1; i <= 8; i++)
             {
                 String square = fileLetter + i.ToString();
 
-                //Highlight square
+                squares[i - 1] = square;
             }
+
+            return squares;
         }
 
         /**
          * Highlight Rank
          * Take as input number of rank
          */
-        private void HighLightRank(int rankNumber)
+        private String[] HighLightRank(int rankNumber)
         {
-            String[] letters = {"a", "b", "c", "d", "e", "f", "g", "h"};
+            String[] squares = {"a", "b", "c", "d", "e", "f", "g", "h"};
 
             for (int i = 0; i < 8; i++)
             {
-                String square = letters[i] + rankNumber.ToString();
+                String square = squares[i] + rankNumber.ToString();
 
-                //HighLight square
+                squares[i] = square; 
             }
+
+            return squares;
         }
     }
 }
