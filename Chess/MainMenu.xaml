@@ -7,7 +7,8 @@
         <ContentControl Name="screenHolder" />
         <Button Margin="208,40,233,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="40" Content="Start Game" Click="Start_Button_Click" TouchDown="Start_Button_Click" Name="Start_Button"></Button>
         <Button Margin="208,100,233,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="40" Content="Learn" Click="Learn_Button_Click" Name="Learn_Button"></Button>
-        <Button Margin="208,160,233,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="40" Content="Tutorial" Click="Tutorial_Button_Click" Name="Tutorial_Button"></Button>
+        <Button Margin="208,160,233,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="40" Content="Pawn Game" Click="Pawn_Game_Button_Click" Name="Pawn_Game_Button"></Button>
+        <Button Margin="208,220,233,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="40" Content="Pawn Mower" Click="Pawn_Mower_Button_Click" Name="Pawn_Mower_Button"></Button>
         <Button Margin="12,178,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Height="40" Click="Settings_Button_Click" Name="Settings_Button"></Button>
 
     </Grid>

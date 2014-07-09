@@ -17,6 +17,7 @@ using Microsoft.Surface.Presentation.Controls;
 using Microsoft.Surface.Presentation.Input;
 using System.Diagnostics;
 using System.IO;
+using Challenges;
 
 namespace Chess
 {
@@ -110,7 +111,8 @@ namespace Chess
             Console.WriteLine("start click");
             Start_Button.Visibility = System.Windows.Visibility.Collapsed;
             Learn_Button.Visibility = System.Windows.Visibility.Collapsed;
-            Tutorial_Button.Visibility = System.Windows.Visibility.Collapsed;
+            Pawn_Game_Button.Visibility = System.Windows.Visibility.Collapsed;
+            Pawn_Mower_Button.Visibility = System.Windows.Visibility.Collapsed;
             Settings_Button.Visibility = System.Windows.Visibility.Collapsed;
             Game g = new Game();
             screenHolder.Content = g.GameScreen;
@@ -125,13 +127,38 @@ namespace Chess
         private void Tutorial_Button_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("tutorial click");
+        }
+
+        private void Pawn_Mower_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("Pawn Mower clicked");
+            
+            Start_Button.Visibility = System.Windows.Visibility.Collapsed;
+            Learn_Button.Visibility = System.Windows.Visibility.Collapsed;
+            Pawn_Game_Button.Visibility = System.Windows.Visibility.Collapsed;
+            Pawn_Mower_Button.Visibility = System.Windows.Visibility.Collapsed;
+            Settings_Button.Visibility = System.Windows.Visibility.Collapsed;
+
+            PawnMower pawnMower = new PawnMower(GameLogic.PieceType.N, 5);
+            GameScreen gameScreen = new GameScreen(false, pawnMower.getPosition());
+            
+            screenHolder.Content = gameScreen;
+        }
+
+        private void Pawn_Game_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("Pawn Game clicked");
 
             Start_Button.Visibility = System.Windows.Visibility.Collapsed;
             Learn_Button.Visibility = System.Windows.Visibility.Collapsed;
-            Tutorial_Button.Visibility = System.Windows.Visibility.Collapsed;
+            Pawn_Game_Button.Visibility = System.Windows.Visibility.Collapsed;
+            Pawn_Mower_Button.Visibility = System.Windows.Visibility.Collapsed;
             Settings_Button.Visibility = System.Windows.Visibility.Collapsed;
-            Tutorial g = new Tutorial();
-            screenHolder.Content = g.GameScreen;
+
+            PawnGame pawnGame = new PawnGame();
+            GameScreen gameScreen = new GameScreen(false, pawnGame.getPosition());
+
+            screenHolder.Content = gameScreen;
         }
 
         private void Settings_Button_Click(object sender, RoutedEventArgs e)
@@ -205,6 +232,6 @@ namespace Chess
             {
                 Console.WriteLine(ex.Message);
             }
-        }
+        }       
     }
 }

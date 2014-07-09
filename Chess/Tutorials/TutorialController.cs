@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Chess.Tutorials
+namespace Tutorials
 {
     /**
      * Controls the flow of the tutorial. Acts as the controller
@@ -12,6 +12,6 @@ namespace Chess.Tutorials
      */
     class TutorialController
     {
-
+        
     }
 }

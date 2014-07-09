@@ -10,13 +10,13 @@ namespace Tutorials
      * Superclass of tutorial objects. Holds
      * the position and methods pertaining to it.
      */
-    class Tutorial
+    public class TutorialBase
     {
         protected Position currentPosition;
 
-        public Tutorial()
+        public TutorialBase()
         {
-            currentPosition = FENConverter.convertFENToPosition(FENConverter.emptyPosition);
+            currentPosition = FENConverter.convertPiecePlacementToPosition(FENConverter.emptyPosition);
         }
 
         public void ClearBoard()

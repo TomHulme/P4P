@@ -13,7 +13,7 @@ namespace Challenges
      * the king. The first player to promote a pawn
      * wins the game.
      */
-    class PawnGame : Tutorial
+    class PawnGame : TutorialBase
     {
         public PawnGame()
         {
@@ -25,6 +25,11 @@ namespace Challenges
             String pawnGamePosition = "4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3 w KQkq - 0 1";
 
             currentPosition = FENConverter.convertFENToPosition(pawnGamePosition);
+        }
+
+        public Position getPosition()
+        {
+            return this.currentPosition;
         }
     }
 }

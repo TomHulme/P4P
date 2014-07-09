@@ -15,7 +15,7 @@ namespace Challenges
      * @param Count - number of pawns on board
      */
 
-    class PawnMower : Tutorial
+    class PawnMower : TutorialBase
     {
         //Piece that user controls
         private PieceType userPiece;

@@ -26,7 +26,7 @@ namespace Tutorials
      *      1.3.3: Pawn game, with king?
      *      1.3.4: Pawn mower puzzle
      */
-    public class TutorialOne : Tutorial
+    public class TutorialOne : TutorialBase
     {
         //Current piece being introduced
         private PieceType currentPiece;
@@ -129,14 +129,6 @@ namespace Tutorials
             }
 
             return isSet;
-        }
-
-        /**
-         * Clears the board of any pieces
-         */
-        private void ClearBoard()
-        {
-            currentPosition = FENConverter.convertPiecePlacementToPosition(FENConverter.emptyPosition);
         }
 
         /**

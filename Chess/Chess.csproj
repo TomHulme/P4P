@@ -83,7 +83,10 @@
     <Compile Include="Tutorial.xaml.cs">
       <DependentUpon>Tutorial.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tutorials\Challenges\PawnGame.cs" />
     <Compile Include="Tutorials\Challenges\PawnMower.cs" />
+    <Compile Include="Tutorials\TutorialBase.cs" />
+    <Compile Include="Tutorials\TutorialController.cs" />
     <Compile Include="Tutorials\TutorialOne.cs" />
     <Page Include="Game.xaml">
       <SubType>Designer</SubType>
@@ -141,6 +144,9 @@
     <Content Include="Chess.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tutorials\Screens\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

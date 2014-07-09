@@ -34,10 +34,6 @@ namespace Chess
         {
             InitializeComponent();
 
-            gameScreen = new GameScreen(false, pawnMower.getPosition());
-
-            game.Content = gameScreen;
-
             // Add handlers for window availability events
             AddWindowAvailabilityHandlers();
         }
@@ -106,11 +102,6 @@ namespace Chess
         private void OnWindowUnavailable(object sender, EventArgs e)
         {
             //TODO: disable audio, animations here
-        }
-
-        private void Reset_Click(object sender, RoutedEventArgs e)
-        {
-            pawnMower.ResetPosition();
         }
     }
 }
