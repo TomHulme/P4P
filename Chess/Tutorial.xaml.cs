@@ -15,6 +15,7 @@ using Microsoft.Surface;
 using Microsoft.Surface.Presentation;
 using Microsoft.Surface.Presentation.Controls;
 using Microsoft.Surface.Presentation.Input;
+using Challenges;
 
 namespace Chess
 {
@@ -23,12 +24,19 @@ namespace Chess
     /// </summary>
     public partial class Tutorial : SurfaceWindow
     {
+        PawnMower pawnMower = new PawnMower(GameLogic.PieceType.Q, 5);
+        GameScreen gameScreen;
+
         /// <summary>
         /// Default constructor.
         /// </summary>
         public Tutorial()
         {
             InitializeComponent();
+
+            gameScreen = new GameScreen(false, pawnMower.getPosition());
+
+            game.Content = gameScreen;
 
             // Add handlers for window availability events
             AddWindowAvailabilityHandlers();
@@ -98,6 +106,11 @@ namespace Chess
         private void OnWindowUnavailable(object sender, EventArgs e)
         {
             //TODO: disable audio, animations here
+        }
+
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            pawnMower.ResetPosition();
         }
     }
 }

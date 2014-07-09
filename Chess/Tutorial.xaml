@@ -4,7 +4,9 @@
     xmlns:s="http://schemas.microsoft.com/surface/2008"
     Title="Chess"
     >
-  <Grid>
-
-  </Grid>
+    <Grid Name="GameScreen" Height="768" Width="1024" Background="Gray" >
+        <ContentControl Name="game">
+        </ContentControl>
+    </Grid>
+    
 </s:SurfaceWindow>

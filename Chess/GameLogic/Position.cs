@@ -38,6 +38,9 @@ namespace GameLogic
         //Cached king positions
         private int wKingSquare, bKingSquare;
 
+        //True if active colour sholuld reamin the same
+        public Boolean sameActiveColor = false;
+
         //-----------------Position Constructors---------------------
 
         /*
@@ -340,7 +343,11 @@ namespace GameLogic
             {
                 setPiece(move.destination, piece);
             }
-            setWhiteMove(!whiteToMove);
+
+            if (!sameActiveColor)
+            {
+                setWhiteMove(!whiteToMove);
+            }
         }
 
         /*
@@ -348,7 +355,10 @@ namespace GameLogic
          */
         public void unMakeMove(Move move, UnMakeInfo moveInfo)
         {
-            setWhiteMove(!whiteMove);
+            if (!sameActiveColor)
+            {
+                setWhiteMove(!whiteMove);
+            }
             PieceType piece = pieceLayout[move.destination];
             setPiece(move.origin, piece);
             setPiece(move.destination, moveInfo.getCapturedPiece());

@@ -29,6 +29,7 @@ namespace GameLogic
          * 6. Full move number
          */
         static public String startPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        static public String emptyPosition = "8/8/8/8/8/8/8/8 w - - 0 1";
 
         /*
          * Parse a FEN string and return a position object
@@ -348,6 +349,7 @@ namespace GameLogic
             catch (ArgumentException ae)
             {
                 //Ignore errors here since fields are optional
+                Console.WriteLine(ae.ToString());
             }
 
             fixupEPSquare(position);

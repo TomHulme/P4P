@@ -47,7 +47,6 @@ namespace Chess
             this.Children.Add(this.whiteText);
             this.Children.Add(this.blackText);
 
-
         }
 
 

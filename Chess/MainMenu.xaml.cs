@@ -125,6 +125,13 @@ namespace Chess
         private void Tutorial_Button_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("tutorial click");
+
+            Start_Button.Visibility = System.Windows.Visibility.Collapsed;
+            Learn_Button.Visibility = System.Windows.Visibility.Collapsed;
+            Tutorial_Button.Visibility = System.Windows.Visibility.Collapsed;
+            Settings_Button.Visibility = System.Windows.Visibility.Collapsed;
+            Tutorial g = new Tutorial();
+            screenHolder.Content = g.GameScreen;
         }
 
         private void Settings_Button_Click(object sender, RoutedEventArgs e)

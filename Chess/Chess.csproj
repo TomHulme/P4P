@@ -61,18 +61,20 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Board.cs" />
+    <Compile Include="EngineLogic\ComputerPlayer.cs" />
+    <Compile Include="EngineLogic\SFEngine.cs" />
     <Compile Include="Game.xaml.cs">
       <DependentUpon>Game.xaml</DependentUpon>
     </Compile>
-	<Compile Include="GameLogic\CommandLineInterface.cs" />
+    <Compile Include="GameLogic\CommandLineInterface.cs" />
     <Compile Include="GameLogic\FENConverter.cs" />
     <Compile Include="GameLogic\Move.cs" />
     <Compile Include="GameLogic\MoveGenerator.cs" />
     <Compile Include="GameLogic\MoveParser.cs" />
-	<Compile Include="GameLogic\ParserError.cs" />
+    <Compile Include="GameLogic\ParserError.cs" />
     <Compile Include="GameLogic\PieceType.cs" />
     <Compile Include="GameLogic\Position.cs" />
-	<Compile Include="GameLogic\UnMakeInfo.cs" />
+    <Compile Include="GameLogic\UnMakeInfo.cs" />
     <Compile Include="GameScreen.cs" />
     <Compile Include="MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
@@ -81,6 +83,8 @@
     <Compile Include="Tutorial.xaml.cs">
       <DependentUpon>Tutorial.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tutorials\Challenges\PawnMower.cs" />
+    <Compile Include="Tutorials\TutorialOne.cs" />
     <Page Include="Game.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
