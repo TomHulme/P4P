@@ -153,6 +153,7 @@ namespace Tutorials
         /**
          * Highlight File
          * Takes as input letter of file
+         * Returns the squares corresponding to that file
          */
         private String[] HighLightFile(String fileLetter)
         {
@@ -171,6 +172,7 @@ namespace Tutorials
         /**
          * Highlight Rank
          * Take as input number of rank
+         * Returns the squares corresponding to that rank
          */
         private String[] HighLightRank(int rankNumber)
         {
