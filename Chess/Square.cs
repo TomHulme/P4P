@@ -11,6 +11,7 @@ namespace Chess
     {
         string name;
         int number;
+        int squareSize = 75;
 
         PieceType piece;
 
@@ -19,6 +20,8 @@ namespace Chess
             this.name = nam;
             this.number = num;
             this.piece = PieceType.Empty;
+            this.Width = squareSize;
+            this.Height = squareSize;
         }
 
         public void setPiece(PieceType p)
