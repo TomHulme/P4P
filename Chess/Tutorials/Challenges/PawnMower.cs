@@ -4,6 +4,7 @@ using System.Collections;
 using System.Linq;
 using System.Text;
 using GameLogic;
+using Tutorials;
 
 namespace Challenges
 {
@@ -14,14 +15,13 @@ namespace Challenges
      * @param Count - number of pawns on board
      */
 
-    class PawnMower
+    class PawnMower : Tutorial
     {
         //Piece that user controls
         private PieceType userPiece;
         //Number of moves to finish challenge
         private int count;
-        //Current chess position
-        private Position boardPosition;
+        //Initial chess position
         private Position initialPosition;
         //List of moves to complete challenge
         private ArrayList moves;
@@ -35,14 +35,13 @@ namespace Challenges
         {
             this.userPiece = userPiece;
             this.count = count;
-            boardPosition = FENConverter.convertPiecePlacementToPosition(FENConverter.emptyPosition);
-            boardPosition.sameActiveColor = true;
+            currentPosition.sameActiveColor = true;
             moves = new ArrayList();
             randomNumber = new Random();
 
             SetUpBoard();
 
-            initialPosition = boardPosition;
+            initialPosition = currentPosition;
         }
 
         private void SetUpBoard()
@@ -50,14 +49,14 @@ namespace Challenges
             //1. Place piece on board
             int startSquare = (int)(randomNumber.NextDouble() * 64);
 
-            boardPosition.setPiece(startSquare, userPiece);
+            currentPosition.setPiece(startSquare, userPiece);
 
             int iterations = count;
 
             while (iterations > 0)
             {
                 //2. Generate possible moves for piece in that square
-                ArrayList generatedMoves = MoveGenerator.mgInstance.psuedoLegalMoves(boardPosition);
+                ArrayList generatedMoves = MoveGenerator.mgInstance.psuedoLegalMoves(currentPosition);
 
                 //3. Randomly select a possible move
                 int moveIndex = (int)(randomNumber.NextDouble() * generatedMoves.Count);
@@ -73,15 +72,15 @@ namespace Challenges
                     destinationSquare = selectedMove.destination;
                     originSquare = selectedMove.origin;
                     //6. Set pawn at origin to block moves in that direction 
-                    boardPosition.setPiece(originSquare, PieceType.p);
-                    boardPosition.setPiece(destinationSquare, userPiece);
+                    currentPosition.setPiece(originSquare, PieceType.p);
+                    currentPosition.setPiece(destinationSquare, userPiece);
 
                     iterations--;
                 }
             }
 
             //Place last pawn at destination square
-            boardPosition.setPiece(destinationSquare, PieceType.p);
+            currentPosition.setPiece(destinationSquare, PieceType.p);
 
             //6. Iterate through the moves list putting an 
             //   opposing pawn on the destination square
@@ -91,7 +90,7 @@ namespace Challenges
             //}
 
             //7. Place piece on the first move's origin square
-            boardPosition.setPiece(startSquare, userPiece);
+            currentPosition.setPiece(startSquare, userPiece);
         }
 
         private Boolean checkBoard(Move currentMove)
@@ -131,12 +130,12 @@ namespace Challenges
 
         public Position getPosition() 
         {
-            return this.boardPosition;
+            return this.currentPosition;
         }
 
         public void ResetPosition()
         {
-            boardPosition = initialPosition;
+            currentPosition = initialPosition;
         }
     }
 }

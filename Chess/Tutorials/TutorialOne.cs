@@ -26,12 +26,10 @@ namespace Tutorials
      *      1.3.3: Pawn game, with king?
      *      1.3.4: Pawn mower puzzle
      */
-    public class TutorialOne
+    public class TutorialOne : Tutorial
     {
         //Current piece being introduced
         private PieceType currentPiece;
-        //Current position of board
-        private Position currentPosition;
         //list of moves
         private ArrayList moveList;
 
@@ -42,7 +40,7 @@ namespace Tutorials
         public TutorialOne()
         {
             currentPiece = PieceType.P;
-            currentPosition = FENConverter.convertPiecePlacementToPosition(FENConverter.emptyPosition);
+            currentPosition.sameActiveColor = true;
         }
 
         /**
