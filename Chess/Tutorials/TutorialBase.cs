@@ -23,5 +23,10 @@ namespace Tutorials
         {
             currentPosition = FENConverter.convertFENToPosition(FENConverter.emptyPosition);
         }
+
+        public Position GetPosition()
+        {
+            return currentPosition;
+        }
     }
 }

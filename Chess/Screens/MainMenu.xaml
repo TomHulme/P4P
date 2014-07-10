@@ -1,0 +1,15 @@
+﻿<view:Screen x:Class="Chess.Screens.MainMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:view="clr-namespace:Chess"
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1280">
+    <Grid Background="Black" Name="MainMenuScreen" Height="720" Width="1280">
+        <Button Margin="208,40,233,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="40" Content="Start Game" Click="Start_Button_Click" TouchDown="Start_Button_Click" Name="Start_Button"></Button>
+        <Button Margin="208,100,233,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="40" Content="Learn" Click="Learn_Button_Click" TouchDown="Learn_Button_Click" Name="Learn_Button"></Button>
+        <Button Margin="208,160,233,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="40" Content="Tutorial" Click="Tutorial_Button_Click" TouchDown="Tutorial_Button_Click" Name="Tutorial_Button"></Button>
+        <Button Margin="12,178,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Height="40" Click="Settings_Button_Click" TouchDown="Settings_Button_Click" Name="Settings_Button" ></Button> 
+    </Grid>
+</view:Screen>

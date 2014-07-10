@@ -4,9 +4,9 @@ using System.Collections;
 using System.Linq;
 using System.Text;
 using GameLogic;
-using Tutorials;
 
-namespace Challenges
+
+namespace Tutorials.Challenges
 {
     /**
      * Each PawnMower object is it's own challenge. When each object
@@ -126,11 +126,6 @@ namespace Challenges
             }
 
             return squareOccupied;
-        }
-
-        public Position getPosition() 
-        {
-            return this.currentPosition;
         }
 
         public void ResetPosition()

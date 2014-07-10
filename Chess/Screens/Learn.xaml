@@ -1,0 +1,12 @@
+﻿<view:Screen x:Class="Chess.Screens.Learn"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:view="clr-namespace:Chess"
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1280">
+    <Grid Background="Black" Name="LearnScreen" Height="720" Width="1280">
+        <Button Content="Challenges" Height="62" HorizontalAlignment="Center" Margin="0,200,0,0" Name="Challenges" VerticalAlignment="Top" Width="312" Click="Challenges_Click" TouchDown="Challenges_Click"  />
+    </Grid>
+</view:Screen>

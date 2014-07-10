@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GameLogic;
-using Tutorials;
 
-namespace Challenges
+
+namespace Tutorials.Challenges
 {
 
     /**
@@ -25,11 +25,6 @@ namespace Challenges
             String pawnGamePosition = "4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3 w KQkq - 0 1";
 
             currentPosition = FENConverter.convertFENToPosition(pawnGamePosition);
-        }
-
-        public Position getPosition()
-        {
-            return this.currentPosition;
         }
     }
 }
