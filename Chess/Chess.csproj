@@ -61,18 +61,16 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Board.cs" />
-    <Compile Include="Game.xaml.cs">
-      <DependentUpon>Game.xaml</DependentUpon>
-    </Compile>
-	<Compile Include="GameLogic\CommandLineInterface.cs" />
+    <Compile Include="GameController.cs" />
+    <Compile Include="GameLogic\CommandLineInterface.cs" />
     <Compile Include="GameLogic\FENConverter.cs" />
     <Compile Include="GameLogic\Move.cs" />
     <Compile Include="GameLogic\MoveGenerator.cs" />
     <Compile Include="GameLogic\MoveParser.cs" />
-	<Compile Include="GameLogic\ParserError.cs" />
+    <Compile Include="GameLogic\ParserError.cs" />
     <Compile Include="GameLogic\PieceType.cs" />
     <Compile Include="GameLogic\Position.cs" />
-	<Compile Include="GameLogic\UnMakeInfo.cs" />
+    <Compile Include="GameLogic\UnMakeInfo.cs" />
     <Compile Include="GameScreen.cs" />
     <Compile Include="MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
@@ -81,24 +79,12 @@
     <Compile Include="Tutorial.xaml.cs">
       <DependentUpon>Tutorial.xaml</DependentUpon>
     </Compile>
-    <Page Include="Game.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SurfaceWindow1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SurfaceWindow1.xaml.cs">
-      <DependentUpon>SurfaceWindow1.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Tutorial.xaml">

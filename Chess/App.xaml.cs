@@ -18,7 +18,7 @@ namespace Chess
 
 
         public static string getPath(){
-            string PATH = System.Reflection.Assembly.GetAssembly(typeof(Game)).Location;
+            string PATH = System.Reflection.Assembly.GetAssembly(typeof(App)).Location;
             int index = PATH.LastIndexOf("bin\\Debug\\Chess.exe");
             string p = PATH.Remove(index);
             return p;

@@ -17,6 +17,7 @@ using Microsoft.Surface.Presentation.Controls;
 using Microsoft.Surface.Presentation.Input;
 using System.Diagnostics;
 using System.IO;
+using GameLogic;
 
 namespace Chess
 {
@@ -112,8 +113,8 @@ namespace Chess
             Learn_Button.Visibility = System.Windows.Visibility.Collapsed;
             Tutorial_Button.Visibility = System.Windows.Visibility.Collapsed;
             Settings_Button.Visibility = System.Windows.Visibility.Collapsed;
-            Game g = new Game();
-            screenHolder.Content = g.GameScreen;
+            GameScreen g = new GameScreen(false, new Position(FENConverter.convertFENToPosition(FENConverter.startPosition)));
+            screenHolder.Content = g;
 
         }
 
