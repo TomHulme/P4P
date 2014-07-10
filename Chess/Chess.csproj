@@ -69,6 +69,7 @@
       <DependentUpon>Game.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GameController.cs" />
     <Compile Include="GameLogic\CommandLineInterface.cs" />
     <Compile Include="GameLogic\FENConverter.cs" />
     <Compile Include="GameLogic\Move.cs" />

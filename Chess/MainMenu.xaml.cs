@@ -18,6 +18,7 @@ using Microsoft.Surface.Presentation.Input;
 using System.Diagnostics;
 using System.IO;
 using Challenges;
+using GameLogic;
 
 namespace Chess
 {
@@ -114,8 +115,8 @@ namespace Chess
             Pawn_Game_Button.Visibility = System.Windows.Visibility.Collapsed;
             Pawn_Mower_Button.Visibility = System.Windows.Visibility.Collapsed;
             Settings_Button.Visibility = System.Windows.Visibility.Collapsed;
-            Game g = new Game();
-            screenHolder.Content = g.GameScreen;
+            GameScreen g = new GameScreen(false, new Position(FENConverter.convertFENToPosition(FENConverter.startPosition)));
+            screenHolder.Content = g;
 
         }
 

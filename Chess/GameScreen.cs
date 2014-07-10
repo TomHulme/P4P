@@ -99,6 +99,19 @@ namespace Chess
         {
             Console.WriteLine("Handled Move from " + e.Move.origin + " to " + e.Move.destination);
             Console.WriteLine(e.MoveString);
+            String move = MoveParser.moveObjectToString(e.Move) + "\n";
+            // Virus line
+            //move += char.IsLower(((char)this.board.getPieceForSquareNumber(e.Move.origin))) ? "Black " : "White ";
+            if (char.IsLower(board.getPieceForSquareNumber(e.Move.destination).ToString()[0]))
+            {
+                blackText.Text = blackText.Text + move;
+            }
+            else
+            {
+                whiteText.Text = whiteText.Text + move;
+            }
+            
+
             if (e.CheckMate)
             {
                 this.Checkmate();
