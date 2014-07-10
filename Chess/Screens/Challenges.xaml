@@ -1,0 +1,13 @@
+﻿<view:Screen x:Class="Chess.Screens.Challenges"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:view="clr-namespace:Chess"
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1280">
+    <Grid Background="Black" Name="LearnScreen" Height="720" Width="1280">
+        <Button Content="Pawn Game" Height="62" HorizontalAlignment="Center" Margin="0,200,0,0" Name="Pawn_Game" VerticalAlignment="Top" Width="312" Click="Pawn_Game_Click" TouchDown="Pawn_Game_Click" />
+        <Button Content="Pawn Mower" Height="62" HorizontalAlignment="Center" Margin="0,265,0,0" Name="Pawn_Mower" VerticalAlignment="Top" Width="312" Click="Pawn_Mower_Click" TouchDown="Pawn_Mower_Click" />
+    </Grid>
+</view:Screen>

@@ -15,6 +15,7 @@ using Microsoft.Surface;
 using Microsoft.Surface.Presentation;
 using Microsoft.Surface.Presentation.Controls;
 using Microsoft.Surface.Presentation.Input;
+using Challenges;
 
 namespace Chess
 {
@@ -23,6 +24,9 @@ namespace Chess
     /// </summary>
     public partial class Tutorial : SurfaceWindow
     {
+        PawnMower pawnMower = new PawnMower(GameLogic.PieceType.Q, 5);
+        GameScreen gameScreen;
+
         /// <summary>
         /// Default constructor.
         /// </summary>

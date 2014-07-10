@@ -34,8 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>
-    </StartupObject>
+    <StartupObject>Chess.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -61,50 +63,72 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Board.cs" />
+    <Compile Include="EngineLogic\ComputerPlayer.cs" />
+    <Compile Include="EngineLogic\SFEngine.cs" />
     <Compile Include="Game.xaml.cs">
       <DependentUpon>Game.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
-	<Compile Include="GameLogic\CommandLineInterface.cs" />
+    <Compile Include="GameLogic\CommandLineInterface.cs" />
     <Compile Include="GameLogic\FENConverter.cs" />
     <Compile Include="GameLogic\Move.cs" />
     <Compile Include="GameLogic\MoveGenerator.cs" />
     <Compile Include="GameLogic\MoveParser.cs" />
-	<Compile Include="GameLogic\ParserError.cs" />
+    <Compile Include="GameLogic\ParserError.cs" />
     <Compile Include="GameLogic\PieceType.cs" />
     <Compile Include="GameLogic\Position.cs" />
-	<Compile Include="GameLogic\UnMakeInfo.cs" />
+    <Compile Include="GameLogic\UnMakeInfo.cs" />
     <Compile Include="GameScreen.cs" />
-    <Compile Include="MainMenu.xaml.cs">
+    <Compile Include="Screens\Challenges.xaml.cs">
+      <DependentUpon>Challenges.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\EmptyBoard.xaml.cs">
+      <DependentUpon>EmptyBoard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\Learn.xaml.cs">
+      <DependentUpon>Learn.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Square.cs" />
-    <Compile Include="Tutorial.xaml.cs">
-      <DependentUpon>Tutorial.xaml</DependentUpon>
+    <Compile Include="Screen.cs" />
+    <Compile Include="ScreenControl.xaml.cs">
+      <DependentUpon>ScreenControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Square.cs" />
+    <Compile Include="Tutorials\Challenges\PawnGame.cs" />
+    <Compile Include="Tutorials\Challenges\PawnMower.cs" />
+    <Compile Include="Tutorials\TutorialBase.cs" />
+    <Compile Include="Tutorials\TutorialController.cs" />
+    <Compile Include="Tutorials\TutorialOne.cs" />
     <Page Include="Game.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainMenu.xaml">
+    <Page Include="ScreenControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SurfaceWindow1.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Screens\Challenges.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\EmptyBoard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\Learn.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\MainMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SurfaceWindow1.xaml.cs">
-      <DependentUpon>SurfaceWindow1.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Tutorial.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -137,6 +161,9 @@
     <Content Include="Chess.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tutorials\Screens\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

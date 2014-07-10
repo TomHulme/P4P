@@ -33,7 +33,7 @@ namespace Chess
         /// </summary>
         public SurfaceWindow1()
         {
-            InitializeComponent();
+            //InitializeComponent();
             StartEngine();
             // Add handlers for window availability events
             AddWindowAvailabilityHandlers();

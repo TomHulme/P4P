@@ -43,6 +43,17 @@ namespace Chess
             AddWindowAvailabilityHandlers();
         }
 
+        public Game(Position position)
+        {
+            InitializeComponent();
+
+            gameScreen = new GameScreen(false, position);
+
+            game.Content = gameScreen;
+            //Add handlers for window availability events
+            AddWindowAvailabilityHandlers();
+        }
+
         /// <summary>
         /// Occurs when the window is about to close. 
         /// </summary>

@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace Chess
 {
-    class GameScreen : Grid
+    public class GameScreen : Grid
     {
         public bool flipped;
         private Board board;

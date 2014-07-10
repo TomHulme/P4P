@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-H:\4TH YEAR\P4P\Chess\Chess\obj\Debug\
+J:\GitHub Projects\P4P\Chess\obj\Debug\
 Chess
 none
 false
 DEBUG;TRACE
-H:\4TH YEAR\P4P\Chess\Chess\App.xaml
-4-958563158
+J:\GitHub Projects\P4P\Chess\App.xaml
+6-1782798296
 2-779556878
-20-340697526
-152103913890
-Game.xaml;MainMenu.xaml;SurfaceWindow1.xaml;Tutorial.xaml;
+30896114196
+15526662166
+Game.xaml;ScreenControl.xaml;Screens\Challenges.xaml;Screens\EmptyBoard.xaml;Screens\Learn.xaml;Screens\MainMenu.xaml;
 
 False
 
