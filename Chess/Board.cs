@@ -213,18 +213,22 @@ namespace Chess
                     {
                         this.drawPiece(current, squares[((i * 8) + j)]);
                     }
+                    else
+                    {
+                        squares[((i * 8) + j)].Children.Clear();
+                    }
                 }
             }
         }
 
-        public void movePiece(int origin, int destination)
+        public void movePiece(Move current)
         {
-            Square originSquare = getSquareForNumber(origin);
-            Square destinationSquare = getSquareForNumber(destination);
+            Square originSquare = getSquareForNumber(current.origin);
+            Square destinationSquare = getSquareForNumber(current.destination);
             PieceType originPiece = originSquare.getPiece();
             destinationSquare.setPiece(originSquare.getPiece());
             originSquare.setPiece(PieceType.Empty);
-            if (this.position.getEpSquare() == destination && (originPiece == PieceType.p || originPiece == PieceType.P))
+            if (this.position.getEpSquare() == current.destination && (originPiece == PieceType.p || originPiece == PieceType.P))
             {
                 // EN PASSANT!
                 Move last = this.previousMoves.Peek();
@@ -232,14 +236,50 @@ namespace Chess
                 enPassantPawn.setPiece(PieceType.Empty);
                 enPassantPawn.Children.Clear();
             }
-            Image[] img = new Image[1];
-            if (destinationSquare.Children.Count > 0)
+
+            if (MoveParser.moveObjectToString(current, this.position).Contains("O-O"))
             {
-                destinationSquare.Children.Clear();
+                // CASTLING!
+                this.ColourBoard();
+                Console.WriteLine("Castling");
+
+                Image[] img = new Image[1];
+                Square rookOrigin;
+                Square rookDestination;
+                if (current.destination == current.origin + 2)
+                {
+                    rookOrigin = getSquareForNumber(current.origin + 3);
+                    rookDestination = getSquareForNumber(current.origin + 1);
+                }
+                else if (current.destination == current.origin - 2)
+                {
+                    rookOrigin = getSquareForNumber(current.origin - 4);
+                    rookDestination = getSquareForNumber(current.origin - 1);
+                }
+                else
+                {
+                    throw new Exception("No.");
+                }
+                originSquare.Children.CopyTo(img, 0);
+                originSquare.Children.Clear();
+                destinationSquare.Children.Add(img[0]);
+                rookOrigin.Children.CopyTo(img, 0);
+                rookOrigin.Children.Clear();
+                rookDestination.Children.Add(img[0]);
+                rookDestination.setPiece(rookOrigin.getPiece());
+                rookOrigin.setPiece(PieceType.Empty);
             }
-            originSquare.Children.CopyTo(img, 0);
-            originSquare.Children.Clear();
-            destinationSquare.Children.Add(img[0]);
+            else
+            {
+                Image[] img = new Image[1];
+                if (destinationSquare.Children.Count > 0)
+                {
+                    destinationSquare.Children.Clear();
+                }
+                originSquare.Children.CopyTo(img, 0);
+                originSquare.Children.Clear();
+                destinationSquare.Children.Add(img[0]);
+            }
         }
 
         private Square getSquareForNumber(int square)
@@ -370,12 +410,13 @@ namespace Chess
             {
                 this.promotePiece(this.getSquareForNumber(current.origin), current.promoteTo);
             }
-            this.movePiece(current.origin, current.destination);
+            OnRaiseBoardEvent(new BoardEvent(current, this.getSquareForNumber(current.origin).getName() + this.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
+            this.movePiece(current);
             this.position.makeMove(current, this.unmake);
             this.previousMoves.Push(current);
-            OnRaiseBoardEvent(new BoardEvent(current, this.getSquareForNumber(current.origin).getName() + this.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
+            //OnRaiseBoardEvent(new BoardEvent(current, this.getSquareForNumber(current.origin).getName() + this.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
 
-            this.ColourBoard();
+            //this.ColourBoard();
             this.printNextTurn();
             this.oneClick = false;
         }
