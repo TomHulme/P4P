@@ -65,10 +65,6 @@
     <Compile Include="Board.cs" />
     <Compile Include="EngineLogic\ComputerPlayer.cs" />
     <Compile Include="EngineLogic\SFEngine.cs" />
-    <Compile Include="Game.xaml.cs">
-      <DependentUpon>Game.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="GameLogic\CommandLineInterface.cs" />
     <Compile Include="GameLogic\FENConverter.cs" />
     <Compile Include="GameLogic\Move.cs" />
@@ -95,16 +91,16 @@
     <Compile Include="ScreenControl.xaml.cs">
       <DependentUpon>ScreenControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Screens\TutorialOneScreen.xaml.cs">
+      <DependentUpon>TutorialOneScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Square.cs" />
     <Compile Include="Tutorials\Challenges\PawnGame.cs" />
     <Compile Include="Tutorials\Challenges\PawnMower.cs" />
     <Compile Include="Tutorials\TutorialBase.cs" />
+    <Compile Include="Tutorials\TutorialBoard.cs" />
     <Compile Include="Tutorials\TutorialController.cs" />
     <Compile Include="Tutorials\TutorialOne.cs" />
-    <Page Include="Game.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="ScreenControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -129,6 +125,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Screens\TutorialOneScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -162,9 +162,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tutorials\Screens\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

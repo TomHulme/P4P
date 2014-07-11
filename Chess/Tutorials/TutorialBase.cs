@@ -21,12 +21,17 @@ namespace Tutorials
 
         public void ClearBoard()
         {
-            currentPosition = FENConverter.convertFENToPosition(FENConverter.emptyPosition);
+            currentPosition = FENConverter.convertPiecePlacementToPosition(FENConverter.emptyPosition);
         }
 
         public Position GetPosition()
         {
             return currentPosition;
+        }
+
+        public virtual void ResetPosition()
+        {
+            ClearBoard();
         }
     }
 }

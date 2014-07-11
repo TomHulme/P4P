@@ -46,7 +46,7 @@ namespace Tutorials
         /**
          * Set the current piece type
          */
-        public void setPiece(PieceType piece)
+        public void SetPiece(PieceType piece)
         {
             currentPiece = piece;
         }
@@ -54,7 +54,7 @@ namespace Tutorials
         /**
          * Return the current piece type
          */
-        public PieceType getPiece()
+        public PieceType GetPiece()
         {
             return currentPiece;
         }
@@ -64,7 +64,7 @@ namespace Tutorials
          * Returns True if position is set, false if the currentPiece
          * is PieceType.Empty
          */
-        public Boolean setInitialPosition()
+        public Boolean SetInitialPosition()
         {
             Boolean isSet = false;
             //Makes the board empty before putting setting any pieces
@@ -176,6 +176,11 @@ namespace Tutorials
             }
 
             return squares;
+        }
+
+        public override void ResetPosition()
+        {
+            SetInitialPosition();
         }
     }
 }

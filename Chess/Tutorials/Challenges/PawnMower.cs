@@ -63,7 +63,7 @@ namespace Tutorials.Challenges
                 Move selectedMove = (Move)generatedMoves.ToArray()[moveIndex];
 
                 //check if squares of selectedMove is occupied
-                if (!checkBoard(selectedMove))
+                if (!CheckBoard(selectedMove))
                 {
                     //4. Add move to list
                     moves.Add(selectedMove);
@@ -93,7 +93,7 @@ namespace Tutorials.Challenges
             currentPosition.setPiece(startSquare, userPiece);
         }
 
-        private Boolean checkBoard(Move currentMove)
+        private Boolean CheckBoard(Move currentMove)
         {
             Boolean squareOccupied = false;
 
@@ -128,7 +128,7 @@ namespace Tutorials.Challenges
             return squareOccupied;
         }
 
-        public void ResetPosition()
+        public override void ResetPosition()
         {
             currentPosition = initialPosition;
         }

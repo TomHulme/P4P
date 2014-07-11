@@ -28,5 +28,10 @@ namespace Chess.Screens
         {
             parentWindow.PushScreen(new Challenges(parentWindow));
         }
+
+        private void Introduction_Click(object sender, RoutedEventArgs e)
+        {
+            parentWindow.PushScreen(new TutorialOneScreen(parentWindow));
+        }
     }
 }
