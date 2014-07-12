@@ -12,6 +12,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Tutorials;
+using Tutorials.Challenges;
+using GameLogic;
 using Chess;
 
 namespace Chess.Screens
@@ -21,8 +23,12 @@ namespace Chess.Screens
     /// </summary>
     public partial class TutorialOneScreen : Screen
     {
+        enum GameMode { Tutorial, PawnGame, PawnMower};
+
         TutorialBoard board;
-        TutorialOne template;
+        TutorialOne tutorialOne;
+        GameMode currentMode;
+        PawnMower pawnMower;
 
         /// <summary>
         /// Screen for introducing the pieces
@@ -33,8 +39,9 @@ namespace Chess.Screens
             InitializeComponent();
             this.parentWindow = parentWindow;
 
-            template = new TutorialOne();
-            board = new TutorialBoard(false, template.GetPosition());
+            tutorialOne = new TutorialOne();
+            currentMode = GameMode.Tutorial;
+            board = new TutorialBoard(false, tutorialOne.GetPosition());
             board.UpdateBoard();
 
             BoardArea.Content = board;
@@ -55,10 +62,32 @@ namespace Chess.Screens
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Reset_Challenge_Click(object sender, RoutedEventArgs e)
+        private void Reset_Board_Click(object sender, RoutedEventArgs e)
         {
-            template.SetInitialPosition();
-            UpdateBoard();
+            switch (currentMode)
+            {
+                case GameMode.Tutorial:
+                    tutorialOne.SetInitialPosition();
+                    UpdateBoard();
+                    break;
+                case GameMode.PawnGame:
+                    PawnGame pawnGame = new PawnGame();
+                    board.SetPosition(pawnGame.GetPosition());
+                    board.UpdateBoard();
+                    break;
+                case GameMode.PawnMower:
+                    Console.Out.WriteLine("position before reset");
+                    Console.Out.WriteLine(FENConverter.convertPositionToFEN(pawnMower.GetPosition()));
+
+                    pawnMower.ResetPosition();
+                    Console.Out.WriteLine("position after reset");
+                    Console.Out.WriteLine(FENConverter.convertPositionToFEN(pawnMower.GetPosition()));
+
+                    board.SetPosition(pawnMower.GetPosition());
+                    board.UpdateBoard();
+                    break;
+            }
+            
         }
 
         /// <summary>
@@ -78,8 +107,9 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Pawn_Click(object sender, RoutedEventArgs e)
         {
-            template.SetPiece(GameLogic.PieceType.P);
-            template.SetInitialPosition();
+            currentMode = GameMode.Tutorial;
+            tutorialOne.SetPiece(GameLogic.PieceType.P);
+            tutorialOne.SetInitialPosition();
             UpdateBoard();
         }
 
@@ -90,8 +120,9 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void King_Click(object sender, RoutedEventArgs e)
         {
-            template.SetPiece(GameLogic.PieceType.K);
-            template.SetInitialPosition();
+            currentMode = GameMode.Tutorial;
+            tutorialOne.SetPiece(GameLogic.PieceType.K);
+            tutorialOne.SetInitialPosition();
             UpdateBoard();
         }
 
@@ -102,8 +133,9 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Rook_Click(object sender, RoutedEventArgs e)
         {
-            template.SetPiece(GameLogic.PieceType.R);
-            template.SetInitialPosition();
+            currentMode = GameMode.Tutorial;
+            tutorialOne.SetPiece(GameLogic.PieceType.R);
+            tutorialOne.SetInitialPosition();
             UpdateBoard();
         }
 
@@ -114,8 +146,9 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Bishop_Click(object sender, RoutedEventArgs e)
         {
-            template.SetPiece(GameLogic.PieceType.B);
-            template.SetInitialPosition();
+            currentMode = GameMode.Tutorial;
+            tutorialOne.SetPiece(GameLogic.PieceType.B);
+            tutorialOne.SetInitialPosition();
             UpdateBoard();
         }
 
@@ -126,8 +159,9 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Queen_Click(object sender, RoutedEventArgs e)
         {
-            template.SetPiece(GameLogic.PieceType.Q);
-            template.SetInitialPosition();
+            currentMode = GameMode.Tutorial;
+            tutorialOne.SetPiece(GameLogic.PieceType.Q);
+            tutorialOne.SetInitialPosition();
             UpdateBoard();
         }
 
@@ -138,9 +172,70 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Knight_Click(object sender, RoutedEventArgs e)
         {
-            template.SetPiece(GameLogic.PieceType.N);
-            template.SetInitialPosition();
+            currentMode = GameMode.Tutorial;
+            tutorialOne.SetPiece(GameLogic.PieceType.N);
+            tutorialOne.SetInitialPosition();
             UpdateBoard();
+        }
+        
+        /// <summary>
+        /// Start a pawn game
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Start_Pawn_Game_Click(object sender, RoutedEventArgs e)
+        {
+            currentMode = GameMode.PawnGame;
+            PawnGame pawnGame = new PawnGame();
+
+            board.SetPosition(pawnGame.GetPosition());
+            board.UpdateBoard();
+        }
+
+        /// <summary>
+        /// Start a pawn mower challenge
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Start_Pawn_Mower_Click(object sender, RoutedEventArgs e)
+        {
+            currentMode = GameMode.PawnMower;
+            //Default piece for pawn mower challenges is a Rook
+            PieceType piece = PieceType.R;
+
+            switch (tutorialOne.GetPiece())
+            {
+                case PieceType.P:
+                case PieceType.p:
+                    break;
+                case PieceType.K:
+                case PieceType.k:
+                    break;
+                case PieceType.R:
+                case PieceType.r:
+                    piece = PieceType.R;
+                    break;
+                case PieceType.B:
+                case PieceType.b:
+                    piece = PieceType.B;
+                    break;
+                case PieceType.Q:
+                case PieceType.q:
+                    piece = PieceType.Q;
+                    break;
+                case PieceType.N:
+                case PieceType.n:
+                    piece = PieceType.N;
+                    break;
+                default:
+                    break;
+            }
+            pawnMower = new PawnMower(piece, 5);
+
+            Console.Out.WriteLine(FENConverter.convertPositionToFEN(pawnMower.GetPosition()));
+
+            board.SetPosition(pawnMower.GetPosition());
+            board.UpdateBoard();
         }
 
         /// <summary>
@@ -148,7 +243,7 @@ namespace Chess.Screens
         /// </summary>
         private void UpdateBoard()
         {
-            board.SetPosition(template.GetPosition());
+            board.SetPosition(tutorialOne.GetPosition());
             board.UpdateBoard();
         }
     }

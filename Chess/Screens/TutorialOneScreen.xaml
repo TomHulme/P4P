@@ -11,20 +11,22 @@
         <Grid Height="720" HorizontalAlignment="Left" Name="MenuBackground" VerticalAlignment="Top" Width="270" AllowDrop="True" Background="Black">
             <!--Introduction Buttons-->
             <Label Content=" Select a Topic" ContentStringFormat="" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
-            <my:SurfaceButton Content="The Board" HorizontalContentAlignment="Center" Margin="6,46,6,636" VerticalContentAlignment="Center" Click="Board_Click" />
-            <my:SurfaceButton Content="The Pawn" HorizontalContentAlignment="Center" Margin="6,90,6,592" VerticalContentAlignment="Center" Click="Pawn_Click" />
-            <my:SurfaceButton Content="The King" HorizontalContentAlignment="Center" Margin="6,134,6,548" VerticalContentAlignment="Center" Click="King_Click" />
-            <my:SurfaceButton Content="The Rook" HorizontalContentAlignment="Center" Margin="6,178,6,504" VerticalContentAlignment="Center" Click="Rook_Click"/>
-            <my:SurfaceButton Content="The Bishop" HorizontalContentAlignment="Center" Margin="6,222,6,460" VerticalContentAlignment="Center" Click="Bishop_Click" />
-            <my:SurfaceButton Content="The Queen" HorizontalContentAlignment="Center" Margin="6,266,6,416" VerticalContentAlignment="Center" Click="Queen_Click" />
-            <my:SurfaceButton Content="The Knight" HorizontalContentAlignment="Center" Margin="6,310,6,372" VerticalContentAlignment="Center" Click="Knight_Click" />
+            <my:SurfaceButton Content="The Board" HorizontalContentAlignment="Center" Margin="6,46,6,636" VerticalContentAlignment="Center" Click="Board_Click" TouchDown="Board_Click"/>
+            <my:SurfaceButton Content="The Pawn" HorizontalContentAlignment="Center" Margin="6,90,6,592" VerticalContentAlignment="Center" Click="Pawn_Click" TouchDown="Pawn_Click"/>
+            <my:SurfaceButton Content="The King" HorizontalContentAlignment="Center" Margin="6,134,6,548" VerticalContentAlignment="Center" Click="King_Click" TouchDown="King_Click"/>
+            <my:SurfaceButton Content="The Rook" HorizontalContentAlignment="Center" Margin="6,178,6,504" VerticalContentAlignment="Center" Click="Rook_Click" TouchDown="Rook_Click"/>
+            <my:SurfaceButton Content="The Bishop" HorizontalContentAlignment="Center" Margin="6,222,6,460" VerticalContentAlignment="Center" Click="Bishop_Click" TouchDown="Bishop_Click"/>
+            <my:SurfaceButton Content="The Queen" HorizontalContentAlignment="Center" Margin="6,266,6,416" VerticalContentAlignment="Center" Click="Queen_Click" TouchDown="Queen_Click"/>
+            <my:SurfaceButton Content="The Knight" HorizontalContentAlignment="Center" Margin="6,310,6,372" VerticalContentAlignment="Center" Click="Knight_Click" TouchDown="Knight_Click"/>
+            <my:SurfaceButton Content="Pawn Mower" HorizontalContentAlignment="Center" Margin="6,354,6,328" VerticalContentAlignment="Center" Click="Start_Pawn_Mower_Click" TouchDown="Start_Pawn_Mower_Click"/>
+            <my:SurfaceButton Content="Pawn Game" HorizontalContentAlignment="Center" Margin="6,398,6,284" VerticalContentAlignment="Center" Click="Start_Pawn_Game_Click" TouchDown="Start_Pawn_Game_Click"/>
             
             <!-- Lower Buttons-->
-            <my:SurfaceButton Content="Reset Board" Height="38" HorizontalAlignment="Stretch" Margin="6,632,6,0" Name="ResetButton" VerticalAlignment="Top" Click="Reset_Challenge_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsDefault="True" />
+            <my:SurfaceButton Content="Reset Board" Height="38" HorizontalAlignment="Stretch" Margin="6,632,6,0" Name="ResetButton" VerticalAlignment="Top" Click="Reset_Board_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsDefault="True" />
             <my:SurfaceButton Content="Go Back" Name="GoBackButton" Click="Go_Back_Click" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="6,676,6,6" HorizontalAlignment="Center" Width="308" />
         </Grid>
         <Grid Height="120" HorizontalAlignment="Left" Margin="270,540,0,0" Name="DialogBackground" VerticalAlignment="Bottom" Width="1010" Background="Black">
-
+            <TextBlock Name="Text" />
         </Grid>
     </Grid>
 </view:Screen>

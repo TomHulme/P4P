@@ -69,6 +69,7 @@ namespace Tutorials
             Boolean isSet = false;
             //Makes the board empty before putting setting any pieces
             ClearBoard();
+            currentPosition.sameActiveColor = true;
 
             switch (currentPiece)
             {

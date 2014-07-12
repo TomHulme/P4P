@@ -253,18 +253,18 @@ namespace GameLogic
                     case '7': file += 7; break;
                     case '8': file += 8; break;
                     case '/': rank--; file = 0; break;
-                    case 'P': setPieceSafely(position, file, rank, PieceType.P); file++; break;
-                    case 'N': setPieceSafely(position, file, rank, PieceType.N); file++; break;
-                    case 'B': setPieceSafely(position, file, rank, PieceType.B); file++; break;
-                    case 'R': setPieceSafely(position, file, rank, PieceType.R); file++; break;
-                    case 'Q': setPieceSafely(position, file, rank, PieceType.Q); file++; break;
-                    case 'K': setPieceSafely(position, file, rank, PieceType.K); file++; break;
-                    case 'p': setPieceSafely(position, file, rank, PieceType.p); file++; break;
-                    case 'n': setPieceSafely(position, file, rank, PieceType.n); file++; break;
-                    case 'b': setPieceSafely(position, file, rank, PieceType.b); file++; break;
-                    case 'r': setPieceSafely(position, file, rank, PieceType.r); file++; break;
-                    case 'q': setPieceSafely(position, file, rank, PieceType.q); file++; break;
-                    case 'k': setPieceSafely(position, file, rank, PieceType.k); file++; break;
+                    case 'P': position.setPiece(Position.getSquare(file, rank), PieceType.P); file++; break;
+                    case 'N': position.setPiece(Position.getSquare(file, rank), PieceType.N); file++; break;
+                    case 'B': position.setPiece(Position.getSquare(file, rank), PieceType.B); file++; break;
+                    case 'R': position.setPiece(Position.getSquare(file, rank), PieceType.R); file++; break;
+                    case 'Q': position.setPiece(Position.getSquare(file, rank), PieceType.Q); file++; break;
+                    case 'K': position.setPiece(Position.getSquare(file, rank), PieceType.K); file++; break;
+                    case 'p': position.setPiece(Position.getSquare(file, rank), PieceType.p); file++; break;
+                    case 'n': position.setPiece(Position.getSquare(file, rank), PieceType.n); file++; break;
+                    case 'b': position.setPiece(Position.getSquare(file, rank), PieceType.b); file++; break;
+                    case 'r': position.setPiece(Position.getSquare(file, rank), PieceType.r); file++; break;
+                    case 'q': position.setPiece(Position.getSquare(file, rank), PieceType.q); file++; break;
+                    case 'k': position.setPiece(Position.getSquare(file, rank), PieceType.k); file++; break;
                     default: throw new ParserError("Invalid Piece", position);
                 }
             }

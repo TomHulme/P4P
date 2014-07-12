@@ -22,7 +22,7 @@ namespace Tutorials.Challenges
         //Number of moves to finish challenge
         private int count;
         //Initial chess position
-        private Position initialPosition;
+        private String initialPosition;
         //List of moves to complete challenge
         private ArrayList moves;
         //Random number generator
@@ -41,7 +41,7 @@ namespace Tutorials.Challenges
 
             SetUpBoard();
 
-            initialPosition = currentPosition;
+            initialPosition = FENConverter.convertPositionToFEN(currentPosition);
         }
 
         private void SetUpBoard()
@@ -130,7 +130,8 @@ namespace Tutorials.Challenges
 
         public override void ResetPosition()
         {
-            currentPosition = initialPosition;
+            currentPosition = FENConverter.convertPiecePlacementToPosition(initialPosition);
+            currentPosition.sameActiveColor = true;
         }
     }
 }
