@@ -232,8 +232,6 @@ namespace Chess.Screens
             }
             pawnMower = new PawnMower(piece, 5);
 
-            Console.Out.WriteLine(FENConverter.convertPositionToFEN(pawnMower.GetPosition()));
-
             board.SetPosition(pawnMower.GetPosition());
             board.UpdateBoard();
         }
