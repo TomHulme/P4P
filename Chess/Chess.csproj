@@ -91,6 +91,12 @@
     <Compile Include="ScreenControl.xaml.cs">
       <DependentUpon>ScreenControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Screens\PawnMowerScreen.xaml.cs">
+      <DependentUpon>PawnMowerScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\TutorialDialogs\BoardDialog.xaml.cs">
+      <DependentUpon>BoardDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Screens\TutorialOneScreen.xaml.cs">
       <DependentUpon>TutorialOneScreen.xaml</DependentUpon>
     </Compile>
@@ -125,6 +131,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Screens\PawnMowerScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\TutorialDialogs\BoardDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Screens\TutorialOneScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

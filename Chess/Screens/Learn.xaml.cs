@@ -33,5 +33,10 @@ namespace Chess.Screens
         {
             parentWindow.PushScreen(new TutorialOneScreen(parentWindow));
         }
+
+        private void Go_Back_Click(object sender, RoutedEventArgs e)
+        {
+            parentWindow.PopScreen();
+        }
     }
 }

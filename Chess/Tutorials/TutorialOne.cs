@@ -146,7 +146,7 @@ namespace Tutorials
          * Takes as input letter of file
          * Returns the squares corresponding to that file
          */
-        private String[] HighLightFile(String fileLetter)
+        public static String[] HighLightFile(String fileLetter)
         {
             String[] squares = new String[8];
 
@@ -165,7 +165,7 @@ namespace Tutorials
          * Take as input number of rank
          * Returns the squares corresponding to that rank
          */
-        private String[] HighLightRank(int rankNumber)
+        public static String[] HighLightRank(int rankNumber)
         {
             String[] squares = {"a", "b", "c", "d", "e", "f", "g", "h"};
 

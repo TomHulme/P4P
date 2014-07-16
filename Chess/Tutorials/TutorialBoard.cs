@@ -12,7 +12,7 @@ using Chess;
 
 namespace Tutorials
 {
-    class TutorialBoard : Canvas
+    public class TutorialBoard : Canvas
     {
         public Boolean flipped;
 
@@ -338,6 +338,16 @@ namespace Tutorials
                 this.ColourLegalMoves(tapped.getSquareNumber());
                 this.oneClick = true;
             }
+        }
+
+        public void ColourSquareBlue(int square)
+        {
+            getPositionSquareNumber(square).Background = Brushes.Blue;
+        }
+
+        public void ColourSquareRed(int square)
+        {
+            getPositionSquareNumber(square).Background = Brushes.Red;
         }
 
         private bool MoveCheck(Move m)

@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 J:\GitHub Projects\P4P\Chess\App.xaml
-61148838818
+8-2074628441
 2-779556878
-311946136904
+33-2139496863
 15526662166
-ScreenControl.xaml;Screens\Challenges.xaml;Screens\EmptyBoard.xaml;Screens\Learn.xaml;Screens\MainMenu.xaml;Screens\TutorialOneScreen.xaml;
+ScreenControl.xaml;Screens\Challenges.xaml;Screens\EmptyBoard.xaml;Screens\Learn.xaml;Screens\MainMenu.xaml;Screens\PawnMowerScreen.xaml;Screens\TutorialDialogs\BoardDialog.xaml;Screens\TutorialOneScreen.xaml;
 
 False
 

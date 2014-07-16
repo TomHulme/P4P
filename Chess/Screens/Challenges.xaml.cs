@@ -37,12 +37,7 @@ namespace Chess.Screens
 
         private void Pawn_Mower_Click(object sender, RoutedEventArgs e)
         {
-            Tutorials.Challenges.PawnMower pawnMower = new Tutorials.Challenges.PawnMower(GameLogic.PieceType.N, 5);
-            GameScreen gameScreen = new GameScreen(false, pawnMower.GetPosition());
-
-            Screen screen = new EmptyBoard(parentWindow, gameScreen);
-
-            parentWindow.PushScreen(screen);
+            parentWindow.PushScreen(new PawnMowerScreen(parentWindow));
         }
     }
 }

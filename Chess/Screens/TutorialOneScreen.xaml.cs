@@ -15,6 +15,7 @@ using Tutorials;
 using Tutorials.Challenges;
 using GameLogic;
 using Chess;
+using Chess.Screens.TutorialDialogs;
 
 namespace Chess.Screens
 {
@@ -29,6 +30,7 @@ namespace Chess.Screens
         TutorialOne tutorialOne;
         GameMode currentMode;
         PawnMower pawnMower;
+        Brush originalColour;
 
         /// <summary>
         /// Screen for introducing the pieces
@@ -45,6 +47,8 @@ namespace Chess.Screens
             board.UpdateBoard();
 
             BoardArea.Content = board;
+
+            originalColour = Board_Button.Background;
         }
 
         /// <summary>
@@ -76,13 +80,7 @@ namespace Chess.Screens
                     board.UpdateBoard();
                     break;
                 case GameMode.PawnMower:
-                    Console.Out.WriteLine("position before reset");
-                    Console.Out.WriteLine(FENConverter.convertPositionToFEN(pawnMower.GetPosition()));
-
                     pawnMower.ResetPosition();
-                    Console.Out.WriteLine("position after reset");
-                    Console.Out.WriteLine(FENConverter.convertPositionToFEN(pawnMower.GetPosition()));
-
                     board.SetPosition(pawnMower.GetPosition());
                     board.UpdateBoard();
                     break;
@@ -97,7 +95,18 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Board_Click(object sender, RoutedEventArgs e)
         {
+            Dialog.Content = new BoardDialog(tutorialOne, board);
 
+            tutorialOne.ClearBoard();
+            UpdateBoard();
+
+            Board_Button.Background = Brushes.SlateGray;
+            Pawn_Button.Background = originalColour;
+            King_Button.Background = originalColour;
+            Rook_Button.Background = originalColour;
+            Bishop_Button.Background = originalColour;
+            Queen_Button.Background = originalColour;
+            Knight_Button.Background = originalColour;
         }
 
         /// <summary>
@@ -107,10 +116,20 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Pawn_Click(object sender, RoutedEventArgs e)
         {
+            Dialog.Content = null;
+
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.P);
             tutorialOne.SetInitialPosition();
             UpdateBoard();
+
+            Board_Button.Background = originalColour;
+            Pawn_Button.Background = Brushes.SlateGray;
+            King_Button.Background = originalColour;
+            Rook_Button.Background = originalColour;
+            Bishop_Button.Background = originalColour;
+            Queen_Button.Background = originalColour;
+            Knight_Button.Background = originalColour;
         }
 
         /// <summary>
@@ -120,10 +139,20 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void King_Click(object sender, RoutedEventArgs e)
         {
+            Dialog.Content = null;
+
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.K);
             tutorialOne.SetInitialPosition();
             UpdateBoard();
+
+            Board_Button.Background = originalColour;
+            Pawn_Button.Background = originalColour;
+            King_Button.Background = Brushes.SlateGray;
+            Rook_Button.Background = originalColour;
+            Bishop_Button.Background = originalColour;
+            Queen_Button.Background = originalColour;
+            Knight_Button.Background = originalColour;
         }
 
         /// <summary>
@@ -133,10 +162,20 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Rook_Click(object sender, RoutedEventArgs e)
         {
+            Dialog.Content = null;
+
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.R);
             tutorialOne.SetInitialPosition();
             UpdateBoard();
+
+            Board_Button.Background = originalColour;
+            Pawn_Button.Background = originalColour;
+            King_Button.Background = originalColour;
+            Rook_Button.Background = Brushes.SlateGray;
+            Bishop_Button.Background = originalColour;
+            Queen_Button.Background = originalColour;
+            Knight_Button.Background = originalColour;
         }
 
         /// <summary>
@@ -146,10 +185,20 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Bishop_Click(object sender, RoutedEventArgs e)
         {
+            Dialog.Content = null;
+
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.B);
             tutorialOne.SetInitialPosition();
             UpdateBoard();
+
+            Board_Button.Background = originalColour;
+            Pawn_Button.Background = originalColour;
+            King_Button.Background = originalColour;
+            Rook_Button.Background = originalColour;
+            Bishop_Button.Background = Brushes.SlateGray;
+            Queen_Button.Background = originalColour;
+            Knight_Button.Background = originalColour;
         }
 
         /// <summary>
@@ -159,10 +208,20 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Queen_Click(object sender, RoutedEventArgs e)
         {
+            Dialog.Content = null;
+
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.Q);
             tutorialOne.SetInitialPosition();
             UpdateBoard();
+
+            Board_Button.Background = originalColour;
+            Pawn_Button.Background = originalColour;
+            King_Button.Background = originalColour;
+            Rook_Button.Background = originalColour;
+            Bishop_Button.Background = originalColour;
+            Queen_Button.Background = Brushes.SlateGray;
+            Knight_Button.Background = originalColour;
         }
 
         /// <summary>
@@ -172,10 +231,20 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Knight_Click(object sender, RoutedEventArgs e)
         {
+            Dialog.Content = null;
+
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.N);
             tutorialOne.SetInitialPosition();
             UpdateBoard();
+
+            Board_Button.Background = originalColour;
+            Pawn_Button.Background = originalColour;
+            King_Button.Background = originalColour;
+            Rook_Button.Background = originalColour;
+            Bishop_Button.Background = originalColour;
+            Queen_Button.Background = originalColour;
+            Knight_Button.Background = Brushes.SlateGray;
         }
         
         /// <summary>
@@ -185,6 +254,8 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Start_Pawn_Game_Click(object sender, RoutedEventArgs e)
         {
+            Dialog.Content = null;
+
             currentMode = GameMode.PawnGame;
             PawnGame pawnGame = new PawnGame();
 
@@ -199,41 +270,7 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Start_Pawn_Mower_Click(object sender, RoutedEventArgs e)
         {
-            currentMode = GameMode.PawnMower;
-            //Default piece for pawn mower challenges is a Rook
-            PieceType piece = PieceType.R;
-
-            switch (tutorialOne.GetPiece())
-            {
-                case PieceType.P:
-                case PieceType.p:
-                    break;
-                case PieceType.K:
-                case PieceType.k:
-                    break;
-                case PieceType.R:
-                case PieceType.r:
-                    piece = PieceType.R;
-                    break;
-                case PieceType.B:
-                case PieceType.b:
-                    piece = PieceType.B;
-                    break;
-                case PieceType.Q:
-                case PieceType.q:
-                    piece = PieceType.Q;
-                    break;
-                case PieceType.N:
-                case PieceType.n:
-                    piece = PieceType.N;
-                    break;
-                default:
-                    break;
-            }
-            pawnMower = new PawnMower(piece, 5);
-
-            board.SetPosition(pawnMower.GetPosition());
-            board.UpdateBoard();
+            parentWindow.PushScreen(new PawnMowerScreen(parentWindow));
         }
 
         /// <summary>
