@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Tutorials;
 using GameLogic;
+using System.Threading;
 
 namespace Chess.Screens.TutorialDialogs
 {
@@ -23,13 +24,18 @@ namespace Chess.Screens.TutorialDialogs
     {
         TutorialOne tutorialOne;
         TutorialBoard tutorialBoard;
+        TutorialOneScreen parentScreen;
 
-        public BoardDialog(TutorialOne tutorialOne, TutorialBoard board)
+        public BoardDialog(TutorialOne tutorialOne, TutorialBoard board, TutorialOneScreen parentScreen)
         {
             InitializeComponent();
 
             this.tutorialOne = tutorialOne;
             this.tutorialBoard = board;
+            this.parentScreen = parentScreen;
+
+            tutorialBoard.UpdateBoard();
+            parentScreen.BoardArea.Content = tutorialBoard;
         }
 
         private void Ranks_Click(object sender, RoutedEventArgs e)
@@ -38,19 +44,18 @@ namespace Chess.Screens.TutorialDialogs
 
             String[] squares;
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 1; i <= 8; i++)
             {
-                squares = TutorialOne.HighLightRank(i + 1);
+                squares = TutorialOne.HighLightRank(i);
+                tutorialBoard.UpdateBoard();
 
                 foreach (String square in squares)
                 {
                     tutorialBoard.ColourSquareBlue(FENConverter.getSquare(square));
-                    tutorialBoard.UpdateBoard();
                 }
-            }
-    
-            tutorialBoard.UpdateBoard();
 
+                Console.Out.WriteLine("Highlighting rank " + i);
+            }
         }
 
         private void Files_Click(object sender, RoutedEventArgs e)

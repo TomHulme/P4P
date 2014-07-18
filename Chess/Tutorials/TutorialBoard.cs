@@ -284,9 +284,11 @@ namespace Tutorials
                 if (x.origin == originSquare)
                 {
                     if(getPositionSquareNumber(x.destination).getPiece() != PieceType.Empty){
-                        getPositionSquareNumber(x.destination).Background = Brushes.Red;
+                        //getPositionSquareNumber(x.destination).Background = Brushes.Red;
+                        ColourSquareRed(x.destination);
                     }else{
-                        getPositionSquareNumber(x.destination).Background = Brushes.Blue;
+                        //getPositionSquareNumber(x.destination).Background = Brushes.Blue;
+                        ColourSquareBlue(x.destination);
                     }
                 }
             }

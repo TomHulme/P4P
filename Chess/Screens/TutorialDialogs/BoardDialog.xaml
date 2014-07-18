@@ -31,6 +31,6 @@
         </Rectangle>
         
         <Label Content="Demonstration" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Height="40" HorizontalAlignment="Left" Margin="12,0,0,0" Name="label1" VerticalAlignment="Top" Width="181" />
-        <Label Content="Challenges" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Height="40" HorizontalAlignment="Left" Margin="817,0,0,0" Name="label2" VerticalAlignment="Top" Width="181" />
+        <Label Content="Quiz!" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Height="40" HorizontalAlignment="Left" Margin="817,0,0,0" Name="label2" VerticalAlignment="Top" Width="181" />
     </Grid>
 </UserControl>

@@ -29,7 +29,6 @@ namespace Chess.Screens
         TutorialBoard board;
         TutorialOne tutorialOne;
         GameMode currentMode;
-        PawnMower pawnMower;
         Brush originalColour;
 
         /// <summary>
@@ -79,11 +78,6 @@ namespace Chess.Screens
                     board.SetPosition(pawnGame.GetPosition());
                     board.UpdateBoard();
                     break;
-                case GameMode.PawnMower:
-                    pawnMower.ResetPosition();
-                    board.SetPosition(pawnMower.GetPosition());
-                    board.UpdateBoard();
-                    break;
             }
             
         }
@@ -95,7 +89,7 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Board_Click(object sender, RoutedEventArgs e)
         {
-            Dialog.Content = new BoardDialog(tutorialOne, board);
+            Dialog.Content = new BoardDialog(tutorialOne, board, this);
 
             tutorialOne.ClearBoard();
             UpdateBoard();
