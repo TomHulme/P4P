@@ -18,28 +18,23 @@ namespace Chess
          */
         private Square[] squares;
 
-        private Queue<Square> moveQueue = new Queue<Square>();
 
-        private bool oneClick = false;
+        
         public bool flipped;
+        private bool isVsAI = false;
         private Position position;
-        private UnMakeInfo unmake = new UnMakeInfo();
-        private MoveGenerator movegen;
+        private GameController gamecon;
         private GameScreen parent;
-        public event EventHandler<BoardEvent> RaiseBoardEvent;
-        private Stack<Move> previousMoves = new Stack<Move>();
         
 
         /*
          * Constructor
          */
-
-        public Board(bool b, Position pos, GameScreen gs)
+        public Board(bool b, Position pos, GameController gc)
         {
             this.flipped = b;
             this.position = pos;
-            this.movegen = new MoveGenerator();
-            this.parent = gs;
+            this.gamecon = gc;
         }
 
         /*
@@ -52,7 +47,7 @@ namespace Chess
 
 
         /*
-         * Private Methods
+         * internal Methods
          */
         internal void setup()
         {
@@ -61,7 +56,7 @@ namespace Chess
             this.printNextTurn();
         }
 
-        private void drawBoard()
+        internal void drawBoard()
         {
             this.Width = 600;
             this.Height = 600;
@@ -87,7 +82,7 @@ namespace Chess
             this.ColourBoard();
         }
 
-        private void ColourBoard()
+        internal void ColourBoard()
         {
             for (int i = 0; i < 8; i++)
             {
@@ -107,36 +102,12 @@ namespace Chess
             }
         }
 
-        private void ColourLegalMoves(int originSquare)
+        public void ColourSquare(int square, Brush colour)
         {
-            this.ColourBoard();
-            foreach (Move x in new MoveGenerator().legalMoves(this.position))
-            {
-                if (x.origin == originSquare)
-                {
-                    if (getSquareForNumber(x.destination).getPiece() != PieceType.Empty)
-                    {
-                        getSquareForNumber(x.destination).Background = Brushes.Red;
-                    }
-                    else if (x.destination == this.position.getEpSquare() && (getSquareForNumber(x.origin).getPiece() == PieceType.P || getSquareForNumber(x.origin).getPiece() == PieceType.p))
-                    {
-                        getSquareForNumber(x.destination).Background = Brushes.Red;
-                        getSquareForNumber(this.previousMoves.Peek().destination).Background = Brushes.Red;
-                    }
-                    else
-                    {
-                        getSquareForNumber(x.destination).Background = Brushes.Blue;
-                    }
-                }
-            }
+            getSquareForNumber(square).Background = colour;
         }
 
-        private void ColourSquare(int square, Brushes colour)
-        {
-            getSquareForNumber(square);
-        }
-
-        private string getSquareName(int row, int col)
+        internal string getSquareName(int row, int col)
         {
             int rank, file;
             if (this.flipped)
@@ -157,7 +128,7 @@ namespace Chess
             return name;
         }
 
-        private string getSquareName(int squareNum)
+        internal string getSquareName(int squareNum)
         {
             int row, col;
             if (this.flipped)
@@ -174,7 +145,7 @@ namespace Chess
             return getSquareName(row, col);
         }
 
-        private int getSquareNumber(int i, int j)
+        internal int getSquareNumber(int i, int j)
         {
             if (this.flipped)
             {
@@ -186,23 +157,7 @@ namespace Chess
             }
         }
 
-
-
-        private PieceType getPromotion(PieceType piece)
-        {
-            
-            if (piece.Equals(PieceType.p))
-            {
-                return PieceType.q;
-            }
-            else
-            {
-                return PieceType.Q;
-            }
-            //return PieceType.Empty;
-        }
-
-        private void placePieces()
+        internal void placePieces()
         {
             for (int i = 7; i >= 0; i--)
             {
@@ -221,68 +176,7 @@ namespace Chess
             }
         }
 
-        public void movePiece(Move current)
-        {
-            Square originSquare = getSquareForNumber(current.origin);
-            Square destinationSquare = getSquareForNumber(current.destination);
-            PieceType originPiece = originSquare.getPiece();
-            destinationSquare.setPiece(originSquare.getPiece());
-            originSquare.setPiece(PieceType.Empty);
-            if (this.position.getEpSquare() == current.destination && (originPiece == PieceType.p || originPiece == PieceType.P))
-            {
-                // EN PASSANT!
-                Move last = this.previousMoves.Peek();
-                Square enPassantPawn = getSquareForNumber(last.destination);
-                enPassantPawn.setPiece(PieceType.Empty);
-                enPassantPawn.Children.Clear();
-            }
-
-            if (MoveParser.moveObjectToString(current, this.position).Contains("O-O"))
-            {
-                // CASTLING!
-                this.ColourBoard();
-                Console.WriteLine("Castling");
-
-                Image[] img = new Image[1];
-                Square rookOrigin;
-                Square rookDestination;
-                if (current.destination == current.origin + 2)
-                {
-                    rookOrigin = getSquareForNumber(current.origin + 3);
-                    rookDestination = getSquareForNumber(current.origin + 1);
-                }
-                else if (current.destination == current.origin - 2)
-                {
-                    rookOrigin = getSquareForNumber(current.origin - 4);
-                    rookDestination = getSquareForNumber(current.origin - 1);
-                }
-                else
-                {
-                    throw new Exception("No.");
-                }
-                originSquare.Children.CopyTo(img, 0);
-                originSquare.Children.Clear();
-                destinationSquare.Children.Add(img[0]);
-                rookOrigin.Children.CopyTo(img, 0);
-                rookOrigin.Children.Clear();
-                rookDestination.Children.Add(img[0]);
-                rookDestination.setPiece(rookOrigin.getPiece());
-                rookOrigin.setPiece(PieceType.Empty);
-            }
-            else
-            {
-                Image[] img = new Image[1];
-                if (destinationSquare.Children.Count > 0)
-                {
-                    destinationSquare.Children.Clear();
-                }
-                originSquare.Children.CopyTo(img, 0);
-                originSquare.Children.Clear();
-                destinationSquare.Children.Add(img[0]);
-            }
-        }
-
-        private Square getSquareForNumber(int square)
+        internal Square getSquareForNumber(int square)
         {
             foreach (Square s in squares)
             {
@@ -291,13 +185,16 @@ namespace Chess
             throw new Exception("ERROR! Could not find square.");
         }
 
-        private void promotePiece(Square sq, PieceType p)
+        internal Square getSquareForName(string name)
         {
-            sq.Children.Clear();
-            this.drawPiece(p, sq);
+            foreach (Square s in squares)
+            {
+                if (s.getName() == name) { return s; }
+            }
+            throw new Exception("ERROR! Could not find square.");
         }
 
-        private void drawPiece(PieceType piece, Square sq)
+        internal void drawPiece(PieceType piece, Square sq)
         {
             string[] pieces = { "black_king", "black_queen", "black_rook", "black_bishop", "black_knight", "black_pawn", "white_king", "white_queen", "white_rook", "white_bishop", "white_knight", "white_pawn" };
             string pieceString = "";
@@ -368,67 +265,20 @@ namespace Chess
             
         }
 
-        private void TappedSquare(object sender, RoutedEventArgs e)
+        /*
+         * Square Tapped Event
+         */
+        internal void TappedSquare(object sender, RoutedEventArgs e)
         {
             Square tapped = (Square)sender;
-            moveQueue.Enqueue(tapped);
-            if (this.oneClick)
-            {
-                Square orig = moveQueue.Dequeue();
-                Square dest = moveQueue.Dequeue();
-                
-                // Debug prints origin and destination piece types contained in squares
-                //Console.WriteLine("Origin: " + orig.getSquareNumber());
-                //Console.WriteLine("Destination: " + dest.getSquareNumber());
-                
-                PieceType promoteTo = ((dest.getSquareNumber() <= 7 | dest.getSquareNumber() > 55) & (orig.getPiece().Equals(PieceType.p) | orig.getPiece().Equals(PieceType.P))) ? getPromotion(orig.getPiece()) : PieceType.Empty;
-                
-                // Debug prints promotion piece
-                //Console.WriteLine("Promote To: " + promoteTo);
-                Move current = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promoteTo);
-                if (MoveCheck(current))
-                {
-                    performMove(current);
-                }
-                else
-                {
-                    moveQueue.Enqueue(dest);
-                    this.ColourLegalMoves(dest.getSquareNumber());
-                }
-                
-            }
-            else
-            {
-                this.ColourLegalMoves(tapped.getSquareNumber());
-                this.oneClick = true;
-            }
+            this.gamecon.MoveHandler(tapped);
         }
 
-        protected void performMove(Move current)
-        {
-            if (current.promoteTo != PieceType.Empty)
-            {
-                this.promotePiece(this.getSquareForNumber(current.origin), current.promoteTo);
-            }
-            OnRaiseBoardEvent(new BoardEvent(current, this.getSquareForNumber(current.origin).getName() + this.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
-            this.movePiece(current);
-            this.position.makeMove(current, this.unmake);
-            this.previousMoves.Push(current);
-            //OnRaiseBoardEvent(new BoardEvent(current, this.getSquareForNumber(current.origin).getName() + this.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
+        /*
+         * Move related methods
+         */
 
-            //this.ColourBoard();
-            this.printNextTurn();
-            this.oneClick = false;
-        }
-
-        private bool MoveCheck(Move m)
-        {
-            // Prints move tested
-            //Console.WriteLine("Testing move from " + m.origin + " to " + m.destination + " with promoteTo " + m.promoteTo);
-            return (movegen.legalMoves(this.position).Contains(m));
-        }
-
-        private void printNextTurn()
+        internal void printNextTurn()
         {
             Console.WriteLine(this.position.whiteMove ? "White to move." : "Black to move.");
 
@@ -443,21 +293,19 @@ namespace Chess
             }
         }
 
-        // Event handling best practice from http://msdn.microsoft.com/en-us/library/w369ty8x.aspx
-        protected virtual void OnRaiseBoardEvent(BoardEvent e)
-        {
-            // Make a temporary copy of the event to avoid possibility of 
-            // a race condition if the last subscriber unsubscribes 
-            // immediately after the null check and before the event is raised.
-            EventHandler<BoardEvent> handler = RaiseBoardEvent;
 
-            // Event will be null if there are no subscribers 
-            if (handler != null)
-            {
-                // Use the () operator to raise the event.
-                handler(this, e);
-            }
+        /*
+         * 
+         *
+        protected void Surscribe(GameController gameController)
+        {
+            gameController.RaiseControllerEvent += HandleControllerEvent;
         }
+
+        void HandleControllerEvent(object sender, ControllerEvent e)
+        {
+            Console.WriteLine("Controller " + e.Name + " is talking!");
+        }*/
     }
 }
 

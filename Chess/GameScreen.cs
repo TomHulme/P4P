@@ -13,7 +13,7 @@ namespace Chess
     public class GameScreen : Grid
     {
         public bool flipped;
-        private Board board;
+        private GameController gamecon;
         private Position position;
         private TextBlock whiteText;
         private TextBlock blackText;
@@ -21,9 +21,12 @@ namespace Chess
         public GameScreen(bool b, Position pos){
             this.flipped = b;
             this.position = pos;
-            this.board = new Board(b, pos, this);
-            board.setup();
-            this.Surscribe(this.board);
+            this.gamecon = new GameController(b, pos);
+            gamecon.board.setup();
+            this.Surscribe(gamecon);
+
+
+
             this.whiteText = new TextBlock();
             this.whiteText.Width = 200;
             this.whiteText.Height = 700;
@@ -52,12 +55,12 @@ namespace Chess
 
 
             Grid.SetColumn(this.whiteText, 1);
-            Grid.SetColumn(this.board, 2);
+            Grid.SetColumn(gamecon.board, 2);
             Grid.SetColumn(this.blackText, 3);
-            this.board.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+            gamecon.board.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
             this.blackText.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
             
-            this.Children.Add(this.board);
+            this.Children.Add(gamecon.board);
             this.Children.Add(this.whiteText);
             this.Children.Add(this.blackText);
 
@@ -89,9 +92,9 @@ namespace Chess
         }
 
 
-        private void Surscribe(Board board)
+        private void Surscribe(GameController gameController)
         {
-            board.RaiseBoardEvent += HandleBoardEvent;
+            gameController.RaiseBoardEvent += HandleBoardEvent;
         }
 
         // Define what actions to take when the event is raised. 
@@ -102,8 +105,8 @@ namespace Chess
             String move = MoveParser.moveObjectToString(e.Move, this.position) + "\n";
             Console.WriteLine(FENConverter.convertPositionToFEN(this.position));
             // Virus line
-            //move += char.IsLower(((char)this.board.getPieceForSquareNumber(e.Move.origin))) ? "Black " : "White ";
-            if (char.IsLower(board.getPieceForSquareNumber(e.Move.origin).ToString()[0]))
+            //move += char.IsLower(((char)gamecon.board.getPieceForSquareNumber(e.Move.origin))) ? "Black " : "White ";
+            if (char.IsLower(gamecon.board.getPieceForSquareNumber(e.Move.origin).ToString()[0]))
             {
                 blackText.Text = blackText.Text + move;
             }
