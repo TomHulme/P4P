@@ -38,7 +38,6 @@ namespace Chess.Screens
         public TutorialOneScreen(ScreenControl parentWindow) : base(parentWindow)
         {
             InitializeComponent();
-            this.parentWindow = parentWindow;
 
             tutorialOne = new TutorialOne();
             currentMode = GameMode.Tutorial;

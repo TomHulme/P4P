@@ -27,12 +27,8 @@ namespace Chess.Screens
         private void Pawn_Game_Click(object sender, RoutedEventArgs e)
         {
             Tutorials.Challenges.PawnGame pawnGame = new Tutorials.Challenges.PawnGame();
-            GameScreen gameScreen = new GameScreen(false, pawnGame.GetPosition());
-
-            Screen screen = new EmptyBoard(parentWindow, gameScreen);
-
-            parentWindow.PushScreen(screen);
-
+            
+            //parentWindow.PushScreen(screen);
         }
 
         private void Pawn_Mower_Click(object sender, RoutedEventArgs e)

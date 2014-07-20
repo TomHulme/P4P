@@ -74,12 +74,11 @@
     <Compile Include="GameLogic\PieceType.cs" />
     <Compile Include="GameLogic\Position.cs" />
     <Compile Include="GameLogic\UnMakeInfo.cs" />
-    <Compile Include="GameScreen.cs" />
     <Compile Include="Screens\Challenges.xaml.cs">
       <DependentUpon>Challenges.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Screens\EmptyBoard.xaml.cs">
-      <DependentUpon>EmptyBoard.xaml</DependentUpon>
+    <Compile Include="Screens\GameBoard.xaml.cs">
+      <DependentUpon>GameBoard.xaml</DependentUpon>
     </Compile>
     <Compile Include="Screens\Learn.xaml.cs">
       <DependentUpon>Learn.xaml</DependentUpon>
@@ -96,6 +95,12 @@
     </Compile>
     <Compile Include="Screens\TutorialDialogs\BoardDialog.xaml.cs">
       <DependentUpon>BoardDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\TutorialDialogs\PawnMowerDialog.xaml.cs">
+      <DependentUpon>PawnMowerDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\TutorialDialogs\PieceDialog.xaml.cs">
+      <DependentUpon>PieceDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Screens\TutorialOneScreen.xaml.cs">
       <DependentUpon>TutorialOneScreen.xaml</DependentUpon>
@@ -115,7 +120,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Screens\EmptyBoard.xaml">
+    <Page Include="Screens\GameBoard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -136,6 +141,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Screens\TutorialDialogs\BoardDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\TutorialDialogs\PawnMowerDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\TutorialDialogs\PieceDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

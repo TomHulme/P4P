@@ -34,12 +34,7 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Start_Button_Click(object sender, RoutedEventArgs e)
         {
-            GameLogic.Position startPosition = GameLogic.FENConverter.convertFENToPosition(GameLogic.FENConverter.startPosition);
-            GameScreen gameScreen = new GameScreen(false, startPosition);
-
-            Screen screen = new EmptyBoard(parentWindow, gameScreen);
-
-            parentWindow.PushScreen(screen);
+            parentWindow.PushScreen(new GameBoard(parentWindow));
         }
 
         /// <summary>

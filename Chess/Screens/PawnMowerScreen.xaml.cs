@@ -15,6 +15,7 @@ using GameLogic;
 using Tutorials.Challenges;
 using Tutorials;
 using Chess;
+using Chess.Screens.TutorialDialogs;
 
 namespace Chess.Screens
 {
@@ -24,6 +25,7 @@ namespace Chess.Screens
     public partial class PawnMowerScreen : Screen
     {
         ScreenControl parentWindow;
+        PieceType userPiece;
         PawnMower pawnMower;
         Brush originalColour;
         TutorialBoard board;
@@ -34,12 +36,15 @@ namespace Chess.Screens
             InitializeComponent();
 
             this.parentWindow = parentWindow;
-            pawnMower = new PawnMower(PieceType.R, count);
+
+            userPiece = PieceType.R;
+            pawnMower = new PawnMower(userPiece, count);
 
             board = new TutorialBoard(false, pawnMower.GetPosition());
+            BoardArea.Content = board;
             board.UpdateBoard();
 
-            BoardArea.Content = board;
+            Dialog.Content = new PawnMowerDialog(this);
 
             originalColour = Rook_Button.Background;
             Rook_Button.Background = Brushes.SlateGray;
@@ -47,9 +52,9 @@ namespace Chess.Screens
 
         private void Rook_Click(object sender, RoutedEventArgs e)
         {
-            pawnMower = new PawnMower(PieceType.R, count);
+            userPiece = PieceType.R;
 
-            Update();
+            NewChallenge();
 
             Rook_Button.Background = Brushes.SlateGray;
             Bishop_Button.Background = originalColour;
@@ -59,9 +64,9 @@ namespace Chess.Screens
 
         private void Bishop_Click(object sender, RoutedEventArgs e)
         {
-            pawnMower = new PawnMower(PieceType.B, count);
+            userPiece = PieceType.B;
 
-            Update();
+            NewChallenge();
 
             Rook_Button.Background = originalColour;
             Bishop_Button.Background = Brushes.SlateGray;
@@ -71,9 +76,9 @@ namespace Chess.Screens
 
         private void Queen_Click(object sender, RoutedEventArgs e)
         {
-            pawnMower = new PawnMower(PieceType.Q, count);
+            userPiece = PieceType.Q;
 
-            Update();
+            NewChallenge();
 
             Rook_Button.Background = originalColour;
             Bishop_Button.Background = originalColour;
@@ -83,9 +88,9 @@ namespace Chess.Screens
 
         private void Knight_Click(object sender, RoutedEventArgs e)
         {
-            pawnMower = new PawnMower(PieceType.N, count);
+            userPiece = PieceType.N;
 
-            Update();
+            NewChallenge();
 
             Rook_Button.Background = originalColour;
             Bishop_Button.Background = originalColour;
@@ -108,6 +113,24 @@ namespace Chess.Screens
         {
             board.SetPosition(pawnMower.GetPosition());
             board.UpdateBoard();
+        }
+
+        public void NewChallenge()
+        {
+            //create new pawn mower challenge
+            pawnMower = new PawnMower(userPiece, count);
+            //update board
+            Update();
+        }
+
+        public int GetCount()
+        {
+            return count;
+        }
+
+        public void SetCount(int count)
+        {
+            this.count = count;
         }
     }
 }

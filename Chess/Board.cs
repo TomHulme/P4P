@@ -20,15 +20,13 @@ namespace Chess
         private Position position;
         private UnMakeInfo unmake = new UnMakeInfo();
         private MoveGenerator movegen;
-        private GameScreen parent;
         public event EventHandler<BoardEvent> RaiseBoardEvent;
         
-        public Board(bool b, Position pos, GameScreen gs)
+        public Board(bool b, Position pos)
         {
             this.flipped = b;
             this.position = pos;
             this.movegen = new MoveGenerator();
-            this.parent = gs;
         }
 
 
