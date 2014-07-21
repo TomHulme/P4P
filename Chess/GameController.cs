@@ -6,12 +6,16 @@ using System.Windows;
 using GameLogic;
 using System.Windows.Controls;
 using System.Windows.Media;
+using EngineLogic;
+using System.IO;
+using System.Collections;
 
 namespace Chess
 {
     class GameController
     {
-        private bool isVsAI = false;
+        private bool blackIsAI = true;
+        private bool whiteIsAI = false;
         private Queue<Square> moveQueue = new Queue<Square>();
         public event EventHandler<ControllerEvent> RaiseControllerEvent;
         private Stack<Move> previousMoves = new Stack<Move>();
@@ -21,6 +25,13 @@ namespace Chess
         internal Position position;
         private MoveGenerator movegen;
         public event EventHandler<BoardEvent> RaiseBoardEvent;
+        private SFEngine engine;
+        private ComputerPlayer blackAI;
+        private ComputerPlayer whiteAI;
+        private StreamReader blackIn;
+        private StreamWriter blackOut;
+        private StreamReader whiteIn;
+        private StreamWriter whiteOut;
 
         public GameController(bool b, Position pos)
         {
@@ -28,6 +39,19 @@ namespace Chess
             board.setup();
             this.position = pos;
             this.movegen = new MoveGenerator();
+            this.engine = new SFEngine();
+            if (blackIsAI)
+            {
+                blackIn = engine.engineProcess.StandardOutput;
+                blackOut = engine.engineProcess.StandardInput;
+                blackAI = new ComputerPlayer(blackIn, blackOut);
+            }
+            if (whiteIsAI)
+            {
+                whiteIn = engine.engineProcess.StandardOutput;
+                whiteOut = engine.engineProcess.StandardInput;
+                whiteAI = new ComputerPlayer(whiteIn, whiteOut);
+            }
         }
 
         private PieceType getPromotion(PieceType piece)
@@ -222,9 +246,23 @@ namespace Chess
             this.previousMoves.Push(current);
             //OnRaiseBoardEvent(new BoardEvent(current, this.getSquareForNumber(current.origin).getName() + this.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
 
+            this.oneClick = false;
+            if (blackIsAI & !position.whiteMove)
+            {
+                blackAI.UpdatePosition(new ArrayList(previousMoves));
+                blackAI.StartSearch();
+                this.MoveHandler(blackAI.GetBestMove());
+                System.Threading.Thread.Sleep(1000);
+                
+            }else if (whiteIsAI & position.whiteMove)
+            {
+                whiteAI.UpdatePosition(new ArrayList(previousMoves));
+                whiteAI.StartSearch();
+                this.MoveHandler(whiteAI.GetBestMove());
+                System.Threading.Thread.Sleep(1000);
+            }
             board.ColourBoard();
             board.printNextTurn();
-            this.oneClick = false;
         }
 
         private bool MoveCheck(Move m)
