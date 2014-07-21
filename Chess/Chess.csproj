@@ -65,6 +65,11 @@
     <Compile Include="Board.cs" />
     <Compile Include="EngineLogic\ComputerPlayer.cs" />
     <Compile Include="EngineLogic\SFEngine.cs" />
+    <Compile Include="Game.xaml.cs">
+      <DependentUpon>Game.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GameController.cs" />
     <Compile Include="GameLogic\CommandLineInterface.cs" />
     <Compile Include="GameLogic\FENConverter.cs" />
     <Compile Include="GameLogic\Move.cs" />
