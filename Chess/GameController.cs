@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,17 +9,16 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using EngineLogic;
 using System.IO;
-using System.Collections;
 
 namespace Chess
 {
     class GameController
     {
         private bool blackIsAI = true;
-        private bool whiteIsAI = false;
+        private bool whiteIsAI = true;
         private Queue<Square> moveQueue = new Queue<Square>();
         public event EventHandler<ControllerEvent> RaiseControllerEvent;
-        private Stack<Move> previousMoves = new Stack<Move>();
+        private ArrayList previousMoves = new ArrayList();
         internal Board board;
         private bool oneClick = false;
         private UnMakeInfo unmake = new UnMakeInfo();
@@ -45,12 +45,15 @@ namespace Chess
                 blackIn = engine.engineProcess.StandardOutput;
                 blackOut = engine.engineProcess.StandardInput;
                 blackAI = new ComputerPlayer(blackIn, blackOut);
+                blackAI.setMoveTime(100);
             }
             if (whiteIsAI)
             {
                 whiteIn = engine.engineProcess.StandardOutput;
                 whiteOut = engine.engineProcess.StandardInput;
                 whiteAI = new ComputerPlayer(whiteIn, whiteOut);
+                whiteAI.setMoveTime(100);
+                //this.PerformAIMove(whiteAI); // if uncommented, entire game plays out before screen is displayed.
             }
         }
 
@@ -81,7 +84,7 @@ namespace Chess
             if (position.getEpSquare() == current.destination && (originPiece == PieceType.p || originPiece == PieceType.P))
             {
                 // EN PASSANT!
-                Move last = this.previousMoves.Peek();
+                Move last = (Move)this.previousMoves[this.previousMoves.Count];
                 Square enPassantPawn = board.getSquareForNumber(last.destination);
                 enPassantPawn.setPiece(PieceType.Empty);
                 enPassantPawn.Children.Clear();
@@ -224,7 +227,7 @@ namespace Chess
                     else if (x.destination == this.position.getEpSquare() && (board.getSquareForNumber(x.origin).getPiece() == PieceType.P || board.getSquareForNumber(x.origin).getPiece() == PieceType.p))
                     {
                         board.getSquareForNumber(x.destination).Background = Brushes.Red;
-                        board.getSquareForNumber(this.previousMoves.Peek().destination).Background = Brushes.Red;
+                        board.getSquareForNumber(((Move)this.previousMoves[this.previousMoves.Count]).destination).Background = Brushes.Red;
                     }
                     else
                     {
@@ -240,26 +243,21 @@ namespace Chess
             {
                 this.promotePiece(board.getSquareForNumber(current.origin), current.promoteTo);
             }
+            OnRaiseControllerEvent(new ControllerEvent("Did a" + (((blackIsAI & !position.whiteMove) | (whiteIsAI & position.whiteMove)) ? "n AI " : " non AI ") + " move from " + board.getSquareName(current.origin) + " to " + board.getSquareName(current.destination)));
             OnRaiseBoardEvent(new BoardEvent(current, board.getSquareForNumber(current.origin).getName() + board.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
             this.movePiece(current);
             this.position.makeMove(current, this.unmake);
-            this.previousMoves.Push(current);
+            this.previousMoves.Add(current);
             //OnRaiseBoardEvent(new BoardEvent(current, this.getSquareForNumber(current.origin).getName() + this.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
 
             this.oneClick = false;
             if (blackIsAI & !position.whiteMove)
             {
-                blackAI.UpdatePosition(new ArrayList(previousMoves));
-                blackAI.StartSearch();
-                this.MoveHandler(blackAI.GetBestMove());
-                System.Threading.Thread.Sleep(1000);
+                this.PerformAIMove(blackAI);
                 
             }else if (whiteIsAI & position.whiteMove)
             {
-                whiteAI.UpdatePosition(new ArrayList(previousMoves));
-                whiteAI.StartSearch();
-                this.MoveHandler(whiteAI.GetBestMove());
-                System.Threading.Thread.Sleep(1000);
+                this.PerformAIMove(whiteAI);
             }
             board.ColourBoard();
             board.printNextTurn();
@@ -270,6 +268,32 @@ namespace Chess
             // Prints move tested
             //Console.WriteLine("Testing move from " + m.origin + " to " + m.destination + " with promoteTo " + m.promoteTo);
             return (movegen.legalMoves(this.position).Contains(m));
+        }
+
+        private void PerformAIMove(ComputerPlayer AIPlayer)
+        {
+            AIPlayer.UpdatePosition(previousMoves);
+            AIPlayer.StartSearch();
+            this.MoveHandler(AIPlayer.GetBestMove());
+        }
+
+
+        /* Event handling best practice from http://msdn.microsoft.com/en-us/library/w369ty8x.aspx
+         * 
+         */
+        protected virtual void OnRaiseControllerEvent(ControllerEvent e)
+        {
+            // Make a temporary copy of the event to avoid possibility of 
+            // a race condition if the last subscriber unsubscribes 
+            // immediately after the null check and before the event is raised.
+            EventHandler<ControllerEvent> handler = RaiseControllerEvent;
+
+            // Event will be null if there are no subscribers 
+            if (handler != null)
+            {
+                // Use the () operator to raise the event.
+                handler(this, e);
+            }
         }
 
 
@@ -296,15 +320,15 @@ namespace Chess
 
     class ControllerEvent : EventArgs
     {
-        private string name;
-        public ControllerEvent(String name)
+        private string text;
+        public ControllerEvent(String text)
         {
-            this.name = name;
+            this.text = text;
         }
 
-        public String Name
+        public String Text
         {
-            get { return name; }
+            get { return text; }
         }
     }
 }

@@ -94,6 +94,7 @@ namespace Chess
 
         private void Surscribe(GameController gameController)
         {
+            gameController.RaiseControllerEvent += HandleControllerEvent;
             gameController.RaiseBoardEvent += HandleBoardEvent;
         }
 
@@ -116,11 +117,17 @@ namespace Chess
             }
             
 
-            if (e.CheckMate)
+            if (move.EndsWith("#"))
             {
                 this.Checkmate();
             }
             //(char.IsLower(this.position.getPiece(e.Move.origin).ToString(), 0)) ? (this.blackText.Text += "\nBlack " + this.position.getPiece(e.Move.origin)) : ("White");
+        }
+
+        // Define what actions to take when the event is raised. 
+        void HandleControllerEvent(object sender, ControllerEvent e)
+        {
+            Console.WriteLine(e.Text);
         }
     }
 }
