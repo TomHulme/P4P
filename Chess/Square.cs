@@ -42,5 +42,7 @@ namespace Chess
         {
             return this.number;
         }
+
+        public String Name { get { return this.name; } }
     }
 }

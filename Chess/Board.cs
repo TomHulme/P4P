@@ -21,10 +21,8 @@ namespace Chess
 
         
         public bool flipped;
-        private bool isVsAI = false;
         private Position position;
         private GameController gamecon;
-        private GameScreen parent;
         
 
         /*

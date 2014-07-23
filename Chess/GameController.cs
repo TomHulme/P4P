@@ -9,13 +9,14 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using EngineLogic;
 using System.IO;
+using System.Threading;
 
 namespace Chess
 {
     class GameController
     {
         private bool blackIsAI = true;
-        private bool whiteIsAI = true;
+        private bool whiteIsAI = false;
         private Queue<Square> moveQueue = new Queue<Square>();
         public event EventHandler<ControllerEvent> RaiseControllerEvent;
         private ArrayList previousMoves = new ArrayList();
@@ -32,6 +33,7 @@ namespace Chess
         private StreamWriter blackOut;
         private StreamReader whiteIn;
         private StreamWriter whiteOut;
+        private Thread AIThread;
 
         public GameController(bool b, Position pos)
         {
@@ -52,8 +54,8 @@ namespace Chess
                 whiteIn = engine.engineProcess.StandardOutput;
                 whiteOut = engine.engineProcess.StandardInput;
                 whiteAI = new ComputerPlayer(whiteIn, whiteOut);
-                whiteAI.setMoveTime(100);
-                //this.PerformAIMove(whiteAI); // if uncommented, entire game plays out before screen is displayed.
+                //whiteAI.setMoveTime(100);
+                MoveHandler(this.GetAIMove(whiteAI)); // if uncommented, entire game plays out before screen is displayed.
             }
         }
 
@@ -253,11 +255,32 @@ namespace Chess
             this.oneClick = false;
             if (blackIsAI & !position.whiteMove)
             {
-                this.PerformAIMove(blackAI);
+
+                //AIThread = new Thread(new ThreadStart(GetAIMove));
+                //AIThread.Start();
+                //AIThread.Join();
+                //MoveHandler(this.GetAIMove(blackAI));
+                String threadOut = null;
+                AIThread = new Thread(() =>
+                {
+                    threadOut = GetAIMove();
+                }
+                );
+                AIThread.Start();
+                AIThread.Join();
+                MoveHandler(threadOut);
                 
             }else if (whiteIsAI & position.whiteMove)
             {
-                this.PerformAIMove(whiteAI);
+                String threadOut = null;
+                AIThread = new Thread(() =>
+                {
+                    threadOut = GetAIMove();
+                }
+                );
+                AIThread.Start();
+                AIThread.Join();
+                MoveHandler(threadOut);
             }
             board.ColourBoard();
             board.printNextTurn();
@@ -270,12 +293,25 @@ namespace Chess
             return (movegen.legalMoves(this.position).Contains(m));
         }
 
-        private void PerformAIMove(ComputerPlayer AIPlayer)
+        private String GetAIMove()
+        {
+            if (position.whiteMove)
+            {
+                return GetAIMove(whiteAI);
+            }
+            else
+            {
+                return GetAIMove(blackAI);
+            }
+        }
+
+        private String GetAIMove(ComputerPlayer AIPlayer)
         {
             AIPlayer.UpdatePosition(previousMoves);
             AIPlayer.StartSearch();
-            this.MoveHandler(AIPlayer.GetBestMove());
+            return AIPlayer.GetBestMove();
         }
+
 
 
         /* Event handling best practice from http://msdn.microsoft.com/en-us/library/w369ty8x.aspx
