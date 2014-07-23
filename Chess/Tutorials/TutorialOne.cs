@@ -46,7 +46,7 @@ namespace Tutorials
         /**
          * Set the current piece type
          */
-        public void setPiece(PieceType piece)
+        public void SetPiece(PieceType piece)
         {
             currentPiece = piece;
         }
@@ -54,7 +54,7 @@ namespace Tutorials
         /**
          * Return the current piece type
          */
-        public PieceType getPiece()
+        public PieceType GetPiece()
         {
             return currentPiece;
         }
@@ -64,11 +64,12 @@ namespace Tutorials
          * Returns True if position is set, false if the currentPiece
          * is PieceType.Empty
          */
-        public Boolean setInitialPosition()
+        public Boolean SetInitialPosition()
         {
             Boolean isSet = false;
             //Makes the board empty before putting setting any pieces
             ClearBoard();
+            currentPosition.sameActiveColor = true;
 
             switch (currentPiece)
             {
@@ -145,7 +146,7 @@ namespace Tutorials
          * Takes as input letter of file
          * Returns the squares corresponding to that file
          */
-        private String[] HighLightFile(String fileLetter)
+        public static String[] HighLightFile(String fileLetter)
         {
             String[] squares = new String[8];
 
@@ -164,7 +165,7 @@ namespace Tutorials
          * Take as input number of rank
          * Returns the squares corresponding to that rank
          */
-        private String[] HighLightRank(int rankNumber)
+        public static String[] HighLightRank(int rankNumber)
         {
             String[] squares = {"a", "b", "c", "d", "e", "f", "g", "h"};
 
@@ -176,6 +177,11 @@ namespace Tutorials
             }
 
             return squares;
+        }
+
+        public override void ResetPosition()
+        {
+            SetInitialPosition();
         }
     }
 }

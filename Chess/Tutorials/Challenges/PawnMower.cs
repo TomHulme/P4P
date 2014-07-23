@@ -22,7 +22,7 @@ namespace Tutorials.Challenges
         //Number of moves to finish challenge
         private int count;
         //Initial chess position
-        private Position initialPosition;
+        private String initialPosition;
         //List of moves to complete challenge
         private ArrayList moves;
         //Random number generator
@@ -41,7 +41,7 @@ namespace Tutorials.Challenges
 
             SetUpBoard();
 
-            initialPosition = currentPosition;
+            initialPosition = FENConverter.convertPositionToFEN(currentPosition);
         }
 
         private void SetUpBoard()
@@ -63,7 +63,7 @@ namespace Tutorials.Challenges
                 Move selectedMove = (Move)generatedMoves.ToArray()[moveIndex];
 
                 //check if squares of selectedMove is occupied
-                if (!checkBoard(selectedMove))
+                if (CheckMoveValidity(selectedMove))
                 {
                     //4. Add move to list
                     moves.Add(selectedMove);
@@ -82,55 +82,33 @@ namespace Tutorials.Challenges
             //Place last pawn at destination square
             currentPosition.setPiece(destinationSquare, PieceType.p);
 
-            //6. Iterate through the moves list putting an 
-            //   opposing pawn on the destination square
-            //foreach (Move move in moves)
-            //{
-            //    boardPosition.setPiece(move.destination, PieceType.p);
-            //}
-
             //7. Place piece on the first move's origin square
             currentPosition.setPiece(startSquare, userPiece);
         }
 
-        private Boolean checkBoard(Move currentMove)
+        /**
+         * Check if the move correlates to the userPiece and
+         * that the destination square of the move is empty.
+         */
+        private Boolean CheckMoveValidity(Move selectedMove)
         {
-            Boolean squareOccupied = false;
+            Boolean moveValid = false;
 
-            //Keep track of squares that are occupied
-            //These values should never exceed one
-            int originCount = 0;
-            int destinationCount = 0;
-
-            //check origin square
-            foreach (Move move in moves)
+            if (currentPosition.getPiece(selectedMove.origin) == userPiece)
             {
-                if ((currentMove.origin == move.origin) || (currentMove.origin == move.destination))
+                if (currentPosition.getPiece(selectedMove.destination) == PieceType.Empty)
                 {
-                    originCount++;
+                    moveValid = true;
                 }
             }
 
-            //check destination square
-            foreach (Move move in moves)
-            {
-                if ((currentMove.destination == move.origin) || (currentMove.destination == move.destination))
-                {
-                    destinationCount++;
-                }
-            }
-
-            if ((originCount > 1) || (destinationCount > 1))
-            {
-                squareOccupied = true;
-            }
-
-            return squareOccupied;
+            return moveValid;
         }
 
-        public void ResetPosition()
+        public override void ResetPosition()
         {
-            currentPosition = initialPosition;
+            currentPosition = FENConverter.convertPiecePlacementToPosition(initialPosition);
+            currentPosition.sameActiveColor = true;
         }
     }
 }

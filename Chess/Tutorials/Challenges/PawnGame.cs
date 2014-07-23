@@ -26,5 +26,10 @@ namespace Tutorials.Challenges
 
             currentPosition = FENConverter.convertFENToPosition(pawnGamePosition);
         }
+
+        public override void ResetPosition()
+        {
+            SetUpPosition();
+        }
     }
 }
