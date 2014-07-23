@@ -7,8 +7,10 @@
              xmlns:my="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1280">
-    <Grid Background="Black" Name="LearnScreen" Height="720" Width="1280">
-        <my:SurfaceButton Content="Pawn Game" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="62" HorizontalAlignment="Center" Margin="0,265,0,0" Name="Pawn_Game" VerticalAlignment="Top" Width="312" Click="Pawn_Game_Click" TouchDown="Pawn_Game_Click" />
-        <my:SurfaceButton Content="Pawn Mower" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="62" HorizontalAlignment="Center" Margin="0,200,0,0" Name="Pawn_Mower" VerticalAlignment="Top" Width="312" Click="Pawn_Mower_Click" TouchDown="Pawn_Mower_Click" />
-    </Grid>
+    <Viewbox>
+        <Grid Background="Black" Name="LearnScreen" Height="720" Width="1280">
+            <my:SurfaceButton Content="Pawn Game" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="62" HorizontalAlignment="Center" Margin="0,265,0,0" Name="Pawn_Game" VerticalAlignment="Top" Width="312" Click="Pawn_Game_Click" TouchDown="Pawn_Game_Click" />
+            <my:SurfaceButton Content="Pawn Mower" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="62" HorizontalAlignment="Center" Margin="0,200,0,0" Name="Pawn_Mower" VerticalAlignment="Top" Width="312" Click="Pawn_Mower_Click" TouchDown="Pawn_Mower_Click" />
+        </Grid>
+    </Viewbox>
 </view:Screen>

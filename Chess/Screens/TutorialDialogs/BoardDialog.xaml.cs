@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -9,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Tutorials;
@@ -20,22 +22,17 @@ namespace Chess.Screens.TutorialDialogs
     /// <summary>
     /// Interaction logic for BoardDialog.xaml
     /// </summary>
-    public partial class BoardDialog : UserControl
+    partial class BoardDialog : UserControl
     {
         TutorialOne tutorialOne;
-        TutorialBoard tutorialBoard;
-        TutorialOneScreen parentScreen;
+        GameController gameController;
 
-        public BoardDialog(TutorialOne tutorialOne, TutorialBoard board, TutorialOneScreen parentScreen)
+        public BoardDialog(TutorialOne tutorialOne, GameController gameController)
         {
             InitializeComponent();
 
             this.tutorialOne = tutorialOne;
-            this.tutorialBoard = board;
-            this.parentScreen = parentScreen;
-
-            tutorialBoard.UpdateBoard();
-            parentScreen.BoardArea.Content = tutorialBoard;
+            this.gameController = gameController;
         }
 
         private void Ranks_Click(object sender, RoutedEventArgs e)
@@ -46,15 +43,26 @@ namespace Chess.Screens.TutorialDialogs
 
             for (int i = 1; i <= 8; i++)
             {
-                squares = TutorialOne.HighLightRank(i);
-                tutorialBoard.UpdateBoard();
+                //get square objects
+                //squares = TutorialOne.HighLightRank(i);
+                //ArrayList squareList = new ArrayList();
+                //foreach (String s in squares)
+                //{
+                //    squareList.Add(gameController.board.getSquareForName(s));
+                //}
 
-                foreach (String square in squares)
-                {
-                    tutorialBoard.ColourSquareBlue(FENConverter.getSquare(square));
-                }
+                ////create animations
+                //ArrayList storyboardList = new ArrayList();
+                //foreach (Square s in squareList)
+                //{
+                //    storyboardList.Add(StoryBoardCreator.PulseSquareBackground(s, i));
+                //}
 
-                Console.Out.WriteLine("Highlighting rank " + i);
+                ////start storyboards
+                //foreach (Storyboard s in storyboardList)
+                //{
+                //    s.Begin();
+                //}
             }
         }
 
@@ -66,15 +74,15 @@ namespace Chess.Screens.TutorialDialogs
 
             for (int i = 0; i < 8; i++)
             {
-                String[] squares = TutorialOne.HighLightFile(files[i]);
+                //String[] squares = TutorialOne.HighLightFile(files[i]);
 
-                foreach (String square in squares)
-                {
-                    tutorialBoard.ColourSquareBlue(FENConverter.getSquare(square));
-                    tutorialBoard.UpdateBoard();
-                }
+                //foreach (String square in squares)
+                //{
+                //    tutorialBoard.ColourSquareBlue(FENConverter.getSquare(square));
+                //    tutorialBoard.UpdateBoard();
+                //}
 
-                    tutorialBoard.UpdateBoard();
+                //    tutorialBoard.UpdateBoard();
             }
         }
 

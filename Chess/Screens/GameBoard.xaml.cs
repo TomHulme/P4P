@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -21,24 +22,55 @@ namespace Chess.Screens
     /// </summary>
     public partial class GameBoard : Screen
     {
-        //ScreenControl parentWindow;
-        TutorialBoard board;
+        GameController gameController;
 
         public GameBoard(ScreenControl parentWindow) : base(parentWindow)
         {
             InitializeComponent();
 
-            //this.parentWindow = parentWindow;
+            this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition));
 
-            this.board = new TutorialBoard(false, FENConverter.convertFENToPosition(FENConverter.startPosition));
-
-            BoardArea.Content = board;
-            board.UpdateBoard();
+            BoardArea.Content = gameController.board;
         }
 
         private void Go_Back_Click(object sender, RoutedEventArgs e)
         {
             parentWindow.PopScreen();
+        }
+
+        private void New_Game_Click(object sender, RoutedEventArgs e)
+        {
+            Storyboard expandButton = this.FindResource("Expand") as Storyboard;
+
+            this.New_Game_Buttons.Visibility = Visibility.Visible;
+            expandButton.Begin();
+        }
+
+        private void PVP_Click(object sender, RoutedEventArgs e)
+        {
+            this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition));
+            BoardArea.Content = gameController.board;
+
+            this.New_Game_Buttons.Height = 0;
+            this.New_Game_Buttons.Visibility = Visibility.Collapsed;
+        }
+
+        private void PVC_Click(object sender, RoutedEventArgs e)
+        {
+            this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition));
+            BoardArea.Content = gameController.board;
+
+            this.New_Game_Buttons.Height = 0;
+            this.New_Game_Buttons.Visibility = Visibility.Collapsed;
+        }
+
+        private void CVC_Click(object sender, RoutedEventArgs e)
+        {
+            this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition));
+            BoardArea.Content = gameController.board;
+
+            this.New_Game_Buttons.Height = 0;
+            this.New_Game_Buttons.Visibility = Visibility.Collapsed;
         }
     }
 }

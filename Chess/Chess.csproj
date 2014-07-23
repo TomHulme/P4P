@@ -65,10 +65,6 @@
     <Compile Include="Board.cs" />
     <Compile Include="EngineLogic\ComputerPlayer.cs" />
     <Compile Include="EngineLogic\SFEngine.cs" />
-    <Compile Include="Game.xaml.cs">
-      <DependentUpon>Game.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="GameController.cs" />
     <Compile Include="GameLogic\CommandLineInterface.cs" />
     <Compile Include="GameLogic\FENConverter.cs" />
@@ -98,6 +94,7 @@
     <Compile Include="Screens\PawnMowerScreen.xaml.cs">
       <DependentUpon>PawnMowerScreen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Screens\StoryBoardCreator.cs" />
     <Compile Include="Screens\TutorialDialogs\BoardDialog.xaml.cs">
       <DependentUpon>BoardDialog.xaml</DependentUpon>
     </Compile>
@@ -114,8 +111,6 @@
     <Compile Include="Tutorials\Challenges\PawnGame.cs" />
     <Compile Include="Tutorials\Challenges\PawnMower.cs" />
     <Compile Include="Tutorials\TutorialBase.cs" />
-    <Compile Include="Tutorials\TutorialBoard.cs" />
-    <Compile Include="Tutorials\TutorialController.cs" />
     <Compile Include="Tutorials\TutorialOne.cs" />
     <Page Include="ScreenControl.xaml">
       <SubType>Designer</SubType>

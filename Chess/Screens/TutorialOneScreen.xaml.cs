@@ -26,10 +26,10 @@ namespace Chess.Screens
     {
         enum GameMode { Tutorial, PawnGame, PawnMower};
 
-        TutorialBoard board;
         TutorialOne tutorialOne;
         GameMode currentMode;
         Brush originalColour;
+        GameController gameController;
 
         /// <summary>
         /// Screen for introducing the pieces
@@ -41,10 +41,10 @@ namespace Chess.Screens
 
             tutorialOne = new TutorialOne();
             currentMode = GameMode.Tutorial;
-            board = new TutorialBoard(false, tutorialOne.GetPosition());
-            board.UpdateBoard();
 
-            BoardArea.Content = board;
+            gameController = new GameController(false, tutorialOne.GetPosition()); 
+
+            BoardArea.Content = gameController.board;
 
             originalColour = Board_Button.Background;
         }
@@ -74,8 +74,7 @@ namespace Chess.Screens
                     break;
                 case GameMode.PawnGame:
                     PawnGame pawnGame = new PawnGame();
-                    board.SetPosition(pawnGame.GetPosition());
-                    board.UpdateBoard();
+                    gameController.SetPosition(pawnGame.GetPosition());
                     break;
             }
             
@@ -88,7 +87,7 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Board_Click(object sender, RoutedEventArgs e)
         {
-            Dialog.Content = new BoardDialog(tutorialOne, board, this);
+            Dialog.Content = new BoardDialog(tutorialOne, gameController);
 
             tutorialOne.ClearBoard();
             UpdateBoard();
@@ -252,8 +251,7 @@ namespace Chess.Screens
             currentMode = GameMode.PawnGame;
             PawnGame pawnGame = new PawnGame();
 
-            board.SetPosition(pawnGame.GetPosition());
-            board.UpdateBoard();
+            gameController.SetPosition(pawnGame.GetPosition());
         }
 
         /// <summary>
@@ -271,8 +269,7 @@ namespace Chess.Screens
         /// </summary>
         private void UpdateBoard()
         {
-            board.SetPosition(tutorialOne.GetPosition());
-            board.UpdateBoard();
+            gameController.SetPosition(tutorialOne.GetPosition());
         }
     }
 }

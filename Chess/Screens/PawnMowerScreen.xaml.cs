@@ -24,25 +24,21 @@ namespace Chess.Screens
     /// </summary>
     public partial class PawnMowerScreen : Screen
     {
-        ScreenControl parentWindow;
         PieceType userPiece;
         PawnMower pawnMower;
         Brush originalColour;
-        TutorialBoard board;
-        int count = 5;
+        GameController gameController;
+        int count = 4;
 
         public PawnMowerScreen(ScreenControl parentWindow) : base(parentWindow)
         {
             InitializeComponent();
 
-            this.parentWindow = parentWindow;
-
             userPiece = PieceType.R;
             pawnMower = new PawnMower(userPiece, count);
 
-            board = new TutorialBoard(false, pawnMower.GetPosition());
-            BoardArea.Content = board;
-            board.UpdateBoard();
+            gameController = new GameController(false, pawnMower.GetPosition());
+            BoardArea.Content = gameController.board;
 
             Dialog.Content = new PawnMowerDialog(this);
 
@@ -101,7 +97,7 @@ namespace Chess.Screens
         private void Reset_Board_Click(object sender, RoutedEventArgs e)
         {
             pawnMower.ResetPosition();
-            Update();
+            UpdateBoard();
         }
 
         private void Go_Back_Click(object sender, RoutedEventArgs e)
@@ -109,10 +105,9 @@ namespace Chess.Screens
             parentWindow.PopScreen();
         }
 
-        private void Update()
+        private void UpdateBoard()
         {
-            board.SetPosition(pawnMower.GetPosition());
-            board.UpdateBoard();
+            gameController.SetPosition(pawnMower.GetPosition());
         }
 
         public void NewChallenge()
@@ -120,9 +115,12 @@ namespace Chess.Screens
             //create new pawn mower challenge
             pawnMower = new PawnMower(userPiece, count);
             //update board
-            Update();
+            UpdateBoard();
         }
 
+        /*
+         * Used for the slider in the pawn mower dialog
+         */
         public int GetCount()
         {
             return count;

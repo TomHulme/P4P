@@ -16,15 +16,11 @@ namespace Chess
         /*
          * Class Vars
          */
-        private Square[] squares;
-
-
-        
+        private Square[] squares;       
         public bool flipped;
         private bool isVsAI = false;
         private Position position;
         private GameController gamecon;
-        private GameScreen parent;
         
 
         /*
@@ -100,6 +96,12 @@ namespace Chess
                     }
                 }
             }
+        }
+
+        internal void SetPosition(Position position)
+        {
+            this.position = position;
+            setup();
         }
 
         public void ColourSquare(int square, Brush colour)
@@ -281,16 +283,6 @@ namespace Chess
         internal void printNextTurn()
         {
             Console.WriteLine(this.position.whiteMove ? "White to move." : "Black to move.");
-
-            // Prints legal moves.
-            if (false)
-            {
-                Console.WriteLine("Legal moves are:");
-                foreach (Move x in new MoveGenerator().legalMoves(this.position))
-                {
-                    Console.WriteLine("\t" + x.origin + " to " + x.destination + " with promoteTo " + x.promoteTo);
-                }
-            }
         }
 
 
