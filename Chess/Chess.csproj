@@ -65,10 +65,6 @@
     <Compile Include="Board.cs" />
     <Compile Include="EngineLogic\ComputerPlayer.cs" />
     <Compile Include="EngineLogic\SFEngine.cs" />
-    <Compile Include="Game.xaml.cs">
-      <DependentUpon>Game.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="GameController.cs" />
     <Compile Include="GameLogic\CommandLineInterface.cs" />
     <Compile Include="GameLogic\FENConverter.cs" />
@@ -79,12 +75,11 @@
     <Compile Include="GameLogic\PieceType.cs" />
     <Compile Include="GameLogic\Position.cs" />
     <Compile Include="GameLogic\UnMakeInfo.cs" />
-    <Compile Include="GameScreen.cs" />
     <Compile Include="Screens\Challenges.xaml.cs">
       <DependentUpon>Challenges.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Screens\EmptyBoard.xaml.cs">
-      <DependentUpon>EmptyBoard.xaml</DependentUpon>
+    <Compile Include="Screens\GameBoard.xaml.cs">
+      <DependentUpon>GameBoard.xaml</DependentUpon>
     </Compile>
     <Compile Include="Screens\Learn.xaml.cs">
       <DependentUpon>Learn.xaml</DependentUpon>
@@ -96,16 +91,27 @@
     <Compile Include="ScreenControl.xaml.cs">
       <DependentUpon>ScreenControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Screens\PawnMowerScreen.xaml.cs">
+      <DependentUpon>PawnMowerScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\StoryBoardCreator.cs" />
+    <Compile Include="Screens\TutorialDialogs\BoardDialog.xaml.cs">
+      <DependentUpon>BoardDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\TutorialDialogs\PawnMowerDialog.xaml.cs">
+      <DependentUpon>PawnMowerDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\TutorialDialogs\PieceDialog.xaml.cs">
+      <DependentUpon>PieceDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\TutorialOneScreen.xaml.cs">
+      <DependentUpon>TutorialOneScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Square.cs" />
     <Compile Include="Tutorials\Challenges\PawnGame.cs" />
     <Compile Include="Tutorials\Challenges\PawnMower.cs" />
     <Compile Include="Tutorials\TutorialBase.cs" />
-    <Compile Include="Tutorials\TutorialController.cs" />
     <Compile Include="Tutorials\TutorialOne.cs" />
-    <Page Include="Game.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="ScreenControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -114,7 +120,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Screens\EmptyBoard.xaml">
+    <Page Include="Screens\GameBoard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -130,6 +136,26 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Screens\PawnMowerScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\TutorialDialogs\BoardDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\TutorialDialogs\PawnMowerDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\TutorialDialogs\PieceDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\TutorialOneScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -163,9 +189,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tutorials\Screens\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

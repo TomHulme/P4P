@@ -4,9 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:view="clr-namespace:Chess"
+             xmlns:my="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1280">
-    <Grid Background="Black" Name="LearnScreen" Height="720" Width="1280">
-        <Button Content="Challenges" Height="62" HorizontalAlignment="Center" Margin="0,200,0,0" Name="Challenges" VerticalAlignment="Top" Width="312" Click="Challenges_Click" TouchDown="Challenges_Click"  />
-    </Grid>
+    <Viewbox>
+        <Grid Background="Black" Name="LearnScreen" Height="720" Width="1280">
+            <my:SurfaceButton Content="Challenges" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="62" HorizontalAlignment="Center" Margin="0,200,0,0" Name="Challenges" VerticalAlignment="Top" Width="312" Click="Challenges_Click" TouchDown="Challenges_Click"  />
+            <my:SurfaceButton Content="Introduction" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="62" HorizontalAlignment="Center" Margin="0,265,0,0" Name="Introduction" VerticalAlignment="Top" Width="312" Click="Introduction_Click" TouchDown="Introduction_Click"  />
+            <my:SurfaceButton Content="Go Back" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="62" HorizontalAlignment="Center" Margin="0,330,0,0" Name="Go_Back" VerticalAlignment="Top" Width="312" Click="Go_Back_Click" TouchDown="Introduction_Click"  />
+        </Grid>
+    </Viewbox>
 </view:Screen>

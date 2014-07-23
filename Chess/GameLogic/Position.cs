@@ -73,6 +73,7 @@ namespace GameLogic
             fullMoveCounter = position.fullMoveCounter;
             wKingSquare = position.wKingSquare;
             bKingSquare = position.bKingSquare;
+            sameActiveColor = position.sameActiveColor;
         }
 
         //-----------------Board and Pieces Methods---------------------

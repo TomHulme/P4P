@@ -13,12 +13,12 @@ using System.Threading;
 
 namespace Chess
 {
-    class GameController
+    public class GameController
     {
         private bool blackIsAI = true;
         private bool whiteIsAI = false;
         private Queue<Square> moveQueue = new Queue<Square>();
-        public event EventHandler<ControllerEvent> RaiseControllerEvent;
+        event EventHandler<ControllerEvent> RaiseControllerEvent;
         private ArrayList previousMoves = new ArrayList();
         internal Board board;
         private bool oneClick = false;
@@ -72,9 +72,6 @@ namespace Chess
             }
             //return PieceType.Empty;
         }
-
-
-
 
         public void movePiece(Move current)
         {
@@ -332,9 +329,17 @@ namespace Chess
             }
         }
 
+        /**
+         * Allows the board to be set to an arbitrary position
+         */
+        public void SetPosition(Position position)
+        {
+            this.position = position;
+            board.SetPosition(position);
+        }
 
 
-
+        
         /* Event handling best practice from http://msdn.microsoft.com/en-us/library/w369ty8x.aspx
          * 
          */

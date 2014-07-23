@@ -7,7 +7,7 @@ using GameLogic;
 
 namespace Chess
 {
-    class Square : Canvas
+    public class Square : Canvas
     {
         string name;
         int number;
@@ -22,6 +22,8 @@ namespace Chess
             this.piece = PieceType.Empty;
             this.Width = squareSize;
             this.Height = squareSize;
+
+            this.Name = nam;
         }
 
         public void setPiece(PieceType p)
