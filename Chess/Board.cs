@@ -8,6 +8,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using GameLogic;
+using System.Threading;
+using Microsoft.Surface.Presentation.Controls;
 
 namespace Chess
 {
@@ -20,6 +22,7 @@ namespace Chess
         public bool flipped;
         private Position position;
         private GameController gamecon;
+        internal Thread BoardThread;
         
 
         /*
@@ -30,6 +33,8 @@ namespace Chess
             this.flipped = b;
             this.position = pos;
             this.gamecon = gc;
+
+            //BoardThread = new Thread(
         }
 
         /*
@@ -61,6 +66,7 @@ namespace Chess
                 squares[i] = new Square(getSquareName(i, 0), this.getSquareNumber(i, 0));
                 squares[i].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
                 squares[i].AddHandler(ButtonBase.TouchDownEvent, new RoutedEventHandler(TappedSquare), true);
+                //squares[i].AddHandler(TagVisualizer
                 this.Children.Add(squares[i]);
                 Canvas.SetTop(squares[i], 0);
                 Canvas.SetLeft(squares[i], i * 75);

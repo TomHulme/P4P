@@ -23,15 +23,13 @@ namespace Chess.Screens.TutorialDialogs
     public partial class PieceDialog : UserControl
     {
         PieceType piece;
-        TutorialBoard tutorialBoard;
         TutorialOneScreen parentScreen;
 
-        public PieceDialog(PieceType piece, TutorialBoard tutorialBoard, TutorialOneScreen parentScreen)
+        public PieceDialog(PieceType piece, TutorialOneScreen parentScreen)
         {
             InitializeComponent();
 
             this.piece = piece;
-            this.tutorialBoard = tutorialBoard;
             this.parentScreen = parentScreen;
         }
 

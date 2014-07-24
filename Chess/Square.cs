@@ -23,7 +23,6 @@ namespace Chess
             this.Width = squareSize;
             this.Height = squareSize;
 
-            this.Name = nam;
         }
 
         public void setPiece(PieceType p)

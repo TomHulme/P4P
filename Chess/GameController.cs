@@ -10,15 +10,15 @@ using System.Windows.Media;
 using EngineLogic;
 using System.IO;
 using System.Threading;
+using System.ComponentModel;
 
 namespace Chess
 {
     public class GameController
     {
-        private bool blackIsAI = true;
+        private bool blackIsAI = false;
         private bool whiteIsAI = false;
         private Queue<Square> moveQueue = new Queue<Square>();
-        event EventHandler<ControllerEvent> RaiseControllerEvent;
         private ArrayList previousMoves = new ArrayList();
         internal Board board;
         private bool oneClick = false;
@@ -26,14 +26,10 @@ namespace Chess
         internal Position position;
         private MoveGenerator movegen;
         public event EventHandler<BoardEvent> RaiseBoardEvent;
+        event EventHandler<ControllerEvent> RaiseControllerEvent;
         private SFEngine engine;
-        private ComputerPlayer blackAI;
-        private ComputerPlayer whiteAI;
-        private StreamReader blackIn;
-        private StreamWriter blackOut;
-        private StreamReader whiteIn;
-        private StreamWriter whiteOut;
-        private Thread AIThread;
+        private ComputerPlayer AI;
+        internal BackgroundWorker bw;
 
         public GameController(bool b, Position pos)
         {
@@ -41,22 +37,104 @@ namespace Chess
             board.setup();
             this.position = pos;
             this.movegen = new MoveGenerator();
-            this.engine = new SFEngine();
-            if (blackIsAI)
+            
+        }
+
+        public GameController(bool b, Position pos, bool blackIsAI, bool whiteIsAI) : this(b, pos)
+        {
+
+            this.blackIsAI = blackIsAI;
+            this.whiteIsAI = whiteIsAI;
+            if (blackIsAI | whiteIsAI)
             {
-                blackIn = engine.engineProcess.StandardOutput;
-                blackOut = engine.engineProcess.StandardInput;
-                blackAI = new ComputerPlayer(blackIn, blackOut);
-                blackAI.setMoveTime(100);
+                this.engine = new SFEngine();
+                AI = new ComputerPlayer(engine.engineProcess.StandardOutput, engine.engineProcess.StandardInput);
+                AI.setMoveTime(2000);
+                this.Subscribe(this);
             }
-            if (whiteIsAI)
+            if (blackIsAI & whiteIsAI)
             {
-                whiteIn = engine.engineProcess.StandardOutput;
-                whiteOut = engine.engineProcess.StandardInput;
-                whiteAI = new ComputerPlayer(whiteIn, whiteOut);
-                //whiteAI.setMoveTime(100);
-                MoveHandler(this.GetAIMove(whiteAI)); // if uncommented, entire game plays out before screen is displayed.
+                //checkAITurn();
+                //MoveHandler(this.GetAIMove(AI)); // if uncommented, entire game plays out before screen is displayed.
             }
+
+            bw = new BackgroundWorker();
+
+            bwSetup();
+        }
+
+        private void bwSetup()
+        {
+            bw.WorkerReportsProgress = true;
+
+            bw.DoWork += new DoWorkEventHandler(
+                delegate(object o, DoWorkEventArgs args)
+                {
+                    BackgroundWorker b = o as BackgroundWorker;
+                    int i = 0;
+                    bool gameCompleted = false;
+                    while (!gameCompleted) 
+                    {
+                        String move;
+                        if ((position.whiteMove & whiteIsAI) | (!position.whiteMove & blackIsAI))
+                        {
+                            move = GetAIMove();
+                        }else{
+                            move = "";
+                        }
+
+                        if (ParseMove(move))
+                        {
+                            Console.WriteLine("_" + move + "_");
+                            Square orig = board.getSquareForName(move.Substring(0, 2));
+                            Square dest = board.getSquareForName(move.Substring(2, 2));
+                            Console.WriteLine(move + " " + move.Length);
+                            PieceType promotion = PieceType.Empty;
+                            if (move.Length == 5)
+                            {
+                                Console.WriteLine("Trying to promote");
+                                promotion = MoveParser.charToPieceType((char)move.Substring(4, 1)[0]);
+                            }
+                            Move newMove = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promotion);
+
+                            if(MoveParser.isMoveValid(newMove, position))
+                            {
+                                position.makeMove(newMove, new UnMakeInfo());
+                                previousMoves.Add(newMove);
+                            }
+                        }
+                        if (movegen.legalMoves(position).Count == 0)
+                        {
+                            i = 100;
+                            gameCompleted = true;
+                        }
+                        else
+                        {
+                            i = (i == 0) ? 50 : 0;
+                        }
+                        b.ReportProgress(i);
+                        
+                    }
+                });
+            bw.ProgressChanged += new ProgressChangedEventHandler(
+                delegate(object o, ProgressChangedEventArgs args)
+                {
+                    this.SetPosition(position);
+                }
+            );
+            bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
+                delegate(object o, RunWorkerCompletedEventArgs args)
+                {
+                    this.SetPosition(position);
+                    Console.WriteLine("Checkmate bruv.");
+                });
+
+            bw.RunWorkerAsync();
+        }
+
+        private void Subscribe(GameController gc)
+        {
+            gc.RaiseControllerEvent += HandleControllerEvent;
         }
 
         private PieceType getPromotion(PieceType piece)
@@ -146,14 +224,13 @@ namespace Chess
             {
                 Square orig = board.getSquareForName(MoveString.Substring(0,2));
                 Square dest = board.getSquareForName(MoveString.Substring(2,2));
-                this.MoveHandler(orig);
-                this.MoveHandler(dest);
+                this.MoveHandler(orig,dest);
             }
         }
 
         private static Boolean ParseMove(String input)
         {
-            if (input.Length > 4)
+            if (input.Length > 5)
             {
                 return false;
             }
@@ -169,11 +246,23 @@ namespace Chess
             {
                 return false;
             }
+
             else if (!((char)input[3] >= '1' && (char)input[3] <= '8'))
             {
                 return false;
             }
             else return true;
+        }
+
+        public void MoveHandler(Square orig, Square dest)
+        {
+            PieceType promoteTo = ((dest.getSquareNumber() <= 7 | dest.getSquareNumber() > 55) & (orig.getPiece().Equals(PieceType.p) | orig.getPiece().Equals(PieceType.P))) ? getPromotion(orig.getPiece()) : PieceType.Empty;
+
+            Move current = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promoteTo);
+            if (MoveCheck(current))
+            {
+                performMove(current);
+            }
         }
 
         public void MoveHandler(Square tapped){
@@ -242,45 +331,48 @@ namespace Chess
             {
                 this.promotePiece(board.getSquareForNumber(current.origin), current.promoteTo);
             }
-            OnRaiseControllerEvent(new ControllerEvent("Did a" + (((blackIsAI & !position.whiteMove) | (whiteIsAI & position.whiteMove)) ? "n AI " : " non AI ") + " move from " + board.getSquareName(current.origin) + " to " + board.getSquareName(current.destination)));
             OnRaiseBoardEvent(new BoardEvent(current, board.getSquareForNumber(current.origin).getName() + board.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
             this.movePiece(current);
             this.position.makeMove(current, this.unmake);
             this.previousMoves.Add(current);
             //OnRaiseBoardEvent(new BoardEvent(current, this.getSquareForNumber(current.origin).getName() + this.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
 
-            this.oneClick = false;
-            if (blackIsAI & !position.whiteMove)
-            {
-
-                //AIThread = new Thread(new ThreadStart(GetAIMove));
-                //AIThread.Start();
-                //AIThread.Join();
-                //MoveHandler(this.GetAIMove(blackAI));
-                String threadOut = null;
-                AIThread = new Thread(() =>
-                {
-                    threadOut = GetAIMove();
-                }
-                );
-                AIThread.Start();
-                AIThread.Join();
-                MoveHandler(threadOut);
-                
-            }else if (whiteIsAI & position.whiteMove)
-            {
-                String threadOut = null;
-                AIThread = new Thread(() =>
-                {
-                    threadOut = GetAIMove();
-                }
-                );
-                AIThread.Start();
-                AIThread.Join();
-                MoveHandler(threadOut);
-            }
             board.ColourBoard();
             board.printNextTurn();
+
+            this.oneClick = false;
+            OnRaiseControllerEvent(new ControllerEvent());//position.whiteMove));
+        }
+
+        private void checkAITurn()
+        {
+            Thread.Sleep(750);
+            if (blackIsAI & !position.whiteMove)
+            {
+                MoveHandler(GetAIMove());
+
+            }
+            else if (whiteIsAI & position.whiteMove)
+            {
+                MoveHandler(GetAIMove());
+            }
+
+            Console.WriteLine("end of check ai turn" + Thread.CurrentThread.ToString());
+        }
+
+        private int checkAITurn(int input)
+        {
+            if (blackIsAI & !position.whiteMove)
+            {
+                MoveHandler(GetAIMove());
+
+            }
+            else if (whiteIsAI & position.whiteMove)
+            {
+                MoveHandler(GetAIMove());
+            }
+
+            return (input == 0 ? 50 : 0);
         }
 
         private bool MoveCheck(Move m)
@@ -292,14 +384,7 @@ namespace Chess
 
         private String GetAIMove()
         {
-            if (position.whiteMove)
-            {
-                return GetAIMove(whiteAI);
-            }
-            else
-            {
-                return GetAIMove(blackAI);
-            }
+            return GetAIMove(AI);
         }
 
         private String GetAIMove(ComputerPlayer AIPlayer)
@@ -325,6 +410,7 @@ namespace Chess
             if (handler != null)
             {
                 // Use the () operator to raise the event.
+                Console.WriteLine("OnRaiseControllerEvent out");
                 handler(this, e);
             }
         }
@@ -357,19 +443,26 @@ namespace Chess
                 handler(this, e);
             }
         }
+
+        void HandleControllerEvent(object sender, ControllerEvent e)
+        {
+            Console.WriteLine("Controller Event Handled");
+            Thread AIThread = new Thread(checkAITurn);
+            AIThread.Start();
+        }
     }
 
-    class ControllerEvent : EventArgs
+    public class ControllerEvent : EventArgs
     {
-        private string text;
-        public ControllerEvent(String text)
+        private bool whiteTurn;
+        public ControllerEvent()//bool whiteTurn)
         {
-            this.text = text;
+            //this.whiteTurn = whiteTurn;
         }
 
-        public String Text
+        public bool WhiteTurn
         {
-            get { return text; }
+            get { return whiteTurn; }
         }
     }
 }
