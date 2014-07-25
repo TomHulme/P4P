@@ -19,8 +19,11 @@ namespace Chess.Screens
          * to highlight the board to show the ranks and files of the board seperately.
          */
 
-        public static Storyboard FadeInFadeOutSquare(Square square, Brush colour)
+        public static Storyboard FadeInFadeOutSquare(Square square, Brush colour, int delay)
         {
+            int beginFadeIn = (delay - 1) * 1000;
+            int beginFadeOut = beginFadeIn + 500;
+
             SolidColorBrush originalBackground = square.Background as SolidColorBrush;
             SolidColorBrush highLightColour = colour as SolidColorBrush;
 
@@ -31,13 +34,13 @@ namespace Chess.Screens
             fadeIn.From = 0;
             fadeIn.To = 1;
             fadeIn.Duration = new Duration(TimeSpan.FromMilliseconds(500));
-            fadeIn.BeginTime = TimeSpan.FromMilliseconds(0);
-
+            fadeIn.BeginTime = TimeSpan.FromMilliseconds(beginFadeIn);
+            
             DoubleAnimation fadeOut = new DoubleAnimation();
             fadeOut.From = 1;
             fadeOut.To = 0;
             fadeIn.Duration = new Duration(TimeSpan.FromMilliseconds(500));
-            fadeIn.BeginTime = TimeSpan.FromMilliseconds(500);
+            fadeIn.BeginTime = TimeSpan.FromMilliseconds(beginFadeOut);
 
             //ColorAnimation fadeIn = new ColorAnimation();
             //fadeIn.From = originalBackground.Color;
