@@ -108,7 +108,7 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Pawn_Click(object sender, RoutedEventArgs e)
         {
-            Dialog.Content = null;
+            Dialog.Content = new PieceDialog(PieceType.P, this);
 
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.P);
@@ -131,7 +131,7 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void King_Click(object sender, RoutedEventArgs e)
         {
-            Dialog.Content = null;
+            Dialog.Content = new PieceDialog(PieceType.K, this);
 
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.K);
@@ -154,7 +154,7 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Rook_Click(object sender, RoutedEventArgs e)
         {
-            Dialog.Content = null;
+            Dialog.Content = new PieceDialog(PieceType.R, this);
 
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.R);
@@ -177,7 +177,7 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Bishop_Click(object sender, RoutedEventArgs e)
         {
-            Dialog.Content = null;
+            Dialog.Content = new PieceDialog(PieceType.B, this);
 
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.B);
@@ -200,7 +200,7 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Queen_Click(object sender, RoutedEventArgs e)
         {
-            Dialog.Content = null;
+            Dialog.Content = new PieceDialog(PieceType.Q, this);
 
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.Q);
@@ -223,7 +223,7 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Knight_Click(object sender, RoutedEventArgs e)
         {
-            Dialog.Content = null;
+            Dialog.Content = new PieceDialog(PieceType.N, this);
 
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.N);
