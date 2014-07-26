@@ -6,8 +6,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="120" d:DesignWidth="1010" xmlns:my="http://schemas.microsoft.com/surface/2008">
     <Grid Background="DarkGray" >
-        <my:SurfaceButton Content="New Challenge" Height="23" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="89,0,0,0" Name="New_Challenge_Button" VerticalAlignment="Center" Width="287" Click="New_Challenge_Button_Click" TouchDown="New_Challenge_Button_Click" />
-        <my:SurfaceSlider Height="40" HorizontalAlignment="Right" Margin="502,0,89,0" Name="Count_Slider" VerticalAlignment="Center" Width="287" Value="4" Minimum="1" Maximum="7" ValueChanged="Count_Slider_ValueChanged" />
-        <Label Content="i Pieces" Height="28" HorizontalAlignment="Left" Margin="634,60,0,0" Name="Count_Label" VerticalAlignment="Top" Width="287" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+        <my:SurfaceButton Content="New Challenge" Height="23" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" Margin="0,0,89,0" Name="New_Challenge_Button" VerticalAlignment="Center" Width="287" Click="New_Challenge_Button_Click" TouchDown="New_Challenge_Button_Click" />
+        <my:SurfaceSlider Height="40" HorizontalAlignment="Left" Margin="89,0,0,0" Name="Count_Slider" VerticalAlignment="Center" Width="287" Value="4" Minimum="1" Maximum="7" ValueChanged="Count_Slider_ValueChanged" />
+        <Label Content="i Pieces" Height="28" HorizontalAlignment="Left" Margin="89,60,0,0" Name="Count_Label" VerticalAlignment="Top" Width="287" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
     </Grid>
 </UserControl>
