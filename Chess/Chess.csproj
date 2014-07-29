@@ -63,6 +63,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Board.cs" />
+    <Compile Include="EngineLogic\AIWorker.cs" />
     <Compile Include="EngineLogic\ComputerPlayer.cs" />
     <Compile Include="EngineLogic\SFEngine.cs" />
     <Compile Include="GameController.cs" />

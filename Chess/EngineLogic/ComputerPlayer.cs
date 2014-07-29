@@ -67,7 +67,7 @@ namespace EngineLogic
             do
             {
                 searchResults = engineReader.ReadLine();
-                Console.WriteLine(searchResults);
+                //Console.WriteLine(searchResults);
                 if (searchResults.StartsWith("bestmove"))
                 {
                     searching = false;
