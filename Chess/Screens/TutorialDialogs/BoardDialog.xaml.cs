@@ -93,11 +93,6 @@ namespace Chess.Screens.TutorialDialogs
             {
                 quiz.RunWorkerAsync("RanksFiles");
             }
-            else
-            {
-                quiz.CancelAsync();
-            }
-
         }
 
         private void Squares_Click(object sender, RoutedEventArgs e)
@@ -108,10 +103,6 @@ namespace Chess.Screens.TutorialDialogs
             if (quiz.IsBusy == false)
             {
                 quiz.RunWorkerAsync("Squares");
-            }
-            else
-            {
-                quiz.CancelAsync();
             }
         }
 
@@ -219,8 +210,6 @@ namespace Chess.Screens.TutorialDialogs
 
         void quiz_DoWork(object sender, DoWorkEventArgs e)
         {
-            BackgroundWorker worker = sender as BackgroundWorker;
-
             Random randGen = new Random();
 
             Boolean quizComplete = false;
@@ -237,9 +226,11 @@ namespace Chess.Screens.TutorialDialogs
                         while (questionNumber < 4)
                         {
                             //if another quiz has been requested, cancel this one
-                            if (worker.CancellationPending)
+                            if (quiz.CancellationPending)
                             {
+                                Console.WriteLine("trying to cancel.");
                                 e.Cancel = true;
+                                quiz.ReportProgress(100, e);
                             }
                             else
                             {
@@ -293,9 +284,11 @@ namespace Chess.Screens.TutorialDialogs
                         while (questionNumber < 4)
                         {
                             //if another quiz has been requested, cancel this one
-                            if (worker.CancellationPending)
+                            if (quiz.CancellationPending)
                             {
+                                Console.WriteLine("trying to cancel.");
                                 e.Cancel = true;
+                                quiz.ReportProgress(100, e);
                             }
                             else
                             {
