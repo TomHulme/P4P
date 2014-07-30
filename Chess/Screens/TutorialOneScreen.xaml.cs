@@ -24,7 +24,7 @@ namespace Chess.Screens
     /// </summary>
     public partial class TutorialOneScreen : Screen
     {
-        enum GameMode { Tutorial, PawnGame, PawnMower};
+        enum GameMode { Tutorial, Board};
 
         TutorialOne tutorialOne;
         GameMode currentMode;
@@ -47,6 +47,8 @@ namespace Chess.Screens
             BoardArea.Content = gameController.board;
 
             originalColour = Board_Button.Background;
+
+            Board_Click(new object(), new RoutedEventArgs());
         }
 
         /// <summary>
@@ -72,9 +74,9 @@ namespace Chess.Screens
                     tutorialOne.SetInitialPosition();
                     UpdateBoard();
                     break;
-                case GameMode.PawnGame:
-                    PawnGame pawnGame = new PawnGame();
-                    gameController.SetPosition(pawnGame.GetPosition());
+                case GameMode.Board:
+                    tutorialOne.ClearBoard();
+                    UpdateBoard();
                     break;
             }
             
@@ -88,6 +90,8 @@ namespace Chess.Screens
         private void Board_Click(object sender, RoutedEventArgs e)
         {
             Dialog.Content = new BoardDialog(tutorialOne, gameController);
+
+            currentMode = GameMode.Board;
 
             tutorialOne.ClearBoard();
             UpdateBoard();
@@ -248,7 +252,6 @@ namespace Chess.Screens
         {
             Dialog.Content = null;
 
-            currentMode = GameMode.PawnGame;
             PawnGame pawnGame = new PawnGame();
 
             gameController.SetPosition(pawnGame.GetPosition());
