@@ -11,6 +11,7 @@ using EngineLogic;
 using System.IO;
 using System.Threading;
 using System.ComponentModel;
+using System.Windows.Threading;
 
 namespace Chess
 {
@@ -33,6 +34,7 @@ namespace Chess
         private String playerMoveString;
         private bool playerHasMoved = false;
         private bool lastMoveWasAI = false;
+        private Thread dispatchThread;
 
         public GameController(bool b, Position pos)
         {
@@ -40,6 +42,7 @@ namespace Chess
             board.setup();
             this.position = pos;
             this.movegen = new MoveGenerator();
+            this.Subscribe(this);
             
         }
 
@@ -53,7 +56,7 @@ namespace Chess
                 this.engine = new SFEngine();
                 AI = new ComputerPlayer(engine.engineProcess.StandardOutput, engine.engineProcess.StandardInput);
                 AI.setMoveTime(2000);
-                this.Subscribe(this);
+                dispatchThread = new Thread(new ThreadStart(ThreadAIWork));
             }
             if (blackIsAI & whiteIsAI)
             {
@@ -362,12 +365,14 @@ namespace Chess
             board.printNextTurn();
 
             this.oneClick = false;
-            OnRaiseControllerEvent(new ControllerEvent());//position.whiteMove));
+            OnRaiseControllerEvent(new ControllerEvent(false));
         }
+
+        private delegate void AsyncCheckAITurn();
 
         private void checkAITurn()
         {
-            Thread.Sleep(750);
+            /*Thread.Sleep(750);
             if (blackIsAI & !position.whiteMove)
             {
                 MoveHandler(GetAIMove());
@@ -378,7 +383,29 @@ namespace Chess
                 MoveHandler(GetAIMove());
             }
 
-            Console.WriteLine("end of check ai turn" + Thread.CurrentThread.ToString());
+            Console.WriteLine("end of check ai turn" + Thread.CurrentThread.ToString());*/
+            Console.WriteLine("Getting AI Move");
+            String move = GetAIMove();
+            if (ParseMove(move))
+            {
+                Console.WriteLine("_" + move + "_");
+                Square orig = board.getSquareForName(move.Substring(0, 2));
+                Square dest = board.getSquareForName(move.Substring(2, 2));
+                Console.WriteLine(move + " " + move.Length);
+                PieceType promotion = PieceType.Empty;
+                if (move.Length == 5)
+                {
+                    Console.WriteLine("Trying to promote");
+                    promotion = MoveParser.charToPieceType((char)move.Substring(4, 1)[0]);
+                }
+                Move newMove = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promotion);
+
+                if (MoveParser.isMoveValid(newMove, position))
+                {
+                    position.makeMove(newMove, new UnMakeInfo());
+                    previousMoves.Add(newMove);
+                }
+            }
         }
 
         private int checkAITurn(int input)
@@ -412,28 +439,9 @@ namespace Chess
         {
             AIPlayer.UpdatePosition(previousMoves);
             AIPlayer.StartSearch();
-            return AIPlayer.GetBestMove();
-        }
-
-
-
-        /* Event handling best practice from http://msdn.microsoft.com/en-us/library/w369ty8x.aspx
-         * 
-         */
-        protected virtual void OnRaiseControllerEvent(ControllerEvent e)
-        {
-            // Make a temporary copy of the event to avoid possibility of 
-            // a race condition if the last subscriber unsubscribes 
-            // immediately after the null check and before the event is raised.
-            EventHandler<ControllerEvent> handler = RaiseControllerEvent;
-
-            // Event will be null if there are no subscribers 
-            if (handler != null)
-            {
-                // Use the () operator to raise the event.
-                Console.WriteLine("OnRaiseControllerEvent out");
-                handler(this, e);
-            }
+            String bestMove = AIPlayer.GetBestMove();
+            //OnRaiseControllerEvent(new ControllerEvent(true));
+            return bestMove;
         }
 
         /**
@@ -465,82 +473,110 @@ namespace Chess
             }
         }
 
+
+
+        /* Event handling best practice from http://msdn.microsoft.com/en-us/library/w369ty8x.aspx
+         * 
+         */
+        protected virtual void OnRaiseControllerEvent(ControllerEvent e)
+        {
+            // Make a temporary copy of the event to avoid possibility of 
+            // a race condition if the last subscriber unsubscribes 
+            // immediately after the null check and before the event is raised.
+            EventHandler<ControllerEvent> handler = RaiseControllerEvent;
+
+            // Event will be null if there are no subscribers 
+            if (handler != null)
+            {
+                // Use the () operator to raise the event.
+                handler(this, e);
+            }
+        }
+
         void HandleControllerEvent(object sender, ControllerEvent e)
         {
-            Console.WriteLine("Controller Event Handled");
-            //Thread AIThread = new Thread(checkAITurn);
-            //AIThread.Start();
+            if (blackIsAI | whiteIsAI)
+            {
+                //AsyncCheckAITurn AICall = new AsyncCheckAITurn(this.checkAITurn);
+                //AICall.BeginInvoke(null, null);
+                //Console.WriteLine("Being called from Thread {0}",Thread.CurrentThread.ManagedThreadId);
+                //dispatchThread.Start();
+                /*Dispatcher x = Dispatcher.FromThread(dispatchThread);
+                x.BeginInvoke((Action)(() =>
+                    {
+                        this.checkAITurn();
+                    }));*/
+                BackgroundWorker AIbw = WorkerSetup();
+                AIbw.RunWorkerAsync();
+                //this.checkAITurn();
+                //SetPosition(position);
+            }
+        }
+
+        void ThreadAIWork()
+        {
+            Console.WriteLine("Running on Thread {0}", Thread.CurrentThread.ManagedThreadId);
+            Dispatcher.CurrentDispatcher.BeginInvoke((Action)(() =>
+                    {
+                        this.checkAITurn();
+                    }));
+            Dispatcher.Run();
         }
 
         private BackgroundWorker WorkerSetup()
         {
             BackgroundWorker worker = new BackgroundWorker();
-
-
+            worker.WorkerReportsProgress = true;
+            worker.DoWork += worker_DoWork;
+            worker.RunWorkerCompleted += worker_RunWorkerCompleted;
+            return worker;
         }
 
         void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             this.SetPosition(position);
         }
 
         void worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            bool gameCompleted = false;
-            Boolean playerTurn = true;
-            while (!gameCompleted)
+            String move = GetAIMove();
+
+            if (ParseMove(move))
             {
-                String move;
-                if (playerTurn)
+                Console.WriteLine("_" + move + "_");
+                Square orig = board.getSquareForName(move.Substring(0, 2));
+                Square dest = board.getSquareForName(move.Substring(2, 2));
+                Console.WriteLine(move + " " + move.Length);
+                PieceType promotion = PieceType.Empty;
+                if (move.Length == 5)
                 {
+                    Console.WriteLine("Trying to promote");
+                    promotion = MoveParser.charToPieceType((char)move.Substring(4, 1)[0]);
                 }
-                else
+                Move newMove = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promotion);
+
+                if (MoveParser.isMoveValid(newMove, position))
                 {
-                    move = GetAIMove();
-                }
-
-                }
-
-                if (ParseMove(move))
-                {
-                    Console.WriteLine("_" + move + "_");
-                    Square orig = board.getSquareForName(move.Substring(0, 2));
-                    Square dest = board.getSquareForName(move.Substring(2, 2));
-                    Console.WriteLine(move + " " + move.Length);
-                    PieceType promotion = PieceType.Empty;
-                    if (move.Length == 5)
-                    {
-                        Console.WriteLine("Trying to promote");
-                        promotion = MoveParser.charToPieceType((char)move.Substring(4, 1)[0]);
-                    }
-                    Move newMove = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promotion);
-
-                    if (MoveParser.isMoveValid(newMove, position))
-                    {
-                        position.makeMove(newMove, new UnMakeInfo());
-                        previousMoves.Add(newMove);
-                    }
+                    position.makeMove(newMove, new UnMakeInfo());
+                    previousMoves.Add(newMove);
                 }
             }
+            ((BackgroundWorker)sender).ReportProgress(100);
         }
     }
+    
 
     public class ControllerEvent : EventArgs
     {
-        private bool whiteTurn;
-        public ControllerEvent()//bool whiteTurn)
+        private bool AIMoved;
+        public ControllerEvent(bool AIMoved)
         {
-            //this.whiteTurn = whiteTurn;
+            this.AIMoved = AIMoved;
         }
 
-        public bool WhiteTurn
+        public bool AIMoveCompleted
         {
-            get { return whiteTurn; }
+            get { return AIMoved; }
         }
     }
 }
