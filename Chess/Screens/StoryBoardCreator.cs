@@ -21,8 +21,8 @@ namespace Chess.Screens
 
         public static Storyboard FadeInFadeOutSquare(Square square, Brush colour, int delay)
         {
-            int beginFadeIn = (delay - 1) * 1000;
-            int beginFadeOut = beginFadeIn + 500;
+            int beginFadeIn = (delay - 1) * 500;
+            int beginFadeOut = beginFadeIn + 250;
 
             SolidColorBrush originalBackground = square.Background as SolidColorBrush;
             SolidColorBrush highLightColour = colour as SolidColorBrush;

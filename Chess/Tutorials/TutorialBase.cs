@@ -24,6 +24,11 @@ namespace Tutorials
             currentPosition = FENConverter.convertPiecePlacementToPosition(FENConverter.emptyPosition);
         }
 
+        public void StartPosition()
+        {
+            currentPosition = FENConverter.convertPiecePlacementToPosition(FENConverter.startPosition);
+        }
+
         public Position GetPosition()
         {
             return currentPosition;

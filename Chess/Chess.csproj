@@ -111,6 +111,7 @@
     <Compile Include="Tutorials\Challenges\PawnGame.cs" />
     <Compile Include="Tutorials\Challenges\PawnMower.cs" />
     <Compile Include="Tutorials\TutorialBase.cs" />
+    <Compile Include="Tutorials\TutorialController.cs" />
     <Compile Include="Tutorials\TutorialOne.cs" />
     <Page Include="ScreenControl.xaml">
       <SubType>Designer</SubType>
