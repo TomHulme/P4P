@@ -346,6 +346,39 @@ namespace Chess
                     }
                 }
             }
+            
+            this.ColourPiecesUnderAttack();
+        }
+
+        private void ColourPiecesUnderAttack()
+        {
+            List<int> controlledSquares = getControlledSquares(position);
+            foreach(int i in controlledSquares)
+            {
+                if (MoveGenerator.squareAttacked(position, i))
+                {
+                    board.ColourSquare(i, Brushes.IndianRed);
+                }
+            }
+        }
+
+        private List<int> getControlledSquares(Position position)
+        {
+            List<int> controlledSquares = new List<int>();
+            for (int i = 0; i < 64; i++)
+            {
+                if(position.getPiece(i).Equals(PieceType.Empty))continue;
+                if((Char.IsLower(position.getPiece(i).ToString()[0]) && !position.whiteMove) | (Char.IsUpper(position.getPiece(i).ToString()[0]) && position.whiteMove)){
+                    controlledSquares.Add(i);
+                }
+            }
+
+            return controlledSquares;
+        }
+
+        private void ColourPiecesDefending()
+        {
+
         }
 
         protected void performMove(Move current)
