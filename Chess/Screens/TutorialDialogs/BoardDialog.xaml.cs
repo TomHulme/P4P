@@ -37,38 +37,40 @@ namespace Chess.Screens.TutorialDialogs
 
         private void Ranks_Click(object sender, RoutedEventArgs e)
         {
-            DialogText.Text = "The board is made up of ranks and files. Ranks are the rows of squares and are labeled 1 through 8.";
+            DialogText.Text = "The board is made up of ranks and files. ";
+            DialogText.Text += "Ranks are the rows of sqaures. ";
+            DialogText.Text += "Beginning from where white starts, they are labeled 1 through 8. ";
 
             String[] squares;
+            ArrayList storyboardList = new ArrayList();
 
             for (int i = 1; i <= 8; i++)
             {
                 //get square objects
-                //squares = TutorialOne.HighLightRank(i);
-                //ArrayList squareList = new ArrayList();
-                //foreach (String s in squares)
-                //{
-                //    squareList.Add(gameController.board.getSquareForName(s));
-                //}
+                squares = TutorialOne.HighLightRank(i);
+                ArrayList squareList = new ArrayList();
+                foreach (String s in squares)
+                {
+                    squareList.Add(gameController.board.getSquareForName(s));
+                }
 
-                ////create animations
-                //ArrayList storyboardList = new ArrayList();
-                //foreach (Square s in squareList)
-                //{
-                //    storyboardList.Add(StoryBoardCreator.PulseSquareBackground(s, i));
-                //}
-
-                ////start storyboards
-                //foreach (Storyboard s in storyboardList)
-                //{
-                //    s.Begin();
-                //}
+                //create animations
+                foreach (Square s in squareList)
+                {
+                    storyboardList.Add(StoryBoardCreator.FadeInFadeOutSquare(s, Brushes.Blue, i));
+                }
+            }
+            foreach (Storyboard s in storyboardList)
+            {
+                s.Begin();
             }
         }
 
         private void Files_Click(object sender, RoutedEventArgs e)
         {
-            DialogText.Text = "The board is made up of ranks and files. Files are the columns and are labeled A through H.";
+            DialogText.Text = "The board is made up of ranks and files. ";
+            DialogText.Text += "Files are the columns of squares. ";
+            DialogText.Text += "Starting from white's left side they are labeled A through H.";
 
             String[] files = { "a", "b", "c", "d", "e", "f", "g", "h" };
 
