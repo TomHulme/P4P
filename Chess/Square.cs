@@ -44,5 +44,22 @@ namespace Chess
         {
             return this.number;
         }
+
+        public static String CopySquare(Square square)
+        {
+            String result;
+            GetNameDelegate a;
+
+            a = new GetNameDelegate(GetName);
+            result = square.Dispatcher.Invoke(a, square) as String;
+            return result;
+        }
+
+        delegate String GetNameDelegate(Square square);
+
+        public static String GetName(Square square)
+        {
+            return square.getName();
+        }
     }
 }

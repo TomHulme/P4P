@@ -22,12 +22,16 @@ namespace Chess
         private MoveGenerator movegen;
         public event EventHandler<BoardEvent> RaiseBoardEvent;
 
+        internal Boolean tutorialFlag;
+        internal volatile Queue<Square> tutorialQueue = new Queue<Square>();
+
         public GameController(bool b, Position pos)
         {
             this.board = new Board(b, pos, this);
             board.setup();
             this.position = pos;
             this.movegen = new MoveGenerator();
+            this.tutorialFlag = false;
         }
 
         private PieceType getPromotion(PieceType piece)
@@ -148,37 +152,47 @@ namespace Chess
         }
 
         public void MoveHandler(Square tapped){
-            Console.WriteLine("Square " + tapped.Name + " tapped");
-            moveQueue.Enqueue(tapped);
-            if (this.oneClick)
+
+            if (tutorialFlag)
             {
-                Square orig = moveQueue.Dequeue();
-                Square dest = moveQueue.Dequeue();
-                
-                // Debug prints origin and destination piece types contained in squares
-                //Console.WriteLine("Origin: " + orig.getSquareNumber());
-                //Console.WriteLine("Destination: " + dest.getSquareNumber());
-                
-                PieceType promoteTo = ((dest.getSquareNumber() <= 7 | dest.getSquareNumber() > 55) & (orig.getPiece().Equals(PieceType.p) | orig.getPiece().Equals(PieceType.P))) ? getPromotion(orig.getPiece()) : PieceType.Empty;
-                
-                // Debug prints promotion piece
-                //Console.WriteLine("Promote To: " + promoteTo);
-                Move current = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promoteTo);
-                if (MoveCheck(current))
-                {
-                    performMove(current);
-                }
-                else
-                {
-                    moveQueue.Enqueue(dest);
-                    this.ColourLegalMoves(dest.getSquareNumber());
-                }
-                
+                Console.WriteLine("Tutorial square " + tapped.Name + " tapped");
+                tutorialQueue.Enqueue(tapped);
             }
             else
             {
-                this.ColourLegalMoves(tapped.getSquareNumber());
-                this.oneClick = true;
+                Console.WriteLine("Square " + tapped.Name + " tapped");
+                moveQueue.Enqueue(tapped);
+
+                if (this.oneClick)
+                {
+                    Square orig = moveQueue.Dequeue();
+                    Square dest = moveQueue.Dequeue();
+
+                    // Debug prints origin and destination piece types contained in squares
+                    //Console.WriteLine("Origin: " + orig.getSquareNumber());
+                    //Console.WriteLine("Destination: " + dest.getSquareNumber());
+
+                    PieceType promoteTo = ((dest.getSquareNumber() <= 7 | dest.getSquareNumber() > 55) & (orig.getPiece().Equals(PieceType.p) | orig.getPiece().Equals(PieceType.P))) ? getPromotion(orig.getPiece()) : PieceType.Empty;
+
+                    // Debug prints promotion piece
+                    //Console.WriteLine("Promote To: " + promoteTo);
+                    Move current = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promoteTo);
+                    if (MoveCheck(current))
+                    {
+                        performMove(current);
+                    }
+                    else
+                    {
+                        moveQueue.Enqueue(dest);
+                        this.ColourLegalMoves(dest.getSquareNumber());
+                    }
+
+                }
+                else
+                {
+                    this.ColourLegalMoves(tapped.getSquareNumber());
+                    this.oneClick = true;
+                }
             }
         }
 

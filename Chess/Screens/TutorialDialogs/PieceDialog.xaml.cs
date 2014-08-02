@@ -24,13 +24,15 @@ namespace Chess.Screens.TutorialDialogs
     {
         PieceType piece;
         TutorialOneScreen parentScreen;
+        GameController gameController;
 
-        public PieceDialog(PieceType piece, TutorialOneScreen parentScreen)
+        public PieceDialog(PieceType piece, TutorialOneScreen parentScreen, GameController gameController)
         {
             InitializeComponent();
 
             this.piece = piece;
             this.parentScreen = parentScreen;
+            this.gameController = gameController;
 
             FillInText();
         }

@@ -89,6 +89,8 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Board_Click(object sender, RoutedEventArgs e)
         {
+            gameController.tutorialFlag = true;
+            gameController.SetPosition(FENConverter.convertPiecePlacementToPosition(FENConverter.emptyPosition));
             Dialog.Content = new BoardDialog(tutorialOne, gameController);
 
             currentMode = GameMode.Board;
@@ -112,7 +114,8 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Pawn_Click(object sender, RoutedEventArgs e)
         {
-            Dialog.Content = new PieceDialog(PieceType.P, this);
+            gameController.tutorialFlag = false;
+            Dialog.Content = new PieceDialog(PieceType.P, this, gameController);
 
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.P);
@@ -135,7 +138,8 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void King_Click(object sender, RoutedEventArgs e)
         {
-            Dialog.Content = new PieceDialog(PieceType.K, this);
+            gameController.tutorialFlag = false;
+            Dialog.Content = new PieceDialog(PieceType.K, this, gameController);
 
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.K);
@@ -158,7 +162,8 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Rook_Click(object sender, RoutedEventArgs e)
         {
-            Dialog.Content = new PieceDialog(PieceType.R, this);
+            gameController.tutorialFlag = false;
+            Dialog.Content = new PieceDialog(PieceType.R, this, gameController);
 
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.R);
@@ -181,7 +186,8 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Bishop_Click(object sender, RoutedEventArgs e)
         {
-            Dialog.Content = new PieceDialog(PieceType.B, this);
+            gameController.tutorialFlag = false;
+            Dialog.Content = new PieceDialog(PieceType.B, this, gameController);
 
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.B);
@@ -204,7 +210,8 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Queen_Click(object sender, RoutedEventArgs e)
         {
-            Dialog.Content = new PieceDialog(PieceType.Q, this);
+            gameController.tutorialFlag = false;
+            Dialog.Content = new PieceDialog(PieceType.Q, this, gameController);
 
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.Q);
@@ -227,7 +234,8 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Knight_Click(object sender, RoutedEventArgs e)
         {
-            Dialog.Content = new PieceDialog(PieceType.N, this);
+            gameController.tutorialFlag = false;
+            Dialog.Content = new PieceDialog(PieceType.N, this, gameController);
 
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.N);
