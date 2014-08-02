@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,21 +7,33 @@ using System.Windows;
 using GameLogic;
 using System.Windows.Controls;
 using System.Windows.Media;
+using EngineLogic;
+using System.IO;
+using System.Threading;
+using System.ComponentModel;
+using System.Windows.Threading;
+using Microsoft.Surface.Presentation.Controls;
 
 namespace Chess
 {
     public class GameController
     {
-        private bool isVsAI = false;
+        private bool blackIsAI = false;
+        private bool whiteIsAI = false;
         private Queue<Square> moveQueue = new Queue<Square>();
-        event EventHandler<ControllerEvent> RaiseControllerEvent;
-        private Stack<Move> previousMoves = new Stack<Move>();
+        private ArrayList previousMoves = new ArrayList();
         internal Board board;
         private bool oneClick = false;
         private UnMakeInfo unmake = new UnMakeInfo();
         internal Position position;
         private MoveGenerator movegen;
         public event EventHandler<BoardEvent> RaiseBoardEvent;
+        event EventHandler<ControllerEvent> RaiseControllerEvent;
+        private SFEngine engine;
+        private ComputerPlayer AI;
+        internal BackgroundWorker bw;
+        private bool playerHasMoved = false;
+        private bool blackReversed = true;
 
         public GameController(bool b, Position pos)
         {
@@ -28,6 +41,110 @@ namespace Chess
             board.setup();
             this.position = pos;
             this.movegen = new MoveGenerator();
+            this.Subscribe(this);
+            
+        }
+
+        public GameController(bool b, Position pos, bool blackIsAI, bool whiteIsAI)
+        {
+
+            this.board = new Board(b, pos, this, !blackIsAI);
+            board.setup();
+            this.position = pos;
+            this.movegen = new MoveGenerator();
+            this.Subscribe(this);
+
+
+            this.blackIsAI = blackIsAI;
+            this.whiteIsAI = whiteIsAI;
+            if (blackIsAI | whiteIsAI)
+            {
+                this.engine = new SFEngine();
+                AI = new ComputerPlayer(engine.engineProcess.StandardOutput, engine.engineProcess.StandardInput);
+                AI.setMoveTime(2000);
+            }
+            if (blackIsAI & whiteIsAI)
+            {
+                bw = new BackgroundWorker();
+
+                bwSetup();
+            }
+            
+        }
+
+        private void bwSetup()
+        {
+            bw.WorkerReportsProgress = true;
+
+            bw.DoWork += new DoWorkEventHandler(
+                delegate(object o, DoWorkEventArgs args)
+                {
+                    BackgroundWorker b = o as BackgroundWorker;
+                    int i = 0;
+                    bool gameCompleted = false;
+                    while (!gameCompleted) 
+                    {
+                        String move;
+                        if ((position.whiteMove & whiteIsAI) | (!position.whiteMove & blackIsAI))
+                        {
+                            move = GetAIMove();
+                        }else{
+                            throw (new Exception("ERROR! This loop should only run when there is no Human player."));
+                        }
+
+                        if (ParseMove(move))
+                        {
+                            Console.WriteLine("_" + move + "_");
+                            Square orig = board.getSquareForName(move.Substring(0, 2));
+                            Square dest = board.getSquareForName(move.Substring(2, 2));
+                            Console.WriteLine(move + " " + move.Length);
+                            PieceType promotion = PieceType.Empty;
+                            if (move.Length == 5)
+                            {
+                                Console.WriteLine("Trying to promote");
+                                promotion = MoveParser.charToPieceType((char)move.Substring(4, 1)[0]);
+                            }
+                            Move newMove = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promotion);
+
+                            if(MoveParser.isMoveValid(newMove, position))
+                            {
+                                position.makeMove(newMove, new UnMakeInfo());
+                                previousMoves.Add(newMove);
+                            }
+                        }
+                        if (movegen.legalMoves(position).Count == 0)
+                        {
+                            i = 100;
+                            gameCompleted = true;
+                        }
+                        else
+                        {
+                            i = (i == 0) ? 50 : 0;
+                        }
+                        b.ReportProgress(i);
+                        
+                                this.playerHasMoved = false;
+                    }
+                });
+            bw.ProgressChanged += new ProgressChangedEventHandler(
+                delegate(object o, ProgressChangedEventArgs args)
+                {
+                    this.SetPosition(position);
+                }
+            );
+            bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
+                delegate(object o, RunWorkerCompletedEventArgs args)
+                {
+                    this.SetPosition(position);
+                    Console.WriteLine("Checkmate bruv.");
+                });
+
+            bw.RunWorkerAsync();
+        }
+
+        private void Subscribe(GameController gc)
+        {
+            gc.RaiseControllerEvent += HandleControllerEvent;
         }
 
         private PieceType getPromotion(PieceType piece)
@@ -54,7 +171,7 @@ namespace Chess
             if (position.getEpSquare() == current.destination && (originPiece == PieceType.p || originPiece == PieceType.P))
             {
                 // EN PASSANT!
-                Move last = this.previousMoves.Peek();
+                Move last = (Move)this.previousMoves[this.previousMoves.Count];
                 Square enPassantPawn = board.getSquareForNumber(last.destination);
                 enPassantPawn.setPiece(PieceType.Empty);
                 enPassantPawn.Children.Clear();
@@ -117,14 +234,13 @@ namespace Chess
             {
                 Square orig = board.getSquareForName(MoveString.Substring(0,2));
                 Square dest = board.getSquareForName(MoveString.Substring(2,2));
-                this.MoveHandler(orig);
-                this.MoveHandler(dest);
+                this.MoveHandler(orig,dest);
             }
         }
 
         private static Boolean ParseMove(String input)
         {
-            if (input.Length > 4)
+            if (input.Length > 5)
             {
                 return false;
             }
@@ -140,6 +256,7 @@ namespace Chess
             {
                 return false;
             }
+
             else if (!((char)input[3] >= '1' && (char)input[3] <= '8'))
             {
                 return false;
@@ -147,38 +264,54 @@ namespace Chess
             else return true;
         }
 
-        public void MoveHandler(Square tapped){
-            Console.WriteLine("Square " + tapped.Name + " tapped");
-            moveQueue.Enqueue(tapped);
-            if (this.oneClick)
+        public void MoveHandler(Square orig, Square dest)
+        {
+            PieceType promoteTo = ((dest.getSquareNumber() <= 7 | dest.getSquareNumber() > 55) & (orig.getPiece().Equals(PieceType.p) | orig.getPiece().Equals(PieceType.P))) ? getPromotion(orig.getPiece()) : PieceType.Empty;
+
+            Move current = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promoteTo);
+            if (MoveCheck(current))
             {
-                Square orig = moveQueue.Dequeue();
-                Square dest = moveQueue.Dequeue();
-                
-                // Debug prints origin and destination piece types contained in squares
-                //Console.WriteLine("Origin: " + orig.getSquareNumber());
-                //Console.WriteLine("Destination: " + dest.getSquareNumber());
-                
-                PieceType promoteTo = ((dest.getSquareNumber() <= 7 | dest.getSquareNumber() > 55) & (orig.getPiece().Equals(PieceType.p) | orig.getPiece().Equals(PieceType.P))) ? getPromotion(orig.getPiece()) : PieceType.Empty;
-                
-                // Debug prints promotion piece
-                //Console.WriteLine("Promote To: " + promoteTo);
-                Move current = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promoteTo);
-                if (MoveCheck(current))
-                {
-                    performMove(current);
-                }
-                else
-                {
-                    moveQueue.Enqueue(dest);
-                    this.ColourLegalMoves(dest.getSquareNumber());
-                }
-                
+                performMove(current);
+            }
+        }
+
+        public void MoveHandler(Square tapped){
+            if (blackIsAI & whiteIsAI)
+            {
+                Console.WriteLine("Both players AI, square tap ignored.");
+            }
+            else if ((blackIsAI & !position.whiteMove) | (whiteIsAI & position.whiteMove))
+            {
+                Console.WriteLine("Safety ignore.");
             }
             else
             {
-                this.ColourLegalMoves(tapped.getSquareNumber());
-                this.oneClick = true;
+                Console.WriteLine("Square " + tapped.Name + " tapped");
+                moveQueue.Enqueue(tapped);
+                if (this.oneClick)
+                {
+                    Square orig = moveQueue.Dequeue();
+                    Square dest = moveQueue.Dequeue();
+
+                    PieceType promoteTo = ((dest.getSquareNumber() <= 7 | dest.getSquareNumber() > 55) & (orig.getPiece().Equals(PieceType.p) | orig.getPiece().Equals(PieceType.P))) ? getPromotion(orig.getPiece()) : PieceType.Empty;
+
+                    Move current = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promoteTo);
+                    if (MoveCheck(current))
+                    {
+                        performMove(current);
+                    }
+                    else
+                    {
+                        moveQueue.Enqueue(dest);
+                        this.ColourLegalMoves(dest.getSquareNumber());
+                    }
+
+                }
+                else
+                {
+                    this.ColourLegalMoves(tapped.getSquareNumber());
+                    this.oneClick = true;
+                }
             }
         }
 
@@ -192,16 +325,16 @@ namespace Chess
                 {
                     if (board.getSquareForNumber(x.destination).getPiece() != PieceType.Empty)
                     {
-                        board.getSquareForNumber(x.destination).Background = Brushes.Red;
+                        board.ColourSquare(x.destination,Brushes.Red);
                     }
                     else if (x.destination == this.position.getEpSquare() && (board.getSquareForNumber(x.origin).getPiece() == PieceType.P || board.getSquareForNumber(x.origin).getPiece() == PieceType.p))
                     {
-                        board.getSquareForNumber(x.destination).Background = Brushes.Red;
-                        board.getSquareForNumber(this.previousMoves.Peek().destination).Background = Brushes.Red;
+                        board.ColourSquare(x.destination, Brushes.Red);
+                        board.ColourSquare(((Move)this.previousMoves[this.previousMoves.Count]).destination, Brushes.Red);
                     }
                     else
                     {
-                        board.getSquareForNumber(x.destination).Background = Brushes.Blue;
+                        board.ColourSquare(x.destination, Brushes.Blue);
                     }
                 }
             }
@@ -216,19 +349,57 @@ namespace Chess
             OnRaiseBoardEvent(new BoardEvent(current, board.getSquareForNumber(current.origin).getName() + board.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
             this.movePiece(current);
             this.position.makeMove(current, this.unmake);
-            this.previousMoves.Push(current);
-            //OnRaiseBoardEvent(new BoardEvent(current, this.getSquareForNumber(current.origin).getName() + this.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
-
+            this.previousMoves.Add(current);
+            
             board.ColourBoard();
             board.printNextTurn();
+
             this.oneClick = false;
+            AsyncAIMoveCheck();
+        }
+
+        private void checkAITurn()
+        {
+            Console.WriteLine("Getting AI Move");
+            String move = GetAIMove();
+            if (ParseMove(move))
+            {
+                Console.WriteLine("_" + move + "_");
+                Square orig = board.getSquareForName(move.Substring(0, 2));
+                Square dest = board.getSquareForName(move.Substring(2, 2));
+                Console.WriteLine(move + " " + move.Length);
+                PieceType promotion = PieceType.Empty;
+                if (move.Length == 5)
+                {
+                    Console.WriteLine("Trying to promote");
+                    promotion = MoveParser.charToPieceType((char)move.Substring(4, 1)[0]);
+                }
+                Move newMove = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promotion);
+
+                if (MoveParser.isMoveValid(newMove, position))
+                {
+                    position.makeMove(newMove, new UnMakeInfo());
+                    previousMoves.Add(newMove);
+                }
+            }
         }
 
         private bool MoveCheck(Move m)
         {
-            // Prints move tested
-            //Console.WriteLine("Testing move from " + m.origin + " to " + m.destination + " with promoteTo " + m.promoteTo);
             return (movegen.legalMoves(this.position).Contains(m));
+        }
+
+        private String GetAIMove()
+        {
+            return GetAIMove(AI);
+        }
+
+        private String GetAIMove(ComputerPlayer AIPlayer)
+        {
+            AIPlayer.UpdatePosition(previousMoves);
+            AIPlayer.StartSearch();
+            String bestMove = AIPlayer.GetBestMove();
+            return bestMove;
         }
 
         /**
@@ -238,6 +409,17 @@ namespace Chess
         {
             this.position = position;
             board.SetPosition(position);
+        }
+
+        /**
+         * Asynchronously Plays an AI move
+         */
+        void AsyncAIMoveCheck(){
+            if (blackIsAI | whiteIsAI)
+            {
+                BackgroundWorker AIbw = WorkerSetup();
+                AIbw.RunWorkerAsync();
+            }
         }
 
 
@@ -259,19 +441,85 @@ namespace Chess
                 handler(this, e);
             }
         }
+
+
+
+        /* Event handling best practice from http://msdn.microsoft.com/en-us/library/w369ty8x.aspx
+         * 
+         */
+        protected virtual void OnRaiseControllerEvent(ControllerEvent e)
+        {
+            // Make a temporary copy of the event to avoid possibility of 
+            // a race condition if the last subscriber unsubscribes 
+            // immediately after the null check and before the event is raised.
+            EventHandler<ControllerEvent> handler = RaiseControllerEvent;
+
+            // Event will be null if there are no subscribers 
+            if (handler != null)
+            {
+                // Use the () operator to raise the event.
+                handler(this, e);
+            }
+        }
+
+        void HandleControllerEvent(object sender, ControllerEvent e)
+        {
+        }
+
+        private BackgroundWorker WorkerSetup()
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.WorkerReportsProgress = true;
+            worker.DoWork += worker_DoWork;
+            worker.RunWorkerCompleted += worker_RunWorkerCompleted;
+            return worker;
+        }
+
+        void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            this.SetPosition(position);
+        }
+
+        void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            String move = GetAIMove();
+
+            if (ParseMove(move))
+            {
+                Console.WriteLine("_" + move + "_");
+                Square orig = board.getSquareForName(move.Substring(0, 2));
+                Square dest = board.getSquareForName(move.Substring(2, 2));
+                Console.WriteLine(move + " " + move.Length);
+                PieceType promotion = PieceType.Empty;
+                if (move.Length == 5)
+                {
+                    Console.WriteLine("Trying to promote");
+                    promotion = MoveParser.charToPieceType((char)move.Substring(4, 1)[0]);
+                }
+                Move newMove = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promotion);
+
+                if (MoveParser.isMoveValid(newMove, position))
+                {
+                    position.makeMove(newMove, new UnMakeInfo());
+                    previousMoves.Add(newMove);
+                }
+            }
+            ((BackgroundWorker)sender).ReportProgress(100);
+        }
     }
+    
 
-    class ControllerEvent : EventArgs
+    public class ControllerEvent : EventArgs
     {
-        private string name;
-        public ControllerEvent(String name)
+        //private bool AIMoved;
+        public ControllerEvent()//bool AIMoved)
         {
-            this.name = name;
+            //this.AIMoved = AIMoved;
         }
 
-        public String Name
+        /*public bool AIMoveCompleted
         {
-            get { return name; }
-        }
+            get { return AIMoved; }
+        }*/
     }
 }

@@ -28,7 +28,7 @@ namespace Chess.Screens
         {
             InitializeComponent();
 
-            this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition));
+            this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition), false, false);
 
             BoardArea.Content = gameController.board;
         }
@@ -48,7 +48,7 @@ namespace Chess.Screens
 
         private void PVP_Click(object sender, RoutedEventArgs e)
         {
-            this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition));
+            this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition), false, false);
             BoardArea.Content = gameController.board;
 
             this.New_Game_Buttons.Height = 0;
@@ -57,7 +57,7 @@ namespace Chess.Screens
 
         private void PVC_Click(object sender, RoutedEventArgs e)
         {
-            this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition));
+            this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition), true, false);
             BoardArea.Content = gameController.board;
 
             this.New_Game_Buttons.Height = 0;
@@ -66,7 +66,7 @@ namespace Chess.Screens
 
         private void CVC_Click(object sender, RoutedEventArgs e)
         {
-            this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition));
+            this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition), true, true);
             BoardArea.Content = gameController.board;
 
             this.New_Game_Buttons.Height = 0;
