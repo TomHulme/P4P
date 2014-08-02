@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Windows.Controls;
@@ -18,11 +19,12 @@ namespace Chess
         /*
          * Class Vars
          */
-        private Square[] squares;       
+        private Square[] squares;
+        private ArrayList tagVisualisations;
         public bool flipped;
         private Position position;
         private GameController gamecon;
-        internal Thread BoardThread;
+        private bool blackReverse = false;
         
 
         /*
@@ -35,6 +37,11 @@ namespace Chess
             this.gamecon = gc;
 
             //BoardThread = new Thread(
+        }
+
+        public Board(bool b, Position pos, GameController gc, bool blkRev) : this(b, pos, gc)
+        {
+            blackReverse = blkRev;
         }
 
         /*
@@ -75,11 +82,34 @@ namespace Chess
                     squares[i + j * 8] = new Square(getSquareName(i, j), this.getSquareNumber(i, j));
                     squares[i + j * 8].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
                     squares[i + j * 8].AddHandler(ButtonBase.TouchDownEvent , new RoutedEventHandler(TappedSquare), true);
+                    //TagVisualizer tag = new TagVisualizer();
+                    //squares[i + j * 8].AddHandler(tag, new RoutedEventHandler(RecognizedSquare), true);
                     this.Children.Add(squares[i + j * 8]);
                     Canvas.SetTop(squares[i + j * 8], j * 75);
                     Canvas.SetLeft(squares[i + j * 8], i * 75);
                 }
             }
+
+            //create tag visualizations
+            for (byte k = 0; k <= 10; k++)
+            {
+                TagVisualizationDefinition tag = new TagVisualizationDefinition();
+                tag.LostTagTimeout = 2000.0;
+                tag.TagRemovedBehavior = TagRemovedBehavior.Fade;
+
+                //iterate through squares and add visualizations to visualizers
+                foreach (Square s in squares)
+                {
+                    s.AddTagVisualisation(tag);
+                }
+            }
+
+            foreach (Square s in squares)
+            {
+                s.tagVis.AddHandler(TagVisualizer.VisualizationAddedEvent, new RoutedEventHandler(TappedSquare), true);
+                s.tagVis.AddHandler(TagVisualizer.VisualizationRemovedEvent, new RoutedEventHandler(TappedSquare), true);
+            }
+
             this.ColourBoard();
         }
 
@@ -106,7 +136,9 @@ namespace Chess
         internal void SetPosition(Position position)
         {
             this.position = position;
-            setup();
+            this.placePieces();
+            this.printNextTurn();
+            this.ColourBoard();
         }
 
         public void ColourSquare(int square, Brush colour)
@@ -261,7 +293,9 @@ namespace Chess
             myBitmapImage.BeginInit();
             myBitmapImage.UriSource = new Uri(App.getPath() + @"Images\" + pieceString + ".jpg");
             myBitmapImage.DecodePixelWidth = 75;
-            if (this.flipped) myBitmapImage.Rotation = Rotation.Rotate90;
+            if (this.flipped & this.blackReverse & pieceString.StartsWith("b")) { myBitmapImage.Rotation = Rotation.Rotate270; }
+            else if (this.blackReverse & pieceString.StartsWith("b")) { myBitmapImage.Rotation = Rotation.Rotate180; }
+            else if (this.flipped) { myBitmapImage.Rotation = Rotation.Rotate90; }
             myBitmapImage.EndInit();
             myImage.Source = myBitmapImage;
             myImage.IsHitTestVisible = false;
@@ -279,6 +313,15 @@ namespace Chess
         {
             Square tapped = (Square)sender;
             this.gamecon.MoveHandler(tapped);
+        }
+
+        /*
+         * Square Tapped Event
+         */
+        internal void RecognizedSquare(object sender, RoutedEventArgs e)
+        {
+            TagVisualizer tapped = (TagVisualizer)sender;
+            Console.WriteLine("Recognized tag on {0}",tapped.Parent);
         }
 
         /*

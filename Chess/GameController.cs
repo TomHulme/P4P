@@ -12,6 +12,7 @@ using System.IO;
 using System.Threading;
 using System.ComponentModel;
 using System.Windows.Threading;
+using Microsoft.Surface.Presentation.Controls;
 
 namespace Chess
 {
@@ -31,10 +32,8 @@ namespace Chess
         private SFEngine engine;
         private ComputerPlayer AI;
         internal BackgroundWorker bw;
-        private String playerMoveString;
         private bool playerHasMoved = false;
-        private bool lastMoveWasAI = false;
-        private Thread dispatchThread;
+        private bool blackReversed = true;
 
         public GameController(bool b, Position pos)
         {
@@ -46,8 +45,15 @@ namespace Chess
             
         }
 
-        public GameController(bool b, Position pos, bool blackIsAI, bool whiteIsAI) : this(b, pos)
+        public GameController(bool b, Position pos, bool blackIsAI, bool whiteIsAI)
         {
+
+            this.board = new Board(b, pos, this, !blackIsAI);
+            board.setup();
+            this.position = pos;
+            this.movegen = new MoveGenerator();
+            this.Subscribe(this);
+
 
             this.blackIsAI = blackIsAI;
             this.whiteIsAI = whiteIsAI;
@@ -56,7 +62,6 @@ namespace Chess
                 this.engine = new SFEngine();
                 AI = new ComputerPlayer(engine.engineProcess.StandardOutput, engine.engineProcess.StandardInput);
                 AI.setMoveTime(2000);
-                dispatchThread = new Thread(new ThreadStart(ThreadAIWork));
             }
             if (blackIsAI & whiteIsAI)
             {
@@ -64,7 +69,6 @@ namespace Chess
 
                 bwSetup();
             }
-
             
         }
 
@@ -85,12 +89,7 @@ namespace Chess
                         {
                             move = GetAIMove();
                         }else{
-                            while (!this.playerHasMoved)
-                            {
-                                //ControllerEvent
-                            }
-
-                            move = this.playerMoveString;
+                            throw (new Exception("ERROR! This loop should only run when there is no Human player."));
                         }
 
                         if (ParseMove(move))
@@ -294,20 +293,12 @@ namespace Chess
                     Square orig = moveQueue.Dequeue();
                     Square dest = moveQueue.Dequeue();
 
-                    // Debug prints origin and destination piece types contained in squares
-                    //Console.WriteLine("Origin: " + orig.getSquareNumber());
-                    //Console.WriteLine("Destination: " + dest.getSquareNumber());
-
                     PieceType promoteTo = ((dest.getSquareNumber() <= 7 | dest.getSquareNumber() > 55) & (orig.getPiece().Equals(PieceType.p) | orig.getPiece().Equals(PieceType.P))) ? getPromotion(orig.getPiece()) : PieceType.Empty;
 
-                    // Debug prints promotion piece
-                    //Console.WriteLine("Promote To: " + promoteTo);
                     Move current = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promoteTo);
                     if (MoveCheck(current))
                     {
                         performMove(current);
-                        //this.playerMoveString = MoveParser.moveObjectToString(current);
-                        //this.playerHasMoved = true;
                     }
                     else
                     {
@@ -334,16 +325,16 @@ namespace Chess
                 {
                     if (board.getSquareForNumber(x.destination).getPiece() != PieceType.Empty)
                     {
-                        board.getSquareForNumber(x.destination).Background = Brushes.Red;
+                        board.ColourSquare(x.destination,Brushes.Red);
                     }
                     else if (x.destination == this.position.getEpSquare() && (board.getSquareForNumber(x.origin).getPiece() == PieceType.P || board.getSquareForNumber(x.origin).getPiece() == PieceType.p))
                     {
-                        board.getSquareForNumber(x.destination).Background = Brushes.Red;
-                        board.getSquareForNumber(((Move)this.previousMoves[this.previousMoves.Count]).destination).Background = Brushes.Red;
+                        board.ColourSquare(x.destination, Brushes.Red);
+                        board.ColourSquare(((Move)this.previousMoves[this.previousMoves.Count]).destination, Brushes.Red);
                     }
                     else
                     {
-                        board.getSquareForNumber(x.destination).Background = Brushes.Blue;
+                        board.ColourSquare(x.destination, Brushes.Blue);
                     }
                 }
             }
@@ -359,31 +350,16 @@ namespace Chess
             this.movePiece(current);
             this.position.makeMove(current, this.unmake);
             this.previousMoves.Add(current);
-            //OnRaiseBoardEvent(new BoardEvent(current, this.getSquareForNumber(current.origin).getName() + this.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
-
+            
             board.ColourBoard();
             board.printNextTurn();
 
             this.oneClick = false;
-            OnRaiseControllerEvent(new ControllerEvent(false));
+            AsyncAIMoveCheck();
         }
-
-        private delegate void AsyncCheckAITurn();
 
         private void checkAITurn()
         {
-            /*Thread.Sleep(750);
-            if (blackIsAI & !position.whiteMove)
-            {
-                MoveHandler(GetAIMove());
-
-            }
-            else if (whiteIsAI & position.whiteMove)
-            {
-                MoveHandler(GetAIMove());
-            }
-
-            Console.WriteLine("end of check ai turn" + Thread.CurrentThread.ToString());*/
             Console.WriteLine("Getting AI Move");
             String move = GetAIMove();
             if (ParseMove(move))
@@ -408,25 +384,8 @@ namespace Chess
             }
         }
 
-        private int checkAITurn(int input)
-        {
-            if (blackIsAI & !position.whiteMove)
-            {
-                MoveHandler(GetAIMove());
-
-            }
-            else if (whiteIsAI & position.whiteMove)
-            {
-                MoveHandler(GetAIMove());
-            }
-
-            return (input == 0 ? 50 : 0);
-        }
-
         private bool MoveCheck(Move m)
         {
-            // Prints move tested
-            //Console.WriteLine("Testing move from " + m.origin + " to " + m.destination + " with promoteTo " + m.promoteTo);
             return (movegen.legalMoves(this.position).Contains(m));
         }
 
@@ -440,7 +399,6 @@ namespace Chess
             AIPlayer.UpdatePosition(previousMoves);
             AIPlayer.StartSearch();
             String bestMove = AIPlayer.GetBestMove();
-            //OnRaiseControllerEvent(new ControllerEvent(true));
             return bestMove;
         }
 
@@ -451,6 +409,17 @@ namespace Chess
         {
             this.position = position;
             board.SetPosition(position);
+        }
+
+        /**
+         * Asynchronously Plays an AI move
+         */
+        void AsyncAIMoveCheck(){
+            if (blackIsAI | whiteIsAI)
+            {
+                BackgroundWorker AIbw = WorkerSetup();
+                AIbw.RunWorkerAsync();
+            }
         }
 
 
@@ -495,32 +464,6 @@ namespace Chess
 
         void HandleControllerEvent(object sender, ControllerEvent e)
         {
-            if (blackIsAI | whiteIsAI)
-            {
-                //AsyncCheckAITurn AICall = new AsyncCheckAITurn(this.checkAITurn);
-                //AICall.BeginInvoke(null, null);
-                //Console.WriteLine("Being called from Thread {0}",Thread.CurrentThread.ManagedThreadId);
-                //dispatchThread.Start();
-                /*Dispatcher x = Dispatcher.FromThread(dispatchThread);
-                x.BeginInvoke((Action)(() =>
-                    {
-                        this.checkAITurn();
-                    }));*/
-                BackgroundWorker AIbw = WorkerSetup();
-                AIbw.RunWorkerAsync();
-                //this.checkAITurn();
-                //SetPosition(position);
-            }
-        }
-
-        void ThreadAIWork()
-        {
-            Console.WriteLine("Running on Thread {0}", Thread.CurrentThread.ManagedThreadId);
-            Dispatcher.CurrentDispatcher.BeginInvoke((Action)(() =>
-                    {
-                        this.checkAITurn();
-                    }));
-            Dispatcher.Run();
         }
 
         private BackgroundWorker WorkerSetup()
@@ -568,15 +511,15 @@ namespace Chess
 
     public class ControllerEvent : EventArgs
     {
-        private bool AIMoved;
-        public ControllerEvent(bool AIMoved)
+        //private bool AIMoved;
+        public ControllerEvent()//bool AIMoved)
         {
-            this.AIMoved = AIMoved;
+            //this.AIMoved = AIMoved;
         }
 
-        public bool AIMoveCompleted
+        /*public bool AIMoveCompleted
         {
             get { return AIMoved; }
-        }
+        }*/
     }
 }

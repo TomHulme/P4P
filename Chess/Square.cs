@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls;
 using GameLogic;
+using Microsoft.Surface.Presentation.Input;
+using System.Windows.Input;
+using Microsoft.Surface.Presentation.Controls;
+using System.Windows;
 
 namespace Chess
 {
@@ -12,6 +16,8 @@ namespace Chess
         string name;
         int number;
         int squareSize = 75;
+
+        internal TagVisualizer tagVis;
 
         PieceType piece;
 
@@ -23,6 +29,7 @@ namespace Chess
             this.Width = squareSize;
             this.Height = squareSize;
 
+            tagVis = new TagVisualizer();
         }
 
         public void setPiece(PieceType p)
@@ -45,5 +52,22 @@ namespace Chess
         }
 
         public String Name { get { return this.name; } }
+
+        protected override void OnPreviewTouchDown(TouchEventArgs e)
+        {
+            bool isFinger = e.TouchDevice.GetIsFingerRecognized();
+            bool isTag = e.TouchDevice.GetIsTagRecognized();
+            if (isFinger == false && isTag == false)
+            {
+                e.Handled = true;
+                return;
+            }
+            base.OnPreviewTouchDown(e);
+        }
+
+        internal void AddTagVisualisation(TagVisualizationDefinition tag)
+        {
+            tagVis.Definitions.Add(tag);
+        }
     }
 }
