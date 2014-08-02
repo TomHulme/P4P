@@ -293,6 +293,14 @@ namespace Chess
                     Square orig = moveQueue.Dequeue();
                     Square dest = moveQueue.Dequeue();
 
+                    if (orig.getSquareNumber() == dest.getSquareNumber())
+                    {
+                        // Same square tapped twice! DESELECT
+                        board.ColourBoard();
+                        this.oneClick = false;
+                        return;
+                    }
+
                     PieceType promoteTo = ((dest.getSquareNumber() <= 7 | dest.getSquareNumber() > 55) & (orig.getPiece().Equals(PieceType.p) | orig.getPiece().Equals(PieceType.P))) ? getPromotion(orig.getPiece()) : PieceType.Empty;
 
                     Move current = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promoteTo);
