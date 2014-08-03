@@ -34,6 +34,9 @@ namespace Chess
         internal BackgroundWorker bw;
         private bool playerHasMoved = false;
         private bool blackReversed = true;
+        private bool showDefendedPieces = false;
+        private bool showAttackedPieces = false;
+        private bool showOnlyDefendedPiecesUnderAttack = true;
 
         public GameController(bool b, Position pos)
         {
@@ -346,11 +349,9 @@ namespace Chess
                     }
                 }
             }
-            
-            this.ColourPiecesUnderAttack();
         }
 
-        private void ColourPiecesUnderAttack()
+        internal void ColourPiecesUnderAttack()
         {
             List<int> controlledSquares = getControlledSquares(position);
             foreach(int i in controlledSquares)
@@ -362,13 +363,56 @@ namespace Chess
             }
         }
 
+        internal void ColourPiecesDefending()
+        {
+            List<int> enemyControlledSquares = getEnemyControlledSquares(position);
+            foreach (int i in enemyControlledSquares)
+            {
+                if (MoveGenerator.squareAttacked(position, i))
+                {
+                    board.ColourSquare(i, Brushes.DarkOliveGreen);
+                }
+            }
+        }
+
+        internal void ColourOnlyDefendedPiecesUnderAttack()
+        {
+            List<int> enemyControlledSquares = getEnemyControlledSquares(position);
+            List<int> attackedSquares = new List<int>();
+            // Remove the enemy pieces which are not under attack
+            foreach (int i in enemyControlledSquares)
+            {
+                if (MoveGenerator.squareAttacked(position, i))
+                {
+                    attackedSquares.Add(i);
+                }
+            }
+
+            if (attackedSquares.Count == 0) return;
+
+            Position tempPos;
+
+            foreach (int i in attackedSquares)
+            {
+                tempPos = FENConverter.convertFENToPosition(FENConverter.convertPositionToFEN(position));
+                
+                tempPos.setPiece(i, ((position.whiteMove) ? PieceType.Q : PieceType.q));
+                tempPos.setWhiteMove(!position.whiteMove);
+                if (MoveGenerator.squareAttacked(tempPos, i))
+                {
+                    board.ColourSquare(i, Brushes.DarkOliveGreen);
+                }
+            }
+        }
+
         private List<int> getControlledSquares(Position position)
         {
             List<int> controlledSquares = new List<int>();
             for (int i = 0; i < 64; i++)
             {
-                if(position.getPiece(i).Equals(PieceType.Empty))continue;
-                if((Char.IsLower(position.getPiece(i).ToString()[0]) && !position.whiteMove) | (Char.IsUpper(position.getPiece(i).ToString()[0]) && position.whiteMove)){
+                if (position.getPiece(i).Equals(PieceType.Empty)) continue;
+                if ((Char.IsLower(position.getPiece(i).ToString()[0]) && !position.whiteMove) | (Char.IsUpper(position.getPiece(i).ToString()[0]) && position.whiteMove))
+                {
                     controlledSquares.Add(i);
                 }
             }
@@ -376,9 +420,19 @@ namespace Chess
             return controlledSquares;
         }
 
-        private void ColourPiecesDefending()
+        private List<int> getEnemyControlledSquares(Position position)
         {
+            List<int> controlledSquares = new List<int>();
+            for (int i = 0; i < 64; i++)
+            {
+                if (position.getPiece(i).Equals(PieceType.Empty)) continue;
+                if ((Char.IsLower(position.getPiece(i).ToString()[0]) && position.whiteMove) | (Char.IsUpper(position.getPiece(i).ToString()[0]) && !position.whiteMove))
+                {
+                    controlledSquares.Add(i);
+                }
+            }
 
+            return controlledSquares;
         }
 
         protected void performMove(Move current)
@@ -396,6 +450,18 @@ namespace Chess
             board.printNextTurn();
 
             this.oneClick = false;
+            if (showOnlyDefendedPiecesUnderAttack)
+            {
+                this.ColourOnlyDefendedPiecesUnderAttack();
+            }
+            if (showAttackedPieces)
+            {
+                this.ColourPiecesUnderAttack();
+            }
+            if (showDefendedPieces)
+            {
+                this.ColourPiecesDefending();
+            }
             AsyncAIMoveCheck();
         }
 
@@ -450,6 +516,19 @@ namespace Chess
         {
             this.position = position;
             board.SetPosition(position);
+
+            if (showOnlyDefendedPiecesUnderAttack)
+            {
+                this.ColourOnlyDefendedPiecesUnderAttack();
+            }
+            if (showAttackedPieces)
+            {
+                this.ColourPiecesUnderAttack();
+            }
+            if (showDefendedPieces)
+            {
+                this.ColourPiecesDefending();
+            }
         }
 
         /**
@@ -546,6 +625,24 @@ namespace Chess
                 }
             }
             ((BackgroundWorker)sender).ReportProgress(100);
+        }
+
+        public bool ShowDefendedPieces 
+        {
+            get { return this.showDefendedPieces; }
+            set { this.showDefendedPieces = value; }
+        }
+
+        public bool ShowAttackedPieces
+        {
+            get { return this.showAttackedPieces; }
+            set { this.showAttackedPieces = value; }
+        }
+
+        public bool ShowOnlyDefendedPiecesUnderAttack
+        {
+            get { return this.showOnlyDefendedPiecesUnderAttack; }
+            set { this.showOnlyDefendedPiecesUnderAttack = value; }
         }
     }
     

@@ -205,6 +205,7 @@ namespace Chess
                     PieceType current = this.position.getPiece((((7-i) * 8) + j));
                     if (current != PieceType.Empty)
                     {
+                        squares[((i * 8) + j)].Children.Clear();
                         this.drawPiece(current, squares[((i * 8) + j)]);
                     }
                     else
