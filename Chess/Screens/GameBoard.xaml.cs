@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GameLogic;
 using Tutorials;
+using Chess.Screens.Dialogs;
 
 namespace Chess.Screens
 {
@@ -23,14 +24,17 @@ namespace Chess.Screens
     public partial class GameBoard : Screen
     {
         GameController gameController;
+        GameInfoDialog gameInfoDialog;
 
         public GameBoard(ScreenControl parentWindow) : base(parentWindow)
         {
             InitializeComponent();
 
             this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition));
+            this.gameInfoDialog = new GameInfoDialog();
 
             BoardArea.Content = gameController.board;
+            BottomCenterControl.Content = this.gameInfoDialog;
         }
 
         private void Go_Back_Click(object sender, RoutedEventArgs e)

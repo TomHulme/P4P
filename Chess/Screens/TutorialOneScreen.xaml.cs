@@ -15,7 +15,7 @@ using Tutorials;
 using Tutorials.Challenges;
 using GameLogic;
 using Chess;
-using Chess.Screens.TutorialDialogs;
+using Chess.Screens.Dialogs;
 
 namespace Chess.Screens
 {
@@ -114,13 +114,13 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Pawn_Click(object sender, RoutedEventArgs e)
         {
-            gameController.tutorialFlag = false;
-            Dialog.Content = new PieceDialog(PieceType.P, this, gameController);
-
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.P);
             tutorialOne.SetInitialPosition();
             UpdateBoard();
+
+            gameController.tutorialFlag = false;
+            Dialog.Content = new PieceDialog(PieceType.P, tutorialOne, gameController);
 
             Board_Button.Background = originalColour;
             Pawn_Button.Background = Brushes.SlateGray;
@@ -138,13 +138,13 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void King_Click(object sender, RoutedEventArgs e)
         {
-            gameController.tutorialFlag = false;
-            Dialog.Content = new PieceDialog(PieceType.K, this, gameController);
-
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.K);
             tutorialOne.SetInitialPosition();
             UpdateBoard();
+
+            gameController.tutorialFlag = false;
+            Dialog.Content = new PieceDialog(PieceType.K, tutorialOne, gameController);
 
             Board_Button.Background = originalColour;
             Pawn_Button.Background = originalColour;
@@ -162,13 +162,13 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Rook_Click(object sender, RoutedEventArgs e)
         {
-            gameController.tutorialFlag = false;
-            Dialog.Content = new PieceDialog(PieceType.R, this, gameController);
-
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.R);
             tutorialOne.SetInitialPosition();
             UpdateBoard();
+
+            gameController.tutorialFlag = false;
+            Dialog.Content = new PieceDialog(PieceType.R, tutorialOne, gameController);
 
             Board_Button.Background = originalColour;
             Pawn_Button.Background = originalColour;
@@ -186,13 +186,13 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Bishop_Click(object sender, RoutedEventArgs e)
         {
-            gameController.tutorialFlag = false;
-            Dialog.Content = new PieceDialog(PieceType.B, this, gameController);
-
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.B);
             tutorialOne.SetInitialPosition();
             UpdateBoard();
+
+            gameController.tutorialFlag = false;
+            Dialog.Content = new PieceDialog(PieceType.B, tutorialOne, gameController);
 
             Board_Button.Background = originalColour;
             Pawn_Button.Background = originalColour;
@@ -210,13 +210,13 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Queen_Click(object sender, RoutedEventArgs e)
         {
-            gameController.tutorialFlag = false;
-            Dialog.Content = new PieceDialog(PieceType.Q, this, gameController);
-
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.Q);
             tutorialOne.SetInitialPosition();
             UpdateBoard();
+
+            gameController.tutorialFlag = false;
+            Dialog.Content = new PieceDialog(PieceType.Q, tutorialOne, gameController);
 
             Board_Button.Background = originalColour;
             Pawn_Button.Background = originalColour;
@@ -234,13 +234,13 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Knight_Click(object sender, RoutedEventArgs e)
         {
-            gameController.tutorialFlag = false;
-            Dialog.Content = new PieceDialog(PieceType.N, this, gameController);
-
             currentMode = GameMode.Tutorial;
             tutorialOne.SetPiece(GameLogic.PieceType.N);
             tutorialOne.SetInitialPosition();
             UpdateBoard();
+
+            gameController.tutorialFlag = false;
+            Dialog.Content = new PieceDialog(PieceType.N, tutorialOne, gameController);
 
             Board_Button.Background = originalColour;
             Pawn_Button.Background = originalColour;

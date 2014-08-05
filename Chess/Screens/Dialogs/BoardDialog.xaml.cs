@@ -18,7 +18,7 @@ using GameLogic;
 using System.Threading;
 using System.ComponentModel;
 
-namespace Chess.Screens.TutorialDialogs
+namespace Chess.Screens.Dialogs
 {
     /// <summary>
     /// Interaction logic for BoardDialog.xaml
@@ -28,7 +28,6 @@ namespace Chess.Screens.TutorialDialogs
         TutorialOne tutorialOne;
         GameController gameController;
         ArrayList squareList;
-        Square tappedSquare;
 
         BackgroundWorker quiz;
 
@@ -40,8 +39,6 @@ namespace Chess.Screens.TutorialDialogs
             this.gameController = gameController;
 
             SetIntroText();
-
-            tappedSquare = new Square("hello", -1);
 
             quiz = new BackgroundWorker();
             quiz.WorkerReportsProgress = true;
@@ -131,7 +128,6 @@ namespace Chess.Screens.TutorialDialogs
                 foreach (Square s in squareList)
                 {
                     Storyboard highlight = (StoryBoardCreator.FadeInFadeOutSquare(s, Brushes.Blue, e.ProgressPercentage));
-                    Console.WriteLine("creating storyboard " + e.ProgressPercentage);
                     highlight.Begin();
                 }
             }

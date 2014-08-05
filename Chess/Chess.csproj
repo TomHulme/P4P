@@ -78,6 +78,9 @@
     <Compile Include="Screens\Challenges.xaml.cs">
       <DependentUpon>Challenges.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Screens\Dialogs\GameInfoDialog.xaml.cs">
+      <DependentUpon>GameInfoDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Screens\GameBoard.xaml.cs">
       <DependentUpon>GameBoard.xaml</DependentUpon>
     </Compile>
@@ -95,13 +98,13 @@
       <DependentUpon>PawnMowerScreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="Screens\StoryBoardCreator.cs" />
-    <Compile Include="Screens\TutorialDialogs\BoardDialog.xaml.cs">
+    <Compile Include="Screens\Dialogs\BoardDialog.xaml.cs">
       <DependentUpon>BoardDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Screens\TutorialDialogs\PawnMowerDialog.xaml.cs">
+    <Compile Include="Screens\Dialogs\PawnMowerDialog.xaml.cs">
       <DependentUpon>PawnMowerDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Screens\TutorialDialogs\PieceDialog.xaml.cs">
+    <Compile Include="Screens\Dialogs\PieceDialog.xaml.cs">
       <DependentUpon>PieceDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Screens\TutorialOneScreen.xaml.cs">
@@ -117,6 +120,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Screens\Challenges.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\Dialogs\GameInfoDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -140,15 +147,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Screens\TutorialDialogs\BoardDialog.xaml">
+    <Page Include="Screens\Dialogs\BoardDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Screens\TutorialDialogs\PawnMowerDialog.xaml">
+    <Page Include="Screens\Dialogs\PawnMowerDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Screens\TutorialDialogs\PieceDialog.xaml">
+    <Page Include="Screens\Dialogs\PieceDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

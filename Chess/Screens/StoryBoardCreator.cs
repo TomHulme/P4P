@@ -33,13 +33,13 @@ namespace Chess.Screens
             DoubleAnimation fadeIn = new DoubleAnimation();
             fadeIn.From = 0;
             fadeIn.To = 1;
-            fadeIn.Duration = new Duration(TimeSpan.FromMilliseconds(500));
+            fadeIn.Duration = new Duration(TimeSpan.FromMilliseconds(250));
             fadeIn.BeginTime = TimeSpan.FromMilliseconds(beginFadeIn);
             
             DoubleAnimation fadeOut = new DoubleAnimation();
             fadeOut.From = 1;
             fadeOut.To = 0;
-            fadeIn.Duration = new Duration(TimeSpan.FromMilliseconds(500));
+            fadeIn.Duration = new Duration(TimeSpan.FromMilliseconds(250));
             fadeIn.BeginTime = TimeSpan.FromMilliseconds(beginFadeOut);
 
             //ColorAnimation fadeIn = new ColorAnimation();
@@ -79,16 +79,16 @@ namespace Chess.Screens
         //should just be a 1 to 8 thing as i
         //then the begin time equals i - 1
 
-        public static Storyboard PulseSquareBackground(Square square, int delay)
+        public static Storyboard PulseSquareBackground(Square square, Brush colour, int delay)
         {
-            int beginFadeIn = (delay - 1) * 1000;
-            int beginFadeOut = beginFadeIn + 500;
+            int beginFadeIn = (delay - 1) * 500;
+            int beginFadeOut = beginFadeIn + 250;
 
             SolidColorBrush animatedBrush = square.Background as SolidColorBrush;
             square.Background = animatedBrush;
             
             SolidColorBrush originalColour = square.Background as SolidColorBrush;
-            SolidColorBrush highlightColour = Brushes.Crimson as SolidColorBrush;
+            SolidColorBrush highlightColour = colour as SolidColorBrush;
 
             ColorAnimation fadeIn = new ColorAnimation();
             fadeIn.From = originalColour.Color;

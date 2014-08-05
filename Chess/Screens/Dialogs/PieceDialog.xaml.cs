@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -9,13 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Animation;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GameLogic;
 using Chess;
 using Tutorials;
+using System.ComponentModel;
+using System.Threading;
 
-namespace Chess.Screens.TutorialDialogs
+namespace Chess.Screens.Dialogs
 {
     /// <summary>
     /// Interaction logic for PieceDialog.xaml
@@ -23,18 +27,26 @@ namespace Chess.Screens.TutorialDialogs
     public partial class PieceDialog : UserControl
     {
         PieceType piece;
-        TutorialOneScreen parentScreen;
+        TutorialOne tutorialOne;
         GameController gameController;
+        BackgroundWorker movesWorker;
+        ArrayList squareList;
 
-        public PieceDialog(PieceType piece, TutorialOneScreen parentScreen, GameController gameController)
+        public PieceDialog(PieceType piece, TutorialOne tutorialOne, GameController gameController)
         {
             InitializeComponent();
 
             this.piece = piece;
-            this.parentScreen = parentScreen;
+            this.tutorialOne = tutorialOne;
             this.gameController = gameController;
 
             FillInText();
+
+            movesWorker = new BackgroundWorker();
+            movesWorker.WorkerReportsProgress = true;
+            movesWorker.DoWork += new DoWorkEventHandler(movesWorker_DoWork);
+            movesWorker.ProgressChanged += new ProgressChangedEventHandler(movesWorker_ProgressChanged);
+            movesWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(movesWorker_RunWorkerCompleted);
         }
 
         private void FillInText()
@@ -89,6 +101,75 @@ namespace Chess.Screens.TutorialDialogs
         {
             //explain how a piece moves in writing.
             //also show possible moves that can be made
+            if (!movesWorker.IsBusy)
+            {
+                movesWorker.RunWorkerAsync();
+            }
+        }
+
+        //called when the moves worker is completed
+        void movesWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Console.WriteLine("Moves highlighted.");
+
+            gameController.SetPosition(tutorialOne.GetPosition());
+        }
+
+        //called when the worker calls the report progress method
+        void movesWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if (e.ProgressPercentage != 100)
+            {
+                //create animations
+                foreach (Square s in squareList)
+                {
+                    Storyboard highlight = (StoryBoardCreator.FadeInFadeOutSquare(s, Brushes.Gold, e.ProgressPercentage));
+                    highlight.Begin();
+                }
+            }
+        }
+
+        //called when the moves worker is started
+        void movesWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            //go through pieces
+            //highlight potential moves
+            //going from left to right
+
+            //get moves list
+            //get origin squares
+
+            ArrayList moves = MoveGenerator.mgInstance.legalMoves(gameController.position);
+            HashSet<int> originSquares = new HashSet<int>();
+            squareList = new ArrayList();
+            //delay for storyboards
+            int count = 1; 
+
+            foreach (Move move in moves)
+            {
+                originSquares.Add(move.origin);
+            }
+
+            foreach (int i in originSquares)
+            {
+                squareList.Clear();
+
+                //origin square gets highlighted too
+                squareList.Add(gameController.board.getSquareForNumber(i));
+                //for each move with the same origin square, create storyboards
+                foreach (Move move in moves)
+                {
+                    if (move.origin == i)
+                    {
+                        squareList.Add(gameController.board.getSquareForNumber(move.destination));
+                        Console.WriteLine("Adding in square " + move.destination);
+                    }
+                }
+
+                movesWorker.ReportProgress(count);
+                Thread.Sleep(500);
+                count++;
+            }
         }
     }
 }
