@@ -45,6 +45,11 @@ namespace Chess
             return this.number;
         }
 
+        internal int getSquareSize()
+        {
+            return squareSize;
+        }
+
         public static String CopySquare(Square square)
         {
             String result;

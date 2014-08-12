@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 
 
 namespace Chess.Screens
@@ -114,5 +115,53 @@ namespace Chess.Screens
             return fadeInOut;
         }
 
+        public static Storyboard NewHighlighter(Square s, Brush brush, int delay)
+        {
+            int beginFadeIn = 0;//(delay - 1) * 300;
+            int beginFadeOut = beginFadeIn + 300;
+
+            var rectangle = new Rectangle()
+            {
+                StrokeThickness = 1,
+                Stroke = s.Background,
+                Fill = s.Background,
+                Width = s.getSquareSize(),
+                Height = s.getSquareSize(),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            Duration duration = new Duration(TimeSpan.FromMilliseconds(200));
+
+            ColorAnimation fadeIn = new ColorAnimation()
+            {
+                From = ((SolidColorBrush)(rectangle.Fill)).Color,
+                To = (brush as SolidColorBrush).Color,
+                Duration = duration,
+                BeginTime = TimeSpan.FromMilliseconds(beginFadeIn)
+            };
+
+            ColorAnimation fadeOut = new ColorAnimation()
+            {
+                From = (brush as SolidColorBrush).Color,
+                To = (s.Background as SolidColorBrush).Color,
+                Duration = duration,
+                BeginTime = TimeSpan.FromMilliseconds(beginFadeOut)
+            };
+
+            Storyboard.SetTarget(fadeIn, rectangle);
+            Storyboard.SetTargetProperty(fadeIn, new PropertyPath("Fill.Color"));
+            Storyboard.SetTarget(fadeOut, rectangle);
+            Storyboard.SetTargetProperty(fadeOut, new PropertyPath("Fill.Color"));
+
+            Storyboard highlight = new Storyboard();
+            highlight.Children.Add(fadeIn);
+            highlight.Children.Add(fadeOut);
+
+            //s.Children.Add(rectangle);
+            s.Children.Insert(0, rectangle);
+
+            return highlight;
+        }
     }
 }

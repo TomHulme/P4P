@@ -32,6 +32,8 @@ namespace Chess.Screens.Dialogs
         BackgroundWorker movesWorker;
         ArrayList squareList;
 
+        BackgroundWorker quiz;
+
         public PieceDialog(PieceType piece, TutorialOne tutorialOne, GameController gameController)
         {
             InitializeComponent();
@@ -47,6 +49,12 @@ namespace Chess.Screens.Dialogs
             movesWorker.DoWork += new DoWorkEventHandler(movesWorker_DoWork);
             movesWorker.ProgressChanged += new ProgressChangedEventHandler(movesWorker_ProgressChanged);
             movesWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(movesWorker_RunWorkerCompleted);
+
+            quiz = new BackgroundWorker();
+            quiz.WorkerReportsProgress = true;
+            quiz.DoWork += new DoWorkEventHandler(quiz_DoWork);
+            quiz.ProgressChanged += new ProgressChangedEventHandler(quiz_ProgressChanged);
+            quiz.RunWorkerCompleted += new RunWorkerCompletedEventHandler(quiz_RunWorkerCompleted);
         }
 
         private void FillInText()
@@ -123,7 +131,7 @@ namespace Chess.Screens.Dialogs
                 //create animations
                 foreach (Square s in squareList)
                 {
-                    Storyboard highlight = (StoryBoardCreator.FadeInFadeOutSquare(s, Brushes.Gold, e.ProgressPercentage));
+                    Storyboard highlight = (StoryBoardCreator.NewHighlighter(s, Brushes.Gold, e.ProgressPercentage));
                     highlight.Begin();
                 }
             }
@@ -168,8 +176,32 @@ namespace Chess.Screens.Dialogs
 
                 movesWorker.ReportProgress(count);
                 Thread.Sleep(500);
+
                 count++;
             }
+        }
+
+        void quiz_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            DialogText.Text = "Quiz Complete! Great job! You can click either quiz button to start a new one.";
+        }
+
+        void quiz_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            String text = e.UserState as String;
+            if (e.ProgressPercentage == 1)
+            {
+                DialogText.Text += "\n" + text;
+            }
+            else
+            {
+                DialogText.Text = text;
+            }
+        }
+
+        void quiz_DoWork(object sender, DoWorkEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
