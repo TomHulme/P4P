@@ -207,7 +207,15 @@ namespace Chess.Screens.Dialogs
         {
             //update text, clear board?
             String text = e.UserState as String;
-            DialogText.Text = text;
+            if (e.ProgressPercentage == 1)
+            {
+                DialogText.Text += "\n" + text;
+            }
+            else
+            {
+                DialogText.Text = text;
+            }
+            
             
         }
 
@@ -250,18 +258,16 @@ namespace Chess.Screens.Dialogs
 
                                     String text = "Please tap a square from the '" + file + "' file.";
 
-                                    quiz.ReportProgress((questionNumber + 1) * 25 / 2, text);
+                                    quiz.ReportProgress((questionNumber + 1) * 25 / 3, text);
 
                                     do
                                     {
-                                        //quiz.ReportProgress((questionNumber + 1) * 25 / 2, text);
+                                        //Update text box with quiz question
+                                        //quiz.RepoErtProgress((questionNumber + 1) * 25 / 2, text);
 
                                         if (controller.tutorialQueue.Count != 0)
                                         {
                                             String tapped = Square.CopySquare(controller.tutorialQueue.Dequeue());
-                                            //Console.WriteLine("square " + tapped.Name + "was tapped");
-                                            //quiz.ReportProgress(questionNumber * 25, "Get Square");
-                                            //Thread.Sleep(1000);
 
                                             Console.WriteLine(tapped);
 
@@ -275,14 +281,11 @@ namespace Chess.Screens.Dialogs
                                             else
                                             {
                                                 //Console.WriteLine("incorrect file tapped");
-                                                quiz.ReportProgress(questionNumber * 25, "Incorrect, that was the " + tapped[0] + " file.");
-                                                Thread.Sleep(1000);
+                                                quiz.ReportProgress(1, "Incorrect, that was the " + tapped[0] + " file.");
                                             }
                                         }
                                     }
                                     while (!questionCorrect);
-
-                                    //quiz.ReportProgress(questionNumber * 25, "Good Work. You got it right!");
 
                                     quizFiles = false;
                                 }
@@ -292,11 +295,12 @@ namespace Chess.Screens.Dialogs
                                     int rank = (int)(randGen.NextDouble() * 8) + 1;
 
                                     String text = "Pleaes tap a square from rank " + rank + ".";
-                                    //Update text box with quiz question
-                                    quiz.ReportProgress((questionNumber + 1) * 25 / 2, text);
+
+                                    quiz.ReportProgress((questionNumber + 1) * 25 / 3, text);
 
                                     do
                                     {
+                                        //Update text box with quiz question
                                         //quiz.ReportProgress((questionNumber + 1) * 25 / 2, text);
 
                                         if (controller.tutorialQueue.Count != 0)
@@ -311,8 +315,7 @@ namespace Chess.Screens.Dialogs
                                             }
                                             else
                                             {
-                                                quiz.ReportProgress(questionNumber * 25, "Incorrect, that was the " + tapped[1] + " rank.");
-                                                Thread.Sleep(1000);
+                                                quiz.ReportProgress(1, "Incorrect, that was the " + tapped[1] + " rank.");
                                             }
                                         }
                                     }
@@ -361,6 +364,9 @@ namespace Chess.Screens.Dialogs
 
                                 do
                                 {
+                                    //Updates the text box to ask the user which square to tap
+                                    //quiz.ReportProgress((questionNumber + 1) * 25 / 2, text);
+
                                     if (controller.tutorialQueue.Count != 0)
                                     {
                                         String tapped = Square.CopySquare(controller.tutorialQueue.Dequeue());
@@ -373,8 +379,7 @@ namespace Chess.Screens.Dialogs
                                         }
                                         else
                                         {
-                                            quiz.ReportProgress(questionNumber * 25, "Incorrect, that was square " + tapped);
-                                            Thread.Sleep(1000);
+                                            quiz.ReportProgress(1, "Incorrect, that was square " + tapped);
                                         }
                                     }
                                 }
