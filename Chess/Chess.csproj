@@ -76,6 +76,9 @@
     <Compile Include="GameLogic\PieceType.cs" />
     <Compile Include="GameLogic\Position.cs" />
     <Compile Include="GameLogic\UnMakeInfo.cs" />
+    <Compile Include="PieceVisualization.xaml.cs">
+      <DependentUpon>PieceVisualization.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Screens\Challenges.xaml.cs">
       <DependentUpon>Challenges.xaml</DependentUpon>
     </Compile>
@@ -108,11 +111,18 @@
     <Compile Include="Screens\TutorialOneScreen.xaml.cs">
       <DependentUpon>TutorialOneScreen.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Square.cs" />
+    <Compile Include="SquareNuts.cs" />
+    <Compile Include="Square.xaml.cs">
+      <DependentUpon>Square.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tutorials\Challenges\PawnGame.cs" />
     <Compile Include="Tutorials\Challenges\PawnMower.cs" />
     <Compile Include="Tutorials\TutorialBase.cs" />
     <Compile Include="Tutorials\TutorialOne.cs" />
+    <Page Include="PieceVisualization.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ScreenControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -157,6 +167,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Square.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -189,6 +203,9 @@
     <Content Include="Chess.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Settings\Tags.xml">
+      <SubType>Designer</SubType>
+    </Resource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

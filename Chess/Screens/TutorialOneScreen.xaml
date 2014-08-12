@@ -8,8 +8,8 @@
              mc:Ignorable="d" d:DesignHeight="720" d:DesignWidth="1280">
     <Viewbox>
         <Grid Background="Gray" Height="720" Width="1280">
-            <ContentControl Name="BoardArea" Margin="270,0,0,0" Height="600" Width="1010" VerticalAlignment="Top" />
-            <Rectangle Height="601" Width="601" Margin="270,0,0,0" Name="BoardBorder" Stroke="Black" StrokeThickness="3" VerticalAlignment="Top" Panel.ZIndex="2"/>
+            <ContentControl Name="BoardArea" Margin="270,0,0,0" Height="600" Width="1010" VerticalAlignment="Top" Panel.ZIndex="2" />
+            <Rectangle Height="601" Width="601" Margin="270,0,0,0" Name="BoardBorder" Stroke="Black" StrokeThickness="3" VerticalAlignment="Top" Panel.ZIndex="1"/>
             
             <Grid Height="720" HorizontalAlignment="Left" Name="MenuBackground" VerticalAlignment="Top" Width="270" AllowDrop="True" Background="DarkGray">
                 <!--Introduction Buttons-->

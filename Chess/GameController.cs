@@ -177,7 +177,7 @@ namespace Chess
                 Move last = (Move)this.previousMoves[this.previousMoves.Count];
                 Square enPassantPawn = board.getSquareForNumber(last.destination);
                 enPassantPawn.setPiece(PieceType.Empty);
-                enPassantPawn.Children.Clear();
+                enPassantPawn.clearPieceImage();
             }
 
             if (MoveParser.moveObjectToString(current, this.position).Contains("O-O"))
@@ -186,7 +186,7 @@ namespace Chess
                 board.ColourBoard();
                 Console.WriteLine("Castling");
 
-                Image[] img = new Image[1];
+                Image img;
                 Square rookOrigin;
                 Square rookDestination;
                 if (current.destination == current.origin + 2)
@@ -203,25 +203,22 @@ namespace Chess
                 {
                     throw new Exception("No.");
                 }
-                originSquare.Children.CopyTo(img, 0);
-                originSquare.Children.Clear();
-                destinationSquare.Children.Add(img[0]);
-                rookOrigin.Children.CopyTo(img, 0);
-                rookOrigin.Children.Clear();
-                rookDestination.Children.Add(img[0]);
+                img = originSquare.getPieceImage();
+                originSquare.clearPieceImage();
+                destinationSquare.setPieceImage(img);
+                img = rookOrigin.getPieceImage();
+                rookOrigin.clearPieceImage();
+                rookDestination.setPieceImage(img);
                 rookDestination.setPiece(rookOrigin.getPiece());
                 rookOrigin.setPiece(PieceType.Empty);
             }
             else
             {
-                Image[] img = new Image[1];
-                if (destinationSquare.Children.Count > 0)
-                {
-                    destinationSquare.Children.Clear();
-                }
-                originSquare.Children.CopyTo(img, 0);
-                originSquare.Children.Clear();
-                destinationSquare.Children.Add(img[0]);
+                Image img;
+                destinationSquare.clearPieceImage();
+                img = originSquare.getPieceImage();
+                originSquare.clearPieceImage();
+                destinationSquare.setPieceImage(img);
             }
         }
 
