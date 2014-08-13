@@ -34,6 +34,9 @@ namespace Chess
         internal BackgroundWorker bw;
         private bool playerHasMoved = false;
         private bool blackReversed = true;
+        private bool showDefendedPieces = false;
+        private bool showAttackedPieces = false;
+        private bool showOnlyDefendedPiecesUnderAttack = true;
 
         public GameController(bool b, Position pos)
         {
@@ -174,7 +177,7 @@ namespace Chess
                 Move last = (Move)this.previousMoves[this.previousMoves.Count];
                 Square enPassantPawn = board.getSquareForNumber(last.destination);
                 enPassantPawn.setPiece(PieceType.Empty);
-                enPassantPawn.Children.Clear();
+                enPassantPawn.clearPieceImage();
             }
 
             if (MoveParser.moveObjectToString(current, this.position).Contains("O-O"))
@@ -183,7 +186,7 @@ namespace Chess
                 board.ColourBoard();
                 Console.WriteLine("Castling");
 
-                Image[] img = new Image[1];
+                Image img;
                 Square rookOrigin;
                 Square rookDestination;
                 if (current.destination == current.origin + 2)
@@ -200,25 +203,22 @@ namespace Chess
                 {
                     throw new Exception("No.");
                 }
-                originSquare.Children.CopyTo(img, 0);
-                originSquare.Children.Clear();
-                destinationSquare.Children.Add(img[0]);
-                rookOrigin.Children.CopyTo(img, 0);
-                rookOrigin.Children.Clear();
-                rookDestination.Children.Add(img[0]);
+                img = originSquare.getPieceImage();
+                originSquare.clearPieceImage();
+                destinationSquare.setPieceImage(img);
+                img = rookOrigin.getPieceImage();
+                rookOrigin.clearPieceImage();
+                rookDestination.setPieceImage(img);
                 rookDestination.setPiece(rookOrigin.getPiece());
                 rookOrigin.setPiece(PieceType.Empty);
             }
             else
             {
-                Image[] img = new Image[1];
-                if (destinationSquare.Children.Count > 0)
-                {
-                    destinationSquare.Children.Clear();
-                }
-                originSquare.Children.CopyTo(img, 0);
-                originSquare.Children.Clear();
-                destinationSquare.Children.Add(img[0]);
+                Image img;
+                destinationSquare.clearPieceImage();
+                img = originSquare.getPieceImage();
+                originSquare.clearPieceImage();
+                destinationSquare.setPieceImage(img);
             }
         }
 
@@ -293,6 +293,14 @@ namespace Chess
                     Square orig = moveQueue.Dequeue();
                     Square dest = moveQueue.Dequeue();
 
+                    if (orig.getSquareNumber() == dest.getSquareNumber())
+                    {
+                        // Same square tapped twice! DESELECT
+                        board.ColourBoard();
+                        this.oneClick = false;
+                        return;
+                    }
+
                     PieceType promoteTo = ((dest.getSquareNumber() <= 7 | dest.getSquareNumber() > 55) & (orig.getPiece().Equals(PieceType.p) | orig.getPiece().Equals(PieceType.P))) ? getPromotion(orig.getPiece()) : PieceType.Empty;
 
                     Move current = new Move(orig.getSquareNumber(), dest.getSquareNumber(), promoteTo);
@@ -340,6 +348,90 @@ namespace Chess
             }
         }
 
+        internal void ColourPiecesUnderAttack()
+        {
+            List<int> controlledSquares = getControlledSquares(position);
+            foreach(int i in controlledSquares)
+            {
+                if (MoveGenerator.squareAttacked(position, i))
+                {
+                    board.ColourSquare(i, Brushes.IndianRed);
+                }
+            }
+        }
+
+        internal void ColourPiecesDefending()
+        {
+            List<int> enemyControlledSquares = getEnemyControlledSquares(position);
+            foreach (int i in enemyControlledSquares)
+            {
+                if (MoveGenerator.squareAttacked(position, i))
+                {
+                    board.ColourSquare(i, Brushes.DarkOliveGreen);
+                }
+            }
+        }
+
+        internal void ColourOnlyDefendedPiecesUnderAttack()
+        {
+            List<int> enemyControlledSquares = getEnemyControlledSquares(position);
+            List<int> attackedSquares = new List<int>();
+            // Remove the enemy pieces which are not under attack
+            foreach (int i in enemyControlledSquares)
+            {
+                if (MoveGenerator.squareAttacked(position, i))
+                {
+                    attackedSquares.Add(i);
+                }
+            }
+
+            if (attackedSquares.Count == 0) return;
+
+            Position tempPos;
+
+            foreach (int i in attackedSquares)
+            {
+                tempPos = FENConverter.convertFENToPosition(FENConverter.convertPositionToFEN(position));
+                
+                tempPos.setPiece(i, ((position.whiteMove) ? PieceType.Q : PieceType.q));
+                tempPos.setWhiteMove(!position.whiteMove);
+                if (MoveGenerator.squareAttacked(tempPos, i))
+                {
+                    board.ColourSquare(i, Brushes.DarkOliveGreen);
+                }
+            }
+        }
+
+        private List<int> getControlledSquares(Position position)
+        {
+            List<int> controlledSquares = new List<int>();
+            for (int i = 0; i < 64; i++)
+            {
+                if (position.getPiece(i).Equals(PieceType.Empty)) continue;
+                if ((Char.IsLower(position.getPiece(i).ToString()[0]) && !position.whiteMove) | (Char.IsUpper(position.getPiece(i).ToString()[0]) && position.whiteMove))
+                {
+                    controlledSquares.Add(i);
+                }
+            }
+
+            return controlledSquares;
+        }
+
+        private List<int> getEnemyControlledSquares(Position position)
+        {
+            List<int> controlledSquares = new List<int>();
+            for (int i = 0; i < 64; i++)
+            {
+                if (position.getPiece(i).Equals(PieceType.Empty)) continue;
+                if ((Char.IsLower(position.getPiece(i).ToString()[0]) && position.whiteMove) | (Char.IsUpper(position.getPiece(i).ToString()[0]) && !position.whiteMove))
+                {
+                    controlledSquares.Add(i);
+                }
+            }
+
+            return controlledSquares;
+        }
+
         protected void performMove(Move current)
         {
             if (current.promoteTo != PieceType.Empty)
@@ -355,6 +447,18 @@ namespace Chess
             board.printNextTurn();
 
             this.oneClick = false;
+            if (showOnlyDefendedPiecesUnderAttack)
+            {
+                this.ColourOnlyDefendedPiecesUnderAttack();
+            }
+            if (showAttackedPieces)
+            {
+                this.ColourPiecesUnderAttack();
+            }
+            if (showDefendedPieces)
+            {
+                this.ColourPiecesDefending();
+            }
             AsyncAIMoveCheck();
         }
 
@@ -409,6 +513,19 @@ namespace Chess
         {
             this.position = position;
             board.SetPosition(position);
+
+            if (showOnlyDefendedPiecesUnderAttack)
+            {
+                this.ColourOnlyDefendedPiecesUnderAttack();
+            }
+            if (showAttackedPieces)
+            {
+                this.ColourPiecesUnderAttack();
+            }
+            if (showDefendedPieces)
+            {
+                this.ColourPiecesDefending();
+            }
         }
 
         /**
@@ -505,6 +622,24 @@ namespace Chess
                 }
             }
             ((BackgroundWorker)sender).ReportProgress(100);
+        }
+
+        public bool ShowDefendedPieces 
+        {
+            get { return this.showDefendedPieces; }
+            set { this.showDefendedPieces = value; }
+        }
+
+        public bool ShowAttackedPieces
+        {
+            get { return this.showAttackedPieces; }
+            set { this.showAttackedPieces = value; }
+        }
+
+        public bool ShowOnlyDefendedPiecesUnderAttack
+        {
+            get { return this.showOnlyDefendedPiecesUnderAttack; }
+            set { this.showOnlyDefendedPiecesUnderAttack = value; }
         }
     }
     

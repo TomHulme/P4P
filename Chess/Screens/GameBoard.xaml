@@ -3,9 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:s="http://schemas.microsoft.com/surface/2008"
              xmlns:view="clr-namespace:Chess"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1280" xmlns:my="http://schemas.microsoft.com/surface/2008">
+
 
     <view:Screen.Resources>
         <!--Animation Resouces-->
@@ -22,13 +24,29 @@
     <Viewbox>
 
         <Grid Background="Gray">
+
+
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="360"/>
                 <RowDefinition Height="360"/>
             </Grid.RowDefinitions>
 
-            <ContentControl Name="BoardArea" Height="600" Width="600" Panel.ZIndex="5" Grid.RowSpan="2" />
-            <Rectangle Height="605" Width="605" Name="BoardBorder" Panel.ZIndex="2" Stroke="Black" VerticalAlignment="Center" HorizontalAlignment="Center" StrokeThickness="5" Grid.RowSpan="2" />
+            <!--
+            <s:TagVisualizer
+                    Name="MyTagVisualizer" 
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Height="Auto" Width="Auto"
+                    VisualizationAdded="OnVisualizationAdded"
+                    Panel.ZIndex="6"
+                    >
+            </s:TagVisualizer>
+            -->
+            
+            <ContentControl Name="BoardArea" Height="600" Width="600" Panel.ZIndex="2" Grid.RowSpan="2" />
+
+            <Rectangle Height="605" Width="605" Name="BoardBorder" Panel.ZIndex="1" Stroke="Black" VerticalAlignment="Center" HorizontalAlignment="Center" StrokeThickness="5" Grid.RowSpan="2" />
 
             <Grid Background="WhiteSmoke" Name="BottomPanel" Height="360" Width="1280" VerticalAlignment="Bottom" Grid.Row="1">
                 <Grid Height="360" HorizontalAlignment="Left" Margin="0,0,0,0" Name="BottomLeft" VerticalAlignment="Center" Width="340">
@@ -58,6 +76,7 @@
                 <Grid Height="360" HorizontalAlignment="Left" Margin="0,0,0,0" Name="TopLeft" VerticalAlignment="Center" Width="340" MinHeight="360"/>
                 <Grid Height="360" HorizontalAlignment="Right" Margin="0,0,0,0" Name="TopRight" VerticalAlignment="Center" Width="340" MinHeight="360"/>
                 <Grid Height="60" HorizontalAlignment="Center" Margin="0,0,0,0" Name="TopCenter" VerticalAlignment="Top" Width="600" MinHeight="60"/>
+
             </Grid>
 
         </Grid>

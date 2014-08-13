@@ -25,6 +25,7 @@ namespace Chess.Screens
         public MainMenu(ScreenControl parentWindow) : base(parentWindow)
         {
             InitializeComponent();
+            SetBackground();
         }
 
         /// <summary>
@@ -54,7 +55,29 @@ namespace Chess.Screens
 
         private void Settings_Button_Click(object sender, RoutedEventArgs e)
         {
+            parentWindow.PushScreen(new Settings(parentWindow));
+        }
 
+
+
+        private void SetBackground()
+        {
+            // Create Image Element
+            Image myImage = new Image();
+            myImage.Width = 1280;
+            myImage.Height = 720;
+
+            // Create source
+            BitmapImage myBitmapImage = new BitmapImage();
+
+            // BitmapImage.UriSource must be in a BeginInit/EndInit block
+            myBitmapImage.BeginInit();
+            myBitmapImage.UriSource = new Uri(App.getPath() + @"Images\MainMenuSplash.png");
+            myBitmapImage.DecodePixelWidth = 1280;
+            myBitmapImage.EndInit();
+            myImage.Source = myBitmapImage;
+            myImage.IsHitTestVisible = false;
+            MainMenuScreen.Background = new ImageBrush(myImage.Source);
         }
     }
 }

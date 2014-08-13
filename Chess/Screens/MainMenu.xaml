@@ -8,10 +8,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1280">
     <Viewbox>
-        <Grid Background="Black" Name="MainMenuScreen" Height="720" Width="1280">
-            <my:SurfaceButton Margin="208,40,233,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="312" Height="62" Content="Start Chess Game!" Click="Start_Button_Click" TouchDown="Start_Button_Click" Name="Start_Button" />
-            <my:SurfaceButton Margin="208,107,233,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="312" Height="62" Content="Learn Chess!" Click="Learn_Button_Click" TouchDown="Learn_Button_Click" Name="Learn_Button" />
-            <my:SurfaceButton Margin="12,178,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Height="40" Click="Settings_Button_Click" TouchDown="Settings_Button_Click" Name="Settings_Button" />
+        <Grid Name="MainMenuScreen" Height="720" Width="1280">
+            <my:SurfaceButton Panel.ZIndex ="5" Margin="208,440,233,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="312" Height="62" Content="Start Chess Game!" Click="Start_Button_Click" TouchDown="Start_Button_Click" Name="Start_Button" />
+            <my:SurfaceButton Panel.ZIndex ="5" Margin="208,507,233,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="312" Height="62" Content="Learn Chess!" Click="Learn_Button_Click" TouchDown="Learn_Button_Click" Name="Learn_Button" />
+            <my:SurfaceButton Panel.ZIndex ="5" Margin="12,578,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Height="40" Click="Settings_Button_Click" TouchDown="Settings_Button_Click" Name="Settings_Button" />
         </Grid>
     </Viewbox>
 </view:Screen>
