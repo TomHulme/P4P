@@ -34,9 +34,10 @@ namespace Chess
         internal BackgroundWorker bw;
         private bool playerHasMoved = false;
         private bool blackReversed = true;
+        private bool showHighlightMoves = false;
         private bool showDefendedPieces = false;
         private bool showAttackedPieces = false;
-        private bool showOnlyDefendedPiecesUnderAttack = true;
+        private bool showOnlyDefendedPiecesUnderAttack = false;
 
         internal Boolean tutorialFlag;
         internal volatile Queue<Square> tutorialQueue = new Queue<Square>();
@@ -338,6 +339,17 @@ namespace Chess
         private void ColourLegalMoves(int originSquare)
         {
             board.ColourBoard();
+            if(board.getSquareForNumber(originSquare).getPiece() != PieceType.Empty)
+            {
+                if (char.IsLower(board.getSquareForNumber(originSquare).getPiece().ToString()[0]) && !position.whiteMove
+                    ||
+                    !char.IsLower(board.getSquareForNumber(originSquare).getPiece().ToString()[0]) && position.whiteMove
+                    )
+                {
+                    board.ColourSquare(originSquare, Brushes.Blue);
+                }
+            }
+            if (!showHighlightMoves) return;
             foreach (Move x in new MoveGenerator().legalMoves(this.position))
             {
                 if (x.origin == originSquare)

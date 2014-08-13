@@ -108,7 +108,7 @@ namespace Chess
         {
             bool isFinger = e.TouchDevice.GetIsFingerRecognized();
             bool isTag = e.TouchDevice.GetIsTagRecognized();
-            if (isTag == false)//isFinger == false && 
+            if (isFinger == false && isTag == false)//
             {
                 e.Handled = true;
                 return;
