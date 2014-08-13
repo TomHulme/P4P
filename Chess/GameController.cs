@@ -647,6 +647,12 @@ namespace Chess
             ((BackgroundWorker)sender).ReportProgress(100);
         }
 
+        public bool ShowHighlightedMoves
+        {
+            get { return this.showHighlightMoves; }
+            set { this.showHighlightMoves = value; }
+        }
+
         public bool ShowDefendedPieces 
         {
             get { return this.showDefendedPieces; }

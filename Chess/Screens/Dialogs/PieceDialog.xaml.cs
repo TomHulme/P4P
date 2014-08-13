@@ -98,10 +98,10 @@ namespace Chess.Screens.Dialogs
         {
             //set up board with a highlighted square. User has to navigate
             //to the lit square
-            if (!quiz.IsBusy)
-            {
-                quiz.RunWorkerAsync();
-            }
+            //if (!quiz.IsBusy)
+            //{
+            //    quiz.RunWorkerAsync();
+            //}
         }
 
         private void Captures_Click(object sender, RoutedEventArgs e)
@@ -210,33 +210,7 @@ namespace Chess.Screens.Dialogs
 
         void quiz_DoWork(object sender, DoWorkEventArgs e)
         {
-            //int iterations = count;
-
-            //while (iterations > 0)
-            //{
-            //    //2. Generate possible moves for piece in that square
-            //    ArrayList generatedMoves = MoveGenerator.mgInstance.psuedoLegalMoves(currentPosition);
-
-            //    //3. Randomly select a possible move
-            //    int moveIndex = (int)(randomNumber.NextDouble() * generatedMoves.Count);
-            //    Move selectedMove = (Move)generatedMoves.ToArray()[moveIndex];
-
-            //    //check if squares of selectedMove is occupied
-            //    if (CheckMoveValidity(selectedMove))
-            //    {
-            //        //4. Add move to list
-            //        moves.Add(selectedMove);
-
-            //        //5. Place piece on destination square
-            //        destinationSquare = selectedMove.destination;
-            //        originSquare = selectedMove.origin;
-            //        //6. Set pawn at origin to block moves in that direction 
-            //        currentPosition.setPiece(originSquare, PieceType.p);
-            //        currentPosition.setPiece(destinationSquare, userPiece);
-
-            //        iterations--;
-            //    }
-            //}
+            gameController.ShowHighlightedMoves = false;
 
             Random random = new Random();
             squareList = new ArrayList();
@@ -270,22 +244,31 @@ namespace Chess.Screens.Dialogs
 
             while (!quizFinished)
             {
-                if (gameController.tutorialQueue.Count == 2)
+                //if (halfMove)
+                //{
+                //    String destination = Square.CopySquare(gameController.tutorialQueue.Dequeue());
+                //    String origin = Square.CopySquare(gameController.tutorialQueue.Dequeue());
+
+                //    foreach (Square s in squareList)
+                //    {
+                //        if (destination.Equals(s.getName()))
+                //        {
+                //            squareList.Remove(s);
+                //            quiz.ReportProgress(2, s);
+                //            Console.WriteLine("Removing square " + s.getName());
+                //        }
+                //    }
+                //    halfMove = false;
+                //}
+                //else if (gameController.tutorialQueue.Count == 1)
+                //{
+                //    halfMove = true;
+                //}
+                foreach (Square s in squareList)
                 {
-                    String tapped = Square.CopySquare(gameController.tutorialQueue.Dequeue());
 
-                    gameController.tutorialQueue.Clear();
-
-                    foreach (Square s in squareList)
-                    {
-                        if (tapped.Equals(s.getName()))
-                        {
-                            squareList.Remove(s);
-                            quiz.ReportProgress(2, s);
-                            Console.WriteLine("Removing square " + s.getName());
-                        }
-                    }
                 }
+
                 if (squareList.Count == 0)
                 {
                     quizFinished = true;
