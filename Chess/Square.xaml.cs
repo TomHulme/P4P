@@ -38,7 +38,6 @@ namespace Chess
         {
             InitializeComponent();
             InitializeDefinitions();
-
             MyTagVisualizer.Height = squareSize;
             MyTagVisualizer.Width = squareSize;
         }
@@ -58,6 +57,12 @@ namespace Chess
             this.Height = squareSize;
             this.SetCurrentValue(Panel.ZIndexProperty, 3);
 
+        }
+
+        public void colourRectangle(Brush colour)
+        {
+            
+            rectangle.Fill = colour;
         }
 
         void tagVis_VisualizationRemoved(object sender, TagVisualizerEventArgs e)

@@ -70,19 +70,8 @@ namespace Chess
             for (int i = 0; i < 8; i++)
             {
                 squares[i] = new Square(getSquareName(i, 0), this.getSquareNumber(i, 0));
-                //squares[i].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
-                //squares[i].AddHandler(ButtonBase.TouchDownEvent, new RoutedEventHandler(TappedSquare), true);
-                /*for (byte k = 0; k <= 10; k++)
-                {
-                    TagVisualizationDefinition tag = new TagVisualizationDefinition();
-                    tag.Source = new Uri("PieceVisualization.xaml", UriKind.Relative);
-                    tag.LostTagTimeout = 2000.0;
-                    tag.TagRemovedBehavior = TagRemovedBehavior.Fade;
-                    tag.Value = k;
-                    tag.MaxCount = 32;
-                    //iterate through squares and add visualizations to visualizer
-                    squares[i].AddTagVisualisation(tag);
-                }   */
+                squares[i].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
+                squares[i].AddHandler(ButtonBase.TouchDownEvent, new RoutedEventHandler(TappedSquare), true);
                 
                 this.Children.Add(squares[i]);
                 Canvas.SetTop(squares[i], 0);
@@ -90,19 +79,9 @@ namespace Chess
                 for (int j = 1; j < 8; j++)
                 {
                     squares[i + j * 8] = new Square(getSquareName(i, j), this.getSquareNumber(i, j));
-                    //squares[i + j * 8].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
-                    //squares[i + j * 8].AddHandler(ButtonBase.TouchDownEvent , new RoutedEventHandler(TappedSquare), true);
-                    /*for (byte k = 0; k <= 10; k++)
-                    {
-                        TagVisualizationDefinition tag = new TagVisualizationDefinition();
-                        tag.LostTagTimeout = 2000.0;
-                        tag.TagRemovedBehavior = TagRemovedBehavior.Fade;
-                        tag.Value = k;
-                        tag.MaxCount = 32;
-                        tag.Source = new Uri("PieceVisualization.xaml", UriKind.Relative);
-                        //iterate through squares and add visualizations to visualizer
-                        squares[i + j * 8].AddTagVisualisation(tag);
-                    }*/
+                    squares[i + j * 8].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
+                    squares[i + j * 8].AddHandler(ButtonBase.TouchDownEvent , new RoutedEventHandler(TappedSquare), true);
+                    
                     this.Children.Add(squares[i + j * 8]);
                     Canvas.SetTop(squares[i + j * 8], j * 75);
                     Canvas.SetLeft(squares[i + j * 8], i * 75);
@@ -144,13 +123,13 @@ namespace Chess
                 {
                     if (this.flipped)
                     {
-                        if ((i + j) % 2 == 0) { this.squares[i * 8 + j].MyTagVisualizer.Background = Brushes.DarkGray; }
-                        else { this.squares[i * 8 + j].MyTagVisualizer.Background = Brushes.WhiteSmoke; }
+                        if ((i + j) % 2 == 0) { this.squares[i * 8 + j].colourRectangle(Brushes.DarkGray); }
+                        else { this.squares[i * 8 + j].colourRectangle(Brushes.WhiteSmoke); }
                     }
                     else
                     {
-                        if ((i + j) % 2 == 0) { this.squares[i * 8 + j].MyTagVisualizer.Background = Brushes.WhiteSmoke; }
-                        else { this.squares[i * 8 + j].MyTagVisualizer.Background = Brushes.DarkGray; }
+                        if ((i + j) % 2 == 0) { this.squares[i * 8 + j].colourRectangle(Brushes.WhiteSmoke); }
+                        else { this.squares[i * 8 + j].colourRectangle(Brushes.DarkGray); }
                     }
                 }
             }
@@ -166,7 +145,7 @@ namespace Chess
 
         public void ColourSquare(int square, Brush colour)
         {
-            getSquareForNumber(square).MyTagVisualizer.Background = colour;
+            getSquareForNumber(square).colourRectangle(colour);
         }
 
         internal string getSquareName(int row, int col)

@@ -4,6 +4,7 @@
     xmlns:s="http://schemas.microsoft.com/surface/2008"
     Loaded="Square_Loaded">
     <Grid>
+        <Rectangle Name="rectangle" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Panel.ZIndex="5"/>
         <s:TagVisualizer
                     Name="MyTagVisualizer" 
                     VerticalAlignment="Stretch"
@@ -11,7 +12,7 @@
                     Background="Crimson"
                     VisualizationAdded="tagVis_VisualizationAdded"
                     VisualizationRemoved="tagVis_VisualizationRemoved"
-                    Panel.ZIndex="6"
+                    Panel.ZIndex="4"
                     >
         </s:TagVisualizer>
     </Grid>

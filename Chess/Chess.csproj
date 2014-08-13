@@ -111,6 +111,9 @@
     <Compile Include="Screens\TutorialOneScreen.xaml.cs">
       <DependentUpon>TutorialOneScreen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Screens\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SquareNuts.cs" />
     <Compile Include="Square.xaml.cs">
       <DependentUpon>Square.xaml</DependentUpon>
@@ -164,6 +167,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Screens\TutorialOneScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
