@@ -69,7 +69,9 @@
                     <my:SurfaceButton Background="DarkGray" Name="Go_Back" Content="Go Back" Height="40" Width="320" HorizontalAlignment="Center" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Go_Back_Click" TouchDown="Go_Back_Click" Grid.Row="2"/>
                 </Grid>
                 <Grid Height="360" HorizontalAlignment="Right" Margin="0,0,0,0" Name="BottomRight" VerticalAlignment="Center" Width="340" />
-                <Grid Height="60" HorizontalAlignment="Center" Margin="0,0,0,0" Name="BottomCenter" VerticalAlignment="Bottom" Width="600" MinHeight="60"/>
+                <Grid Height="60" HorizontalAlignment="Center" Margin="0,0,0,0" Name="BottomCenter" VerticalAlignment="Bottom" Width="600" MinHeight="60">
+                    <ContentControl Name="BottomCenterControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/> 
+                </Grid>
             </Grid>
 
             <Grid Background="DarkGray" Name="TopPanel" Height="360" Width="1280" VerticalAlignment="Top" Grid.Row="0">

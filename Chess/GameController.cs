@@ -39,12 +39,17 @@ namespace Chess
         private bool showAttackedPieces = false;
         private bool showOnlyDefendedPiecesUnderAttack = false;
 
+        internal Boolean tutorialFlag;
+        internal volatile Queue<Square> tutorialQueue = new Queue<Square>();
+
         public GameController(bool b, Position pos)
         {
             this.board = new Board(b, pos, this);
             board.setup();
             this.position = pos;
             this.movegen = new MoveGenerator();
+            this.tutorialFlag = false;
+
             this.Subscribe(this);
             
         }
@@ -277,7 +282,13 @@ namespace Chess
         }
 
         public void MoveHandler(Square tapped){
-            if (blackIsAI & whiteIsAI)
+
+            if (tutorialFlag)
+            {
+                Console.WriteLine("Tutorial square " + tapped.Name + " tapped");
+                tutorialQueue.Enqueue(tapped);
+            }
+            else if (blackIsAI & whiteIsAI)
             {
                 Console.WriteLine("Both players AI, square tap ignored.");
             }
@@ -634,6 +645,12 @@ namespace Chess
                 }
             }
             ((BackgroundWorker)sender).ReportProgress(100);
+        }
+
+        public bool ShowHighlightedMoves
+        {
+            get { return this.showHighlightMoves; }
+            set { this.showHighlightMoves = value; }
         }
 
         public bool ShowDefendedPieces 

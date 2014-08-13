@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Chess.Screens.TutorialDialogs
+namespace Chess.Screens.Dialogs
 {
     /// <summary>
     /// Interaction logic for PawnMowerDialog.xaml

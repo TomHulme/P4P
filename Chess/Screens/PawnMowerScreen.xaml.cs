@@ -15,7 +15,7 @@ using GameLogic;
 using Tutorials.Challenges;
 using Tutorials;
 using Chess;
-using Chess.Screens.TutorialDialogs;
+using Chess.Screens.Dialogs;
 
 namespace Chess.Screens
 {

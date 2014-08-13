@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 
 
 namespace Chess.Screens
@@ -33,13 +34,13 @@ namespace Chess.Screens
             DoubleAnimation fadeIn = new DoubleAnimation();
             fadeIn.From = 0;
             fadeIn.To = 1;
-            fadeIn.Duration = new Duration(TimeSpan.FromMilliseconds(500));
+            fadeIn.Duration = new Duration(TimeSpan.FromMilliseconds(250));
             fadeIn.BeginTime = TimeSpan.FromMilliseconds(beginFadeIn);
             
             DoubleAnimation fadeOut = new DoubleAnimation();
             fadeOut.From = 1;
             fadeOut.To = 0;
-            fadeIn.Duration = new Duration(TimeSpan.FromMilliseconds(500));
+            fadeIn.Duration = new Duration(TimeSpan.FromMilliseconds(250));
             fadeIn.BeginTime = TimeSpan.FromMilliseconds(beginFadeOut);
 
             //ColorAnimation fadeIn = new ColorAnimation();
@@ -79,16 +80,16 @@ namespace Chess.Screens
         //should just be a 1 to 8 thing as i
         //then the begin time equals i - 1
 
-        public static Storyboard PulseSquareBackground(Square square, int delay)
+        public static Storyboard PulseSquareBackground(Square square, Brush colour, int delay)
         {
-            int beginFadeIn = (delay - 1) * 1000;
-            int beginFadeOut = beginFadeIn + 500;
+            int beginFadeIn = (delay - 1) * 500;
+            int beginFadeOut = beginFadeIn + 250;
 
             SolidColorBrush animatedBrush = square.Background as SolidColorBrush;
             square.Background = animatedBrush;
             
             SolidColorBrush originalColour = square.Background as SolidColorBrush;
-            SolidColorBrush highlightColour = Brushes.Crimson as SolidColorBrush;
+            SolidColorBrush highlightColour = colour as SolidColorBrush;
 
             ColorAnimation fadeIn = new ColorAnimation();
             fadeIn.From = originalColour.Color;
@@ -114,5 +115,56 @@ namespace Chess.Screens
             return fadeInOut;
         }
 
+        public static Storyboard NewHighlighter(Square s, Brush brush, int delay)
+        {
+            int beginFadeIn = 0;//(delay - 1) * 300;
+            int beginFadeOut = beginFadeIn + 300;
+
+            //var rectangle = new Rectangle()
+            //{
+            //    StrokeThickness = 1,
+            //    Stroke = s.Background,
+            //    Fill = s.Background,
+            //    Width = s.getSquareSize(),
+            //    Height = s.getSquareSize(),
+            //    HorizontalAlignment = HorizontalAlignment.Center,
+            //    VerticalAlignment = VerticalAlignment.Center
+            //};
+
+            Duration duration = new Duration(TimeSpan.FromMilliseconds(200));
+
+            ColorAnimation fadeIn = new ColorAnimation()
+            {
+                From = ((SolidColorBrush)(s.rectangle.Fill)).Color,
+                To = (brush as SolidColorBrush).Color,
+                Duration = duration,
+                BeginTime = TimeSpan.FromMilliseconds(beginFadeIn)
+            };
+
+            ColorAnimation fadeOut = new ColorAnimation()
+            {
+                From = (brush as SolidColorBrush).Color,
+                To = (s.rectangle.Fill as SolidColorBrush).Color,
+                Duration = duration,
+                BeginTime = TimeSpan.FromMilliseconds(beginFadeOut)
+            };
+
+            //ColorAnimation fadeOut = new ColorAnimation();
+            //fadeOut.From = (brush as SolidColorBrush).Color;
+            //fadeOut.To = (s.Background as SolidColorBrush).Color;
+            //fadeOut.Duration = duration;
+            //fadeOut.BeginTime = TimeSpan.FromMilliseconds(beginFadeOut);
+
+            Storyboard.SetTarget(fadeIn, s.rectangle);
+            Storyboard.SetTargetProperty(fadeIn, new PropertyPath("Fill.Color"));
+            Storyboard.SetTarget(fadeOut, s.rectangle);
+            Storyboard.SetTargetProperty(fadeOut, new PropertyPath("Fill.Color"));
+
+            Storyboard highlight = new Storyboard();
+            highlight.Children.Add(fadeIn);
+            highlight.Children.Add(fadeOut);
+
+            return highlight;
+        }
     }
 }

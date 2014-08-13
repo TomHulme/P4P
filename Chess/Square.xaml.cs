@@ -57,6 +57,10 @@ namespace Chess
             this.Height = squareSize;
             this.SetCurrentValue(Panel.ZIndexProperty, 3);
 
+            rectangle.Width = squareSize;
+            rectangle.Height = squareSize;
+            rectangle.Stroke = Brushes.Black;
+            rectangle.StrokeThickness = 1;
         }
 
         public void colourRectangle(Brush colour)
@@ -143,6 +147,29 @@ namespace Chess
             }
             this.Children.Add(img);
             pieceChildrenNumber = this.Children.IndexOf(img);
+        }
+
+        internal int getSquareSize()
+        {
+            return squareSize;
+        }
+
+        //Used to get the sqaure name from another thread
+        public static String CopySquare(Square square)
+        {
+            String result;
+            GetNameDelegate a;
+
+            a = new GetNameDelegate(GetName);
+            result = square.Dispatcher.Invoke(a, square) as String;
+            return result;
+        }
+
+        delegate String GetNameDelegate(Square square);
+
+        public static String GetName(Square square)
+        {
+            return square.getName();
         }
 
 
