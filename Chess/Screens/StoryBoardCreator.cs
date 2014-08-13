@@ -120,22 +120,22 @@ namespace Chess.Screens
             int beginFadeIn = 0;//(delay - 1) * 300;
             int beginFadeOut = beginFadeIn + 300;
 
-            var rectangle = new Rectangle()
-            {
-                StrokeThickness = 1,
-                Stroke = s.Background,
-                Fill = s.Background,
-                Width = s.getSquareSize(),
-                Height = s.getSquareSize(),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            };
+            //var rectangle = new Rectangle()
+            //{
+            //    StrokeThickness = 1,
+            //    Stroke = s.Background,
+            //    Fill = s.Background,
+            //    Width = s.getSquareSize(),
+            //    Height = s.getSquareSize(),
+            //    HorizontalAlignment = HorizontalAlignment.Center,
+            //    VerticalAlignment = VerticalAlignment.Center
+            //};
 
             Duration duration = new Duration(TimeSpan.FromMilliseconds(200));
 
             ColorAnimation fadeIn = new ColorAnimation()
             {
-                From = ((SolidColorBrush)(rectangle.Fill)).Color,
+                From = ((SolidColorBrush)(s.rectangle.Fill)).Color,
                 To = (brush as SolidColorBrush).Color,
                 Duration = duration,
                 BeginTime = TimeSpan.FromMilliseconds(beginFadeIn)
@@ -144,22 +144,25 @@ namespace Chess.Screens
             ColorAnimation fadeOut = new ColorAnimation()
             {
                 From = (brush as SolidColorBrush).Color,
-                To = (s.Background as SolidColorBrush).Color,
+                To = (s.rectangle.Fill as SolidColorBrush).Color,
                 Duration = duration,
                 BeginTime = TimeSpan.FromMilliseconds(beginFadeOut)
             };
 
-            Storyboard.SetTarget(fadeIn, rectangle);
+            //ColorAnimation fadeOut = new ColorAnimation();
+            //fadeOut.From = (brush as SolidColorBrush).Color;
+            //fadeOut.To = (s.Background as SolidColorBrush).Color;
+            //fadeOut.Duration = duration;
+            //fadeOut.BeginTime = TimeSpan.FromMilliseconds(beginFadeOut);
+
+            Storyboard.SetTarget(fadeIn, s.rectangle);
             Storyboard.SetTargetProperty(fadeIn, new PropertyPath("Fill.Color"));
-            Storyboard.SetTarget(fadeOut, rectangle);
+            Storyboard.SetTarget(fadeOut, s.rectangle);
             Storyboard.SetTargetProperty(fadeOut, new PropertyPath("Fill.Color"));
 
             Storyboard highlight = new Storyboard();
             highlight.Children.Add(fadeIn);
             highlight.Children.Add(fadeOut);
-
-            //s.Children.Add(rectangle);
-            s.Children.Insert(0, rectangle);
 
             return highlight;
         }

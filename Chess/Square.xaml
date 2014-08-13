@@ -4,7 +4,7 @@
     xmlns:s="http://schemas.microsoft.com/surface/2008"
     Loaded="Square_Loaded">
     <Grid>
-        <Rectangle Name="rectangle" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Panel.ZIndex="5"/>
+        <Rectangle Name="rectangle" Panel.ZIndex="5"/>
         <s:TagVisualizer
                     Name="MyTagVisualizer" 
                     VerticalAlignment="Stretch"

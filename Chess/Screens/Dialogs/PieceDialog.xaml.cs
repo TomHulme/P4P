@@ -198,13 +198,13 @@ namespace Chess.Screens.Dialogs
                 foreach (Square s in squareList)
                 {
                     DialogText.Text = "Navigate to the highlighted squares!";
-                    s.Background = Brushes.Green;
+                    s.rectangle.Fill = Brushes.Green;
                 }
             }
             else if (e.ProgressPercentage == 2)
             {
                 Square square = e.UserState as Square;
-                square.Background = Brushes.DarkGoldenrod;
+                square.rectangle.Fill = Brushes.DarkGoldenrod;
             }
         }
 
@@ -273,6 +273,8 @@ namespace Chess.Screens.Dialogs
                 if (gameController.tutorialQueue.Count == 2)
                 {
                     String tapped = Square.CopySquare(gameController.tutorialQueue.Dequeue());
+
+                    gameController.tutorialQueue.Clear();
 
                     foreach (Square s in squareList)
                     {
