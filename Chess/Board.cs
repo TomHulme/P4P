@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Windows.Controls;
@@ -8,6 +9,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using GameLogic;
+using System.Threading;
+using Microsoft.Surface.Presentation.Controls;
 
 namespace Chess
 {
@@ -16,11 +19,12 @@ namespace Chess
         /*
          * Class Vars
          */
-        private Square[] squares;       
+        private Square[] squares;
+        private ArrayList tagVisualisations;
         public bool flipped;
-        private bool isVsAI = false;
         private Position position;
         private GameController gamecon;
+        private bool blackReverse = false;
         
 
         /*
@@ -31,6 +35,12 @@ namespace Chess
             this.flipped = b;
             this.position = pos;
             this.gamecon = gc;
+            //BoardThread = new Thread(
+        }
+
+        public Board(bool b, Position pos, GameController gc, bool blkRev) : this(b, pos, gc)
+        {
+            blackReverse = blkRev;
         }
 
         /*
@@ -62,6 +72,7 @@ namespace Chess
                 squares[i] = new Square(getSquareName(i, 0), this.getSquareNumber(i, 0));
                 squares[i].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
                 squares[i].AddHandler(ButtonBase.TouchDownEvent, new RoutedEventHandler(TappedSquare), true);
+                
                 this.Children.Add(squares[i]);
                 Canvas.SetTop(squares[i], 0);
                 Canvas.SetLeft(squares[i], i * 75);
@@ -70,11 +81,37 @@ namespace Chess
                     squares[i + j * 8] = new Square(getSquareName(i, j), this.getSquareNumber(i, j));
                     squares[i + j * 8].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
                     squares[i + j * 8].AddHandler(ButtonBase.TouchDownEvent , new RoutedEventHandler(TappedSquare), true);
+                    
                     this.Children.Add(squares[i + j * 8]);
                     Canvas.SetTop(squares[i + j * 8], j * 75);
                     Canvas.SetLeft(squares[i + j * 8], i * 75);
                 }
             }
+
+            /*/create tag visualizations
+            for (byte k = 0; k <= 10; k++)
+            {
+                TagVisualizationDefinition tag = new TagVisualizationDefinition();
+                tag.LostTagTimeout = 2000.0;
+                tag.TagRemovedBehavior = TagRemovedBehavior.Fade;
+                tag.Value = k;
+                tag.MaxCount = 32;
+                tag.Source = new Uri("PieceVisualization.xaml", UriKind.Relative);
+                //iterate through squares and add visualizations to visualizers
+                foreach (Square s in squares)
+                {
+                    s.AddTagVisualisation(tag);
+                    
+                }
+            }*/
+
+            foreach (Square s in squares)
+            {
+                
+                s.MyTagVisualizer.AddHandler(TagVisualizer.VisualizationAddedEvent, new RoutedEventHandler(RecognizedSquare), true);
+                s.MyTagVisualizer.AddHandler(TagVisualizer.VisualizationRemovedEvent, new RoutedEventHandler(RecognizedSquare), true);
+            }
+
             this.ColourBoard();
         }
 
@@ -86,13 +123,13 @@ namespace Chess
                 {
                     if (this.flipped)
                     {
-                        if ((i + j) % 2 == 0) { this.squares[i * 8 + j].Background = Brushes.DarkGray; }
-                        else { this.squares[i * 8 + j].Background = Brushes.WhiteSmoke; }
+                        if ((i + j) % 2 == 0) { this.squares[i * 8 + j].colourRectangle(Brushes.DarkGray); }
+                        else { this.squares[i * 8 + j].colourRectangle(Brushes.WhiteSmoke); }
                     }
                     else
                     {
-                        if ((i + j) % 2 == 0) { this.squares[i * 8 + j].Background = Brushes.WhiteSmoke; }
-                        else { this.squares[i * 8 + j].Background = Brushes.DarkGray; }
+                        if ((i + j) % 2 == 0) { this.squares[i * 8 + j].colourRectangle(Brushes.WhiteSmoke); }
+                        else { this.squares[i * 8 + j].colourRectangle(Brushes.DarkGray); }
                     }
                 }
             }
@@ -101,12 +138,14 @@ namespace Chess
         internal void SetPosition(Position position)
         {
             this.position = position;
-            setup();
+            this.placePieces();
+            this.printNextTurn();
+            this.ColourBoard();
         }
 
         public void ColourSquare(int square, Brush colour)
         {
-            getSquareForNumber(square).Background = colour;
+            getSquareForNumber(square).colourRectangle(colour);
         }
 
         internal string getSquareName(int row, int col)
@@ -168,11 +207,12 @@ namespace Chess
                     PieceType current = this.position.getPiece((((7-i) * 8) + j));
                     if (current != PieceType.Empty)
                     {
+                        squares[((i * 8) + j)].clearPieceImage();
                         this.drawPiece(current, squares[((i * 8) + j)]);
                     }
                     else
                     {
-                        squares[((i * 8) + j)].Children.Clear();
+                        squares[((i * 8) + j)].clearPieceImage();
                     }
                 }
             }
@@ -256,12 +296,14 @@ namespace Chess
             myBitmapImage.BeginInit();
             myBitmapImage.UriSource = new Uri(App.getPath() + @"Images\" + pieceString + ".jpg");
             myBitmapImage.DecodePixelWidth = 75;
-            if (this.flipped) myBitmapImage.Rotation = Rotation.Rotate90;
+            if (this.flipped & this.blackReverse & pieceString.StartsWith("b")) { myBitmapImage.Rotation = Rotation.Rotate270; }
+            else if (this.blackReverse & pieceString.StartsWith("b")) { myBitmapImage.Rotation = Rotation.Rotate180; }
+            else if (this.flipped) { myBitmapImage.Rotation = Rotation.Rotate90; }
             myBitmapImage.EndInit();
             myImage.Source = myBitmapImage;
             myImage.IsHitTestVisible = false;
             //myImage.
-            sq.Children.Add(myImage);
+            sq.setPieceImage(myImage);
             sq.setPiece(piece);
             myImage.SetValue(TextBlock.TextProperty, pieceString);
             
@@ -274,6 +316,17 @@ namespace Chess
         {
             Square tapped = (Square)sender;
             this.gamecon.MoveHandler(tapped);
+        }
+
+        /*
+         * Square Tapped Event
+         * CHANGE THIS TO FIX
+         */
+        internal void RecognizedSquare(object sender, RoutedEventArgs e)
+        {
+            TagVisualizer tapped = (TagVisualizer)sender;
+            this.gamecon.MoveHandler((Square)((Grid)tapped.Parent).Parent);
+            Console.WriteLine("Recognized tag on {0}", ((Square)((Grid)tapped.Parent).Parent).getName());
         }
 
         /*

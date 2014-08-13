@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<!--
+This file contains more information than John's brain.
+Also, it contains the tags used in our application.
+-->
+<ss:ApplicationInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:ss="http://schemas.microsoft.com/Surface/2007/ApplicationMetadata">
+
+  <Application>
+    <Tags>
+      <Tag Name="P" Series="0x0" Value="0x0" />
+      <Tag Name="R" Series="0x0" Value="0x1" />
+      <Tag Name="N" Series="0x0" Value="0x2" />
+      <Tag Name="B" Series="0x0" Value="0x3" />
+      <Tag Name="Q" Series="0x0" Value="0x4" />
+      <Tag Name="K" Series="0x0" Value="0x5" />
+      <Tag Name="p" Series="0x0" Value="0x8" />
+      <Tag Name="r" Series="0x0" Value="0x9" />
+      <Tag Name="n" Series="0x0" Value="0xA" />
+      <Tag Name="b" Series="0x0" Value="0xB" />
+      <Tag Name="q" Series="0x0" Value="0xC" />
+      <Tag Name="k" Series="0x1" Value="0xD" />
+    </Tags>
+  </Application>
+</ss:ApplicationInfo>

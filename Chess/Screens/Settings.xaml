@@ -1,0 +1,15 @@
+﻿<view:Screen x:Class="Chess.Screens.Settings"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:view="clr-namespace:Chess"
+            xmlns:my="clr-namespace:Microsoft.Surface.Presentation.Controls;assembly=Microsoft.Surface.Presentation"
+            mc:Ignorable="d" d:DesignHeight="720" d:DesignWidth="1280">
+    <Viewbox>
+        <Grid Background="Gray" Height="720" Width="1280">
+            <my:SurfaceButton Margin="208,40,233,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="312" Height="62" Content="Go Back" Click="Go_Back_Click" TouchDown="Go_Back_Click" Name="Back_Button" />
+            <my:SurfaceButton Margin="208,107,233,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="312" Height="62" Content="Go Back" Click="Go_Back_Click" TouchDown="Go_Back_Click" Name="Back_Button2" />
+        </Grid>
+    </Viewbox>
+</view:Screen>
