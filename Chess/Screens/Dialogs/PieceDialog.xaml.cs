@@ -98,6 +98,10 @@ namespace Chess.Screens.Dialogs
         {
             //set up board with a highlighted square. User has to navigate
             //to the lit square
+            if (!quiz.IsBusy)
+            {
+                quiz.RunWorkerAsync();
+            }
         }
 
         private void Captures_Click(object sender, RoutedEventArgs e)
@@ -188,20 +192,103 @@ namespace Chess.Screens.Dialogs
 
         void quiz_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            String text = e.UserState as String;
             if (e.ProgressPercentage == 1)
             {
-                DialogText.Text += "\n" + text;
+                //highlight all squares in square list
+                foreach (Square s in squareList)
+                {
+                    DialogText.Text = "Navigate to the highlighted squares!";
+                    s.Background = Brushes.Green;
+                }
             }
-            else
+            else if (e.ProgressPercentage == 2)
             {
-                DialogText.Text = text;
+                Square square = e.UserState as Square;
+                square.Background = Brushes.DarkGoldenrod;
             }
         }
 
         void quiz_DoWork(object sender, DoWorkEventArgs e)
         {
-            throw new NotImplementedException();
+            //int iterations = count;
+
+            //while (iterations > 0)
+            //{
+            //    //2. Generate possible moves for piece in that square
+            //    ArrayList generatedMoves = MoveGenerator.mgInstance.psuedoLegalMoves(currentPosition);
+
+            //    //3. Randomly select a possible move
+            //    int moveIndex = (int)(randomNumber.NextDouble() * generatedMoves.Count);
+            //    Move selectedMove = (Move)generatedMoves.ToArray()[moveIndex];
+
+            //    //check if squares of selectedMove is occupied
+            //    if (CheckMoveValidity(selectedMove))
+            //    {
+            //        //4. Add move to list
+            //        moves.Add(selectedMove);
+
+            //        //5. Place piece on destination square
+            //        destinationSquare = selectedMove.destination;
+            //        originSquare = selectedMove.origin;
+            //        //6. Set pawn at origin to block moves in that direction 
+            //        currentPosition.setPiece(originSquare, PieceType.p);
+            //        currentPosition.setPiece(destinationSquare, userPiece);
+
+            //        iterations--;
+            //    }
+            //}
+
+            Random random = new Random();
+            squareList = new ArrayList();
+
+            int iterations = 7;
+
+            String initialPosition = FENConverter.convertPositionToFEN(gameController.position);
+
+            //generate list of squares to visit
+            while (iterations > 0)
+            {
+                ArrayList generatedMoves = MoveGenerator.mgInstance.psuedoLegalMoves(gameController.position);
+
+                int moveIndex = (int)(random.NextDouble() * generatedMoves.Count);
+                Move selectedMove = (Move)generatedMoves.ToArray()[moveIndex];
+
+                squareList.Add(gameController.board.getSquareForNumber(selectedMove.destination));
+
+                gameController.position.setPiece(selectedMove.destination, gameController.position.getPiece(selectedMove.origin));
+
+                iterations--;
+            }
+            
+            //highlight squares to visit
+            quiz.ReportProgress(1);
+
+            //reset the position to the initial starting position
+            gameController.position = FENConverter.convertPiecePlacementToPosition(initialPosition);
+            
+            Boolean quizFinished = false;
+
+            while (!quizFinished)
+            {
+                if (gameController.tutorialQueue.Count == 2)
+                {
+                    String tapped = Square.CopySquare(gameController.tutorialQueue.Dequeue());
+
+                    foreach (Square s in squareList)
+                    {
+                        if (tapped.Equals(s.getName()))
+                        {
+                            squareList.Remove(s);
+                            quiz.ReportProgress(2, s);
+                            Console.WriteLine("Removing square " + s.getName());
+                        }
+                    }
+                }
+                if (squareList.Count == 0)
+                {
+                    quizFinished = true;
+                }
+            }
         }
     }
 }
