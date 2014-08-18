@@ -26,16 +26,25 @@ namespace Chess.Screens
     {
         GameController gameController;
         GameInfoDialog gameInfoDialog;
+        GameSettingsDialog gameSettingsDialog;
 
         public GameBoard(ScreenControl parentWindow) : base(parentWindow)
         {
             InitializeComponent();
 
             this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition));
-            this.gameInfoDialog = new GameInfoDialog();
+            ResetDialogs();
+        }
+
+        private void ResetDialogs()
+        {
+            this.gameInfoDialog = new GameInfoDialog(gameController);
+            this.gameSettingsDialog = new GameSettingsDialog(gameController);
+
+            BottomCenterControl.Content = this.gameInfoDialog;
+            BottomRightControl.Content = this.gameSettingsDialog;
 
             BoardArea.Content = gameController.board;
-            BottomCenterControl.Content = this.gameInfoDialog;
         }
 
         private void Go_Back_Click(object sender, RoutedEventArgs e)
@@ -54,7 +63,7 @@ namespace Chess.Screens
         private void PVP_Click(object sender, RoutedEventArgs e)
         {
             this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition), false, false);
-            BoardArea.Content = gameController.board;
+            ResetDialogs();
 
             this.New_Game_Buttons.Height = 0;
             this.New_Game_Buttons.Visibility = Visibility.Collapsed;
@@ -63,7 +72,7 @@ namespace Chess.Screens
         private void PVC_Click(object sender, RoutedEventArgs e)
         {
             this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition), true, false);
-            BoardArea.Content = gameController.board;
+            ResetDialogs();
 
             this.New_Game_Buttons.Height = 0;
             this.New_Game_Buttons.Visibility = Visibility.Collapsed;
@@ -72,7 +81,7 @@ namespace Chess.Screens
         private void CVC_Click(object sender, RoutedEventArgs e)
         {
             this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition), true, true);
-            BoardArea.Content = gameController.board;
+            ResetDialogs();
 
             this.New_Game_Buttons.Height = 0;
             this.New_Game_Buttons.Visibility = Visibility.Collapsed;

@@ -123,14 +123,25 @@ namespace Chess
                 {
                     if (this.flipped)
                     {
-                        if ((i + j) % 2 == 0) { this.squares[i * 8 + j].colourRectangle(Brushes.DarkGray); }
-                        else { this.squares[i * 8 + j].colourRectangle(Brushes.WhiteSmoke); }
+                        if ((i + j) % 2 == 0) { this.squares[i * 8 + j].Background = Brushes.DarkGray; }
+                        else { this.squares[i * 8 + j].Background = Brushes.WhiteSmoke; }
                     }
                     else
                     {
-                        if ((i + j) % 2 == 0) { this.squares[i * 8 + j].colourRectangle(Brushes.WhiteSmoke); }
-                        else { this.squares[i * 8 + j].colourRectangle(Brushes.DarkGray); }
+                        if ((i + j) % 2 == 0) { this.squares[i * 8 + j].Background = Brushes.WhiteSmoke; }
+                        else { this.squares[i * 8 + j].Background = Brushes.DarkGray; }
                     }
+                }
+            }
+        }
+
+        internal void UnColourBoard(Brush colour)
+        {
+            foreach (Square s in squares)
+            {
+                if (s.rectangle.Fill == colour)
+                {
+                    s.colourRectangle(Brushes.Transparent);
                 }
             }
         }
@@ -140,7 +151,6 @@ namespace Chess
             this.position = position;
             this.placePieces();
             this.printNextTurn();
-            this.ColourBoard();
         }
 
         public void ColourSquare(int square, Brush colour)

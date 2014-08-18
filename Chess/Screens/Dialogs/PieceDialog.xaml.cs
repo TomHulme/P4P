@@ -88,25 +88,44 @@ namespace Chess.Screens.Dialogs
             }
         }
 
-        private void Captures_Quiz_Click(object sender, RoutedEventArgs e)
-        {
-            //Set up board with an enemy piece. User has to take piece.
-            //May need seperate controller for these to ensure continuity.
-        }
-
         private void Moves_Quiz_Click(object sender, RoutedEventArgs e)
         {
-            //set up board with a highlighted square. User has to navigate
-            //to the lit square
-            //if (!quiz.IsBusy)
-            //{
-            //    quiz.RunWorkerAsync();
-            //}
-        }
+            //gameController.ShowHighlightedMoves = false;
 
-        private void Captures_Click(object sender, RoutedEventArgs e)
-        {
-            //setup board with a possible capture scenario
+            //Random random = new Random();
+            //squareList = new ArrayList();
+
+            //int iterations = 7;
+
+            //String initialPosition = FENConverter.convertPositionToFEN(gameController.position);
+
+            ////generate list of squares to visit
+            //while (iterations > 0)
+            //{
+            //    ArrayList generatedMoves = MoveGenerator.mgInstance.psuedoLegalMoves(gameController.position);
+
+            //    int moveIndex = (int)(random.NextDouble() * generatedMoves.Count);
+            //    Move selectedMove = (Move)generatedMoves.ToArray()[moveIndex];
+
+            //    squareList.Add(gameController.board.getSquareForNumber(selectedMove.destination));
+
+            //    gameController.position.setPiece(selectedMove.destination, gameController.position.getPiece(selectedMove.origin));
+
+            //    iterations--;
+            //}
+
+            ////reset the position to the initial starting position
+            //gameController.position = FENConverter.convertPiecePlacementToPosition(initialPosition);
+            //gameController.position.sameActiveColor = true;
+
+            //foreach (Square s in squareList)
+            //{
+            //    s.rectangle.Fill = Brushes.Green;
+            //}
+            if (!quiz.IsBusy)
+            {
+                quiz.RunWorkerAsync();
+            }
         }
 
         private void Moves_Click(object sender, RoutedEventArgs e)
@@ -123,8 +142,6 @@ namespace Chess.Screens.Dialogs
         void movesWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             Console.WriteLine("Moves highlighted.");
-
-            gameController.SetPosition(tutorialOne.GetPosition());
         }
 
         //called when the worker calls the report progress method
@@ -187,7 +204,7 @@ namespace Chess.Screens.Dialogs
 
         void quiz_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            DialogText.Text = "Quiz Complete! Great job! You can click either quiz button to start a new one.";
+            DialogText.Text = "Quiz Complete! Great job! You can click the quiz button to start a new one.";
         }
 
         void quiz_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -198,13 +215,13 @@ namespace Chess.Screens.Dialogs
                 foreach (Square s in squareList)
                 {
                     DialogText.Text = "Navigate to the highlighted squares!";
-                    s.rectangle.Fill = Brushes.Green;
+                    s.colourRectangle(Brushes.Green);
                 }
             }
             else if (e.ProgressPercentage == 2)
             {
-                Square square = e.UserState as Square;
-                square.rectangle.Fill = Brushes.DarkGoldenrod;
+                Square s = e.UserState as Square;
+                s.colourRectangle(Brushes.Transparent);
             }
         }
 
@@ -233,14 +250,16 @@ namespace Chess.Screens.Dialogs
 
                 iterations--;
             }
+
+            //reset the position to the initial starting position
+            gameController.position = FENConverter.convertPiecePlacementToPosition(initialPosition);
+            gameController.position.sameActiveColor = true;
             
             //highlight squares to visit
             quiz.ReportProgress(1);
 
-            //reset the position to the initial starting position
-            gameController.position = FENConverter.convertPiecePlacementToPosition(initialPosition);
-            
             Boolean quizFinished = false;
+            //Boolean halfMove = false;
 
             while (!quizFinished)
             {
@@ -248,6 +267,9 @@ namespace Chess.Screens.Dialogs
                 //{
                 //    String destination = Square.CopySquare(gameController.tutorialQueue.Dequeue());
                 //    String origin = Square.CopySquare(gameController.tutorialQueue.Dequeue());
+
+                //    Console.WriteLine("Desitination Square: " + destination);
+                //    Console.WriteLine("Origin Square: " + origin);
 
                 //    foreach (Square s in squareList)
                 //    {
@@ -264,14 +286,27 @@ namespace Chess.Screens.Dialogs
                 //{
                 //    halfMove = true;
                 //}
-                foreach (Square s in squareList)
-                {
-
-                }
-
                 if (squareList.Count == 0)
                 {
                     quizFinished = true;
+                }
+                else
+                {
+                    ArrayList tempList = new ArrayList();
+                    foreach (Square s in squareList)
+                    {
+                        if (s.getPiece() != PieceType.Empty)
+                        {
+                            tempList.Add(s);
+                            quiz.ReportProgress(2, s);
+                        }
+                    }
+
+                    foreach (Square s in tempList)
+                    {
+                        squareList.Remove(s);
+                    }
+
                 }
             }
         }

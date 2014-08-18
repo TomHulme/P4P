@@ -27,8 +27,8 @@ namespace Chess
         private UnMakeInfo unmake = new UnMakeInfo();
         internal Position position;
         private MoveGenerator movegen;
-        public event EventHandler<BoardEvent> RaiseBoardEvent;
-        event EventHandler<ControllerEvent> RaiseControllerEvent;
+        internal event EventHandler<BoardEvent> RaiseBoardEvent;
+        internal event EventHandler<ControllerEvent> RaiseControllerEvent;
         private SFEngine engine;
         private ComputerPlayer AI;
         internal BackgroundWorker bw;
@@ -139,6 +139,7 @@ namespace Chess
                 delegate(object o, ProgressChangedEventArgs args)
                 {
                     this.SetPosition(position);
+                    OnRaiseControllerEvent(new ControllerEvent());
                 }
             );
             bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
@@ -308,7 +309,8 @@ namespace Chess
                     if (orig.getSquareNumber() == dest.getSquareNumber())
                     {
                         // Same square tapped twice! DESELECT
-                        board.ColourBoard();
+                        //board.ColourBoard();
+                        board.UnColourBoard(Brushes.Blue);
                         this.oneClick = false;
                         return;
                     }
@@ -465,8 +467,8 @@ namespace Chess
             this.movePiece(current);
             this.position.makeMove(current, this.unmake);
             this.previousMoves.Add(current);
-            
-            board.ColourBoard();
+
+            board.UnColourBoard(Brushes.Blue);
             board.printNextTurn();
 
             this.oneClick = false;
@@ -483,6 +485,8 @@ namespace Chess
                 this.ColourPiecesDefending();
             }
             AsyncAIMoveCheck();
+
+            OnRaiseControllerEvent(new ControllerEvent());
         }
 
         private void checkAITurn()
@@ -618,6 +622,7 @@ namespace Chess
         void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             this.SetPosition(position);
+            OnRaiseControllerEvent(new ControllerEvent());
         }
 
         void worker_DoWork(object sender, DoWorkEventArgs e)

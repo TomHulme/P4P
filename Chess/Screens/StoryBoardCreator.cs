@@ -117,19 +117,8 @@ namespace Chess.Screens
 
         public static Storyboard NewHighlighter(Square s, Brush brush, int delay)
         {
-            int beginFadeIn = 0;//(delay - 1) * 300;
+            int beginFadeIn = 0;
             int beginFadeOut = beginFadeIn + 300;
-
-            //var rectangle = new Rectangle()
-            //{
-            //    StrokeThickness = 1,
-            //    Stroke = s.Background,
-            //    Fill = s.Background,
-            //    Width = s.getSquareSize(),
-            //    Height = s.getSquareSize(),
-            //    HorizontalAlignment = HorizontalAlignment.Center,
-            //    VerticalAlignment = VerticalAlignment.Center
-            //};
 
             Duration duration = new Duration(TimeSpan.FromMilliseconds(200));
 
@@ -148,12 +137,6 @@ namespace Chess.Screens
                 Duration = duration,
                 BeginTime = TimeSpan.FromMilliseconds(beginFadeOut)
             };
-
-            //ColorAnimation fadeOut = new ColorAnimation();
-            //fadeOut.From = (brush as SolidColorBrush).Color;
-            //fadeOut.To = (s.Background as SolidColorBrush).Color;
-            //fadeOut.Duration = duration;
-            //fadeOut.BeginTime = TimeSpan.FromMilliseconds(beginFadeOut);
 
             Storyboard.SetTarget(fadeIn, s.rectangle);
             Storyboard.SetTargetProperty(fadeIn, new PropertyPath("Fill.Color"));

@@ -45,20 +45,13 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Learn_Button_Click(object sender, RoutedEventArgs e)
         {
-            parentWindow.PushScreen(new Learn(parentWindow));
-        }
-
-        private void Tutorial_Button_Click(object sender, RoutedEventArgs e)
-        {
-
+            parentWindow.PushScreen(new TutorialOneScreen(parentWindow));
         }
 
         private void Settings_Button_Click(object sender, RoutedEventArgs e)
         {
             parentWindow.PushScreen(new Settings(parentWindow));
         }
-
-
 
         private void SetBackground()
         {

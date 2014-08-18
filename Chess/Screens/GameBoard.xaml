@@ -25,8 +25,6 @@
 
         <Grid Background="Gray">
 
-
-
             <Grid.RowDefinitions>
                 <RowDefinition Height="360"/>
                 <RowDefinition Height="360"/>
@@ -43,7 +41,7 @@
                     >
             </s:TagVisualizer>
             -->
-            
+
             <ContentControl Name="BoardArea" Height="600" Width="600" Panel.ZIndex="2" Grid.RowSpan="2" />
 
             <Rectangle Height="605" Width="605" Name="BoardBorder" Panel.ZIndex="1" Stroke="Black" VerticalAlignment="Center" HorizontalAlignment="Center" StrokeThickness="5" Grid.RowSpan="2" />
@@ -68,9 +66,11 @@
                     </Grid>
                     <my:SurfaceButton Background="DarkGray" Name="Go_Back" Content="Go Back" Height="40" Width="320" HorizontalAlignment="Center" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="Go_Back_Click" TouchDown="Go_Back_Click" Grid.Row="2"/>
                 </Grid>
-                <Grid Height="360" HorizontalAlignment="Right" Margin="0,0,0,0" Name="BottomRight" VerticalAlignment="Center" Width="340" />
+                <Grid Height="360" HorizontalAlignment="Right" Margin="0,0,0,0" Name="BottomRight" VerticalAlignment="Center" Width="340">
+                    <ContentControl Name="BottomRightControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
                 <Grid Height="60" HorizontalAlignment="Center" Margin="0,0,0,0" Name="BottomCenter" VerticalAlignment="Bottom" Width="600" MinHeight="60">
-                    <ContentControl Name="BottomCenterControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/> 
+                    <ContentControl Name="BottomCenterControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
             </Grid>
 

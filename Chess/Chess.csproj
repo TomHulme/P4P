@@ -79,17 +79,14 @@
     <Compile Include="PieceVisualization.xaml.cs">
       <DependentUpon>PieceVisualization.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Screens\Challenges.xaml.cs">
-      <DependentUpon>Challenges.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Screens\Dialogs\GameInfoDialog.xaml.cs">
       <DependentUpon>GameInfoDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Screens\Dialogs\GameSettingsDialog.xaml.cs">
+      <DependentUpon>GameSettingsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Screens\GameBoard.xaml.cs">
       <DependentUpon>GameBoard.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Screens\Learn.xaml.cs">
-      <DependentUpon>Learn.xaml</DependentUpon>
     </Compile>
     <Compile Include="Screens\MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
@@ -133,19 +130,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Screens\Challenges.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Screens\Dialogs\GameInfoDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Screens\GameBoard.xaml">
+    <Page Include="Screens\Dialogs\GameSettingsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Screens\Learn.xaml">
+    <Page Include="Screens\GameBoard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -61,6 +61,7 @@ namespace Chess
             rectangle.Height = squareSize;
             rectangle.Stroke = Brushes.Black;
             rectangle.StrokeThickness = 1;
+            colourRectangle(Brushes.Transparent);
         }
 
         public void colourRectangle(Brush colour)

@@ -9,7 +9,7 @@
                     Name="MyTagVisualizer" 
                     VerticalAlignment="Stretch"
                     HorizontalAlignment="Stretch"
-                    Background="Crimson"
+                    Background="Transparent"
                     VisualizationAdded="tagVis_VisualizationAdded"
                     VisualizationRemoved="tagVis_VisualizationRemoved"
                     Panel.ZIndex="4"

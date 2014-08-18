@@ -19,9 +19,34 @@ namespace Chess.Screens.Dialogs
     /// </summary>
     public partial class GameInfoDialog : UserControl
     {
-        public GameInfoDialog()
+        GameController gameController;
+
+        public GameInfoDialog(GameController gameController)
         {
             InitializeComponent();
+
+            this.gameController = gameController;
+
+            this.gameController.RaiseControllerEvent +=new EventHandler<ControllerEvent>(gameController_MoveText);
         }
+
+        void gameController_MoveText(object sender, ControllerEvent e)
+        {
+            if (gameController.position.whiteMove)
+            {
+                SetGameInfoText("White To Move");
+            }
+            else
+            {
+                SetGameInfoText("Black To Move");
+            }
+        }
+
+        internal void SetGameInfoText(String text)
+        {
+            GameInfoText.Text = text;
+        }
+
+
     }
 }
