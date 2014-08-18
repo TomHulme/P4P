@@ -70,7 +70,10 @@ namespace Chess
             for (int i = 0; i < 8; i++)
             {
                 squares[i] = new Square(getSquareName(i, 0), this.getSquareNumber(i, 0));
-                squares[i].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
+                if (gamecon.debugging)
+                {
+                    squares[i].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
+                }
                 squares[i].AddHandler(ButtonBase.TouchDownEvent, new RoutedEventHandler(TappedSquare), true);
                 
                 this.Children.Add(squares[i]);
@@ -79,7 +82,10 @@ namespace Chess
                 for (int j = 1; j < 8; j++)
                 {
                     squares[i + j * 8] = new Square(getSquareName(i, j), this.getSquareNumber(i, j));
-                    squares[i + j * 8].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
+                    if (gamecon.debugging)
+                    {
+                        squares[i + j * 8].AddHandler(ButtonBase.MouseLeftButtonDownEvent, new RoutedEventHandler(TappedSquare), true);
+                    }
                     squares[i + j * 8].AddHandler(ButtonBase.TouchDownEvent , new RoutedEventHandler(TappedSquare), true);
                     
                     this.Children.Add(squares[i + j * 8]);
@@ -131,6 +137,7 @@ namespace Chess
                         if ((i + j) % 2 == 0) { this.squares[i * 8 + j].colourRectangle(Brushes.WhiteSmoke); }
                         else { this.squares[i * 8 + j].colourRectangle(Brushes.DarkGray); }
                     }
+                    this.squares[i * 8 + j].colourBorder(Brushes.Black);
                 }
             }
         }
@@ -146,6 +153,11 @@ namespace Chess
         public void ColourSquare(int square, Brush colour)
         {
             getSquareForNumber(square).colourRectangle(colour);
+        }
+
+        public void ColourSquareBorder(int square, Brush colour)
+        {
+            getSquareForNumber(square).colourBorder(colour);
         }
 
         internal string getSquareName(int row, int col)
@@ -315,6 +327,10 @@ namespace Chess
         internal void TappedSquare(object sender, RoutedEventArgs e)
         {
             Square tapped = (Square)sender;
+            if (this.gamecon.debugging)
+            {
+                Console.WriteLine(tapped.getPiece());
+            }
             this.gamecon.MoveHandler(tapped);
         }
 

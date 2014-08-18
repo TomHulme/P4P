@@ -13,13 +13,13 @@ namespace EngineLogic
         private StreamReader engineReader;
         private StreamWriter engineWriter;
 
-        private int moveTime;
+        private int moveDepth;
 
         public ComputerPlayer(StreamReader engineReader, StreamWriter engineWriter)
         {
             this.engineReader = engineReader;
             this.engineWriter = engineWriter;
-            this.moveTime = 5;
+            this.moveDepth = 1;
         }
 
         /**
@@ -30,7 +30,7 @@ namespace EngineLogic
         {
             //uci command to being searching for a move
             //the movetime variable describes how long the engine searches for
-            String search = "go movetime " + moveTime;
+            String search = "go depth " + moveDepth;
 
             engineWriter.WriteLine(search);
         }
@@ -82,21 +82,21 @@ namespace EngineLogic
         }
 
         /**
-         * Getter for moveTime variable
+         * Getter for moveDepth variable
          * Default value is 5
          */
-        public int getMoveTime()
+        public int getMoveDepth()
         {
-            return moveTime;
+            return moveDepth;
         }
 
         /**
-         * Setter for moveTime variable
+         * Setter for moveDepth variable
          * Default value is 5
          */
-        public void setMoveTime(int moveTime)
+        public void setMoveDepth(int moveDepth)
         {
-            this.moveTime = moveTime;
+            this.moveDepth = moveDepth;
         }
     }
 }
