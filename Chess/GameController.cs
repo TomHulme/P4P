@@ -41,6 +41,7 @@ namespace Chess
 
         internal Boolean tutorialFlag;
         internal volatile Queue<Square> tutorialQueue = new Queue<Square>();
+        public bool debugging = true;
 
         public GameController(bool b, Position pos)
         {
@@ -70,7 +71,7 @@ namespace Chess
             {
                 this.engine = new SFEngine();
                 AI = new ComputerPlayer(engine.engineProcess.StandardOutput, engine.engineProcess.StandardInput);
-                AI.setMoveTime(2000);
+                ResetEngineDifficulty();
             }
             if (blackIsAI & whiteIsAI)
             {
@@ -79,6 +80,17 @@ namespace Chess
                 bwSetup();
             }
             
+        }
+
+        private void ResetEngineDifficulty(){
+            if (engine != null)
+            {
+                engine.setSkillLevel(Chess.Properties.Settings.Default.DifficultySetting);
+            }
+            if (AI != null)
+            {
+                AI.setMoveDepth(Chess.Properties.Settings.Default.DifficultySetting);
+            }
         }
 
         private void bwSetup()
@@ -131,14 +143,15 @@ namespace Chess
                             i = (i == 0) ? 50 : 0;
                         }
                         b.ReportProgress(i);
-                        
-                                this.playerHasMoved = false;
+                        this.playerHasMoved = false;
+                        Thread.Sleep(2000);
                     }
                 });
             bw.ProgressChanged += new ProgressChangedEventHandler(
                 delegate(object o, ProgressChangedEventArgs args)
                 {
                     this.SetPosition(position);
+
                     OnRaiseControllerEvent(new ControllerEvent());
                 }
             );
@@ -289,11 +302,11 @@ namespace Chess
                 Console.WriteLine("Tutorial square " + tapped.Name + " tapped");
                 tutorialQueue.Enqueue(tapped);
             }
-            else if (blackIsAI & whiteIsAI)
+            else if (blackIsAI && whiteIsAI)
             {
                 Console.WriteLine("Both players AI, square tap ignored.");
             }
-            else if ((blackIsAI & !position.whiteMove) | (whiteIsAI & position.whiteMove))
+            else if ((blackIsAI && !position.whiteMove) || (whiteIsAI & position.whiteMove))
             {
                 Console.WriteLine("Safety ignore.");
             }
@@ -427,6 +440,18 @@ namespace Chess
             }
         }
 
+        internal void ColourPreviousMove(int pos1, int pos2)
+        {
+            board.ColourSquareBorder(pos1, Brushes.OrangeRed);
+            board.ColourSquareBorder(pos2, Brushes.OrangeRed);
+        }
+
+        internal void ColourPreviousMove(Move move)
+        {
+            ColourPreviousMove(move.origin, move.destination);
+        }
+
+
         private List<int> getControlledSquares(Position position)
         {
             List<int> controlledSquares = new List<int>();
@@ -464,13 +489,17 @@ namespace Chess
                 this.promotePiece(board.getSquareForNumber(current.origin), current.promoteTo);
             }
             OnRaiseBoardEvent(new BoardEvent(current, board.getSquareForNumber(current.origin).getName() + board.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
+            if (board.getSquareForNumber(current.destination).getPiece() != PieceType.Empty)
+            {
+                OnRaiseControllerEvent(new ControllerEvent(board.getSquareForNumber(current.destination).getPiece()));
+            }
             this.movePiece(current);
             this.position.makeMove(current, this.unmake);
             this.previousMoves.Add(current);
 
             board.UnColourBoard(Brushes.Blue);
             board.printNextTurn();
-
+            ColourPreviousMove(current);
             this.oneClick = false;
             if (showOnlyDefendedPiecesUnderAttack)
             {
@@ -623,6 +652,7 @@ namespace Chess
         {
             this.SetPosition(position);
             OnRaiseControllerEvent(new ControllerEvent());
+            ColourPreviousMove((Move)previousMoves[previousMoves.Count-1]);
         }
 
         void worker_DoWork(object sender, DoWorkEventArgs e)
@@ -648,6 +678,7 @@ namespace Chess
                     position.makeMove(newMove, new UnMakeInfo());
                     previousMoves.Add(newMove);
                 }
+                Thread.Sleep(2000);
             }
             ((BackgroundWorker)sender).ReportProgress(100);
         }
@@ -684,6 +715,11 @@ namespace Chess
         public ControllerEvent()//bool AIMoved)
         {
             //this.AIMoved = AIMoved;
+        }
+
+        public ControllerEvent(PieceType p)
+        {
+            Console.WriteLine(p.ToString() + " captured");
         }
 
         /*public bool AIMoveCompleted
