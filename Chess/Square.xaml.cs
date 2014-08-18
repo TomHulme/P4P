@@ -31,6 +31,7 @@ namespace Chess
         int squareSize = 75;
         int pieceChildrenNumber = -1;
         internal TagVisualizer tagVis;
+        Image image;
 
         PieceType piece;
 
@@ -65,8 +66,12 @@ namespace Chess
 
         public void colourRectangle(Brush colour)
         {
-            
             rectangle.Fill = colour;
+        }
+
+        public void colourBorder(Brush colour)
+        {
+            rectangle.Stroke = colour;
         }
 
         void tagVis_VisualizationRemoved(object sender, TagVisualizerEventArgs e)
@@ -123,9 +128,9 @@ namespace Chess
 
         internal void clearPieceImage()
         {
-            if (pieceChildrenNumber != -1)
+            if (pieceChildrenNumber != -1 && image != null)
             {
-                this.Children.RemoveAt(pieceChildrenNumber);
+                this.Children.Remove(image);
                 this.pieceChildrenNumber = -1;
             }
         }
@@ -146,6 +151,7 @@ namespace Chess
                 this.clearPieceImage();
             }
             this.Children.Add(img);
+            this.image = img;
             pieceChildrenNumber = this.Children.IndexOf(img);
         }
 

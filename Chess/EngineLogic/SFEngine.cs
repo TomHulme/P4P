@@ -84,9 +84,8 @@ namespace EngineLogic
                 Console.WriteLine(ex.Message);
             }
             Console.WriteLine(engine);
-            setSkillLevel(1,2);
+            setSkillLevel(Chess.Properties.Settings.Default.DifficultySetting);
         }
-
         public Boolean StopEngine()
         {
             return true;
@@ -96,11 +95,12 @@ namespace EngineLogic
          * 
          * 
          */
-        public void setSkillLevel(int skillLevel, int moveDepth)
+        public void setSkillLevel(int skillLevel)
         {
             if (skillLevel < 0 || skillLevel > 20) return;
             engineInput.WriteLine("setoption name Skill Level value " + skillLevel);
         }
+
 
     }
 }
