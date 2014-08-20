@@ -75,9 +75,15 @@
             </Grid>
 
             <Grid Background="DarkGray" Name="TopPanel" Height="360" Width="1280" VerticalAlignment="Top" Grid.Row="0">
-                <Grid Height="360" HorizontalAlignment="Left" Margin="0,0,0,0" Name="TopLeft" VerticalAlignment="Center" Width="340" MinHeight="360"/>
-                <Grid Height="360" HorizontalAlignment="Right" Margin="0,0,0,0" Name="TopRight" VerticalAlignment="Center" Width="340" MinHeight="360"/>
-                <Grid Height="60" HorizontalAlignment="Center" Margin="0,0,0,0" Name="TopCenter" VerticalAlignment="Top" Width="600" MinHeight="60"/>
+                <Grid Height="360" HorizontalAlignment="Left" Margin="0,0,0,0" Name="TopLeft" VerticalAlignment="Center" Width="340" MinHeight="360">
+                    <ContentControl Name="TopLeftControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
+                <Grid Height="360" HorizontalAlignment="Right" Margin="0,0,0,0" Name="TopRight" VerticalAlignment="Center" Width="340" MinHeight="360">
+                    <ContentControl Name="TopRightControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
+                <Grid Height="60" HorizontalAlignment="Center" Margin="0,0,0,0" Name="TopCenter" VerticalAlignment="Top" Width="600" MinHeight="60">
+                    <ContentControl Name="TopCenterControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
 
             </Grid>
 

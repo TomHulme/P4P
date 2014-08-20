@@ -130,6 +130,11 @@ namespace Chess
 
                             if(MoveParser.isMoveValid(newMove, position))
                             {
+                                if (MoveParser.isMoveCapture(newMove, position))
+                                {
+                                    Console.WriteLine("Computer captured something");
+                                    b.ReportProgress(1, newMove);
+                                }
                                 position.makeMove(newMove, new UnMakeInfo());
                                 previousMoves.Add(newMove);
                                 test = newMove;
@@ -152,10 +157,18 @@ namespace Chess
             bw.ProgressChanged += new ProgressChangedEventHandler(
                 delegate(object o, ProgressChangedEventArgs args)
                 {
-                    this.SetPosition(position);
-                    board.UnColourBorders();
-                    ColourPreviousMove(test);
-                    OnRaiseControllerEvent(new ControllerEvent());
+                    if (args.ProgressPercentage == 1)
+                    {
+                        Move move = args.UserState as Move;
+                        OnRaiseControllerEvent(new ControllerEvent(board.getSquareForNumber(move.destination).getPiece()));
+                    }
+                    else
+                    {
+                        this.SetPosition(position);
+						board.UnColourBorders();
+						ColourPreviousMove(test);
+                        OnRaiseControllerEvent(new ControllerEvent());
+                    }
                 }
             );
             bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
@@ -730,20 +743,17 @@ namespace Chess
 
     public class ControllerEvent : EventArgs
     {
-        //private bool AIMoved;
-        public ControllerEvent()//bool AIMoved)
+        internal PieceType p;
+        
+        public ControllerEvent()
         {
-            //this.AIMoved = AIMoved;
+            p = PieceType.Empty;
         }
 
         public ControllerEvent(PieceType p)
         {
+            this.p = p;
             Console.WriteLine(p.ToString() + " captured");
         }
-
-        /*public bool AIMoveCompleted
-        {
-            get { return AIMoved; }
-        }*/
     }
 }
