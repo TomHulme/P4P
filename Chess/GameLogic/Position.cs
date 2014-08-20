@@ -265,7 +265,7 @@ namespace GameLogic
                     setPiece(kingOrigin + 1, pieceLayout[kingOrigin + 3]);
                     setPiece(kingOrigin + 3, PieceType.Empty);
                 }
-                else if (move.origin == kingOrigin - 2)
+                else if (move.destination == kingOrigin - 2)
                 {
                     setPiece(kingOrigin - 1, pieceLayout[kingOrigin - 4]);
                     setPiece(kingOrigin - 4, PieceType.Empty);

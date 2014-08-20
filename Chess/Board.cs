@@ -153,6 +153,14 @@ namespace Chess
             }
         }
 
+        internal void UnColourBorders()
+        {
+            foreach (Square s in squares)
+            {
+                s.rectangle.Stroke = Brushes.Black;
+            }
+        }
+
         internal void SetPosition(Position position)
         {
             this.position = position;

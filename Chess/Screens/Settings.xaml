@@ -11,7 +11,7 @@
             <my:SurfaceSlider Height="40" HorizontalAlignment="Left" Margin="89,0,0,0" Name="Difficulty_Slider" VerticalAlignment="Center" Width="287" Value="1" Minimum="1" Maximum="20" ValueChanged="Difficulty_Slider_ValueChanged" />
             <Label Content="Super Super Simple" Height="28" HorizontalAlignment="Left" Margin="89,60,0,0" Name="Difficulty_Label" VerticalAlignment="Top" Width="287" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
 
-            <my:SurfaceButton Margin="208,40,233,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="312" Height="62" Content="Go Back" Click="Go_Back_Click" TouchDown="Go_Back_Click" Name="Back_Button" />
+            <my:SurfaceButton Margin="208,578,233,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="312" Height="62" Content="Go Back" Click="Go_Back_Click" TouchDown="Go_Back_Click" Name="Back_Button" />
             </Grid>
     </Viewbox>
 </view:Screen>
