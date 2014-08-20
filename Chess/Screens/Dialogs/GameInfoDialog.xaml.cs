@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GameLogic;
 
 namespace Chess.Screens.Dialogs
 {
@@ -39,6 +40,11 @@ namespace Chess.Screens.Dialogs
             else
             {
                 SetGameInfoText("Black To Move");
+            }
+
+            if ((new MoveGenerator()).legalMoves(gameController.position).Count == 0)
+            {
+                SetGameInfoText("Checkmate! " + (gameController.position.whiteMove ? "Black wins!" : "White wins!"));
             }
         }
 

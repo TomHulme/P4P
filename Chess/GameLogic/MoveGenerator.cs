@@ -94,7 +94,8 @@ namespace GameLogic
                                 (position.getPiece(kingOrigin + 2) == PieceType.Empty) &&
                                 (position.getPiece(kingOrigin + 3) == rook) &&
                                 !squareAttacked(position, kingOrigin) &&
-                                !squareAttacked(position, kingOrigin + 1))
+                                !squareAttacked(position, kingOrigin + 1) &&
+                                !squareAttacked(position, kingOrigin + 2))
                             {
                                 moveList.Add(getMoveObject(kingOrigin, kingOrigin + 2, PieceType.Empty));
                             }
@@ -104,7 +105,8 @@ namespace GameLogic
                                 (position.getPiece(kingOrigin - 3) == PieceType.Empty) &&
                                 (position.getPiece(kingOrigin - 4) == rook) &&
                                 !squareAttacked(position, kingOrigin) &&
-                                !squareAttacked(position, kingOrigin - 1))
+                                !squareAttacked(position, kingOrigin - 1) &&
+                                !squareAttacked(position, kingOrigin - 2))
                             {
                                 moveList.Add(getMoveObject(kingOrigin, kingOrigin - 2, PieceType.Empty));
                             }

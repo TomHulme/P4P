@@ -8,10 +8,18 @@
             mc:Ignorable="d" d:DesignHeight="720" d:DesignWidth="1280">
     <Viewbox>
         <Grid Background="Gray" Height="720" Width="1280">
-            <my:SurfaceSlider Height="40" HorizontalAlignment="Left" Margin="89,0,0,0" Name="Difficulty_Slider" VerticalAlignment="Center" Width="287" Value="1" Minimum="1" Maximum="20" ValueChanged="Difficulty_Slider_ValueChanged" />
-            <Label Content="Super Super Simple" Height="28" HorizontalAlignment="Left" Margin="89,60,0,0" Name="Difficulty_Label" VerticalAlignment="Top" Width="287" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+            <Label Content="Select A Difficulty!" Height="28" HorizontalAlignment="Center" Margin="0,20,0,0" Name="Difficulty_Level_Label" VerticalAlignment="Top" Width="287" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+            <my:SurfaceSlider Height="40" HorizontalAlignment="Left" Margin="89,110,0,0" Name="Difficulty_Slider" VerticalAlignment="Top" Width="1102" Minimum="1" Maximum="20" ValueChanged="Difficulty_Slider_ValueChanged" />
+            <Label Content="Super Super Simple" Height="28" HorizontalAlignment="Center" Margin="0,60,0,0" Name="Difficulty_Label" VerticalAlignment="Top" Width="287" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
 
-            <my:SurfaceButton Margin="208,40,233,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="312" Height="62" Content="Go Back" Click="Go_Back_Click" TouchDown="Go_Back_Click" Name="Back_Button" />
+
+            <Label Content="Select a Board Texture" Height="28" HorizontalAlignment="Center" Margin="0,230,0,0" Name="Texture_Label" VerticalAlignment="Top" Width="287" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+            <Rectangle Height="75" HorizontalAlignment="Center" Margin="0,300,150,0" Name="Texture_Button_1" VerticalAlignment="Top" Width="75"/>
+            <Rectangle Height="75" HorizontalAlignment="Center" Margin="150,300,0,0" Name="Texture_Button_2" VerticalAlignment="Top" Width="75"/>
+
+
+
+            <my:SurfaceButton Margin="208,578,233,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="312" Height="62" Content="Go Back" Click="Go_Back_Click" TouchDown="Go_Back_Click" Name="Back_Button" />
             </Grid>
     </Viewbox>
 </view:Screen>
