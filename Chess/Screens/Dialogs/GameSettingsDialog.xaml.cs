@@ -236,7 +236,7 @@ namespace Chess.Screens.Dialogs
 
         private void Defended_Click(object sender, RoutedEventArgs e)
         {
-            gameController.ShowDefendedPieces = gameController.ShowDefendedPieces ? false : true;
+            gameController.ShowOnlyDefendedPiecesUnderAttack = gameController.ShowOnlyDefendedPiecesUnderAttack ? false : true;
         }
     }
 }
