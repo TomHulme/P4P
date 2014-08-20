@@ -38,6 +38,7 @@ namespace Chess
         private bool showDefendedPieces = false;
         private bool showAttackedPieces = false;
         private bool showOnlyDefendedPiecesUnderAttack = false;
+        private bool endCvCGame = false;
 
         internal Boolean tutorialFlag;
         internal volatile Queue<Square> tutorialQueue = new Queue<Square>();
@@ -76,7 +77,6 @@ namespace Chess
             if (blackIsAI & whiteIsAI)
             {
                 bw = new BackgroundWorker();
-
                 bwSetup();
             }
             
@@ -96,14 +96,15 @@ namespace Chess
         private void bwSetup()
         {
             bw.WorkerReportsProgress = true;
-
+            bw.WorkerSupportsCancellation = true;
+            Move test = new Move(0, 0, PieceType.Empty);
             bw.DoWork += new DoWorkEventHandler(
                 delegate(object o, DoWorkEventArgs args)
                 {
                     BackgroundWorker b = o as BackgroundWorker;
                     int i = 0;
                     bool gameCompleted = false;
-                    while (!gameCompleted) 
+                    while (!gameCompleted && !endCvCGame) 
                     {
                         String move;
                         if ((position.whiteMove & whiteIsAI) | (!position.whiteMove & blackIsAI))
@@ -130,8 +131,8 @@ namespace Chess
                             if(MoveParser.isMoveValid(newMove, position))
                             {
                                 position.makeMove(newMove, new UnMakeInfo());
-                                ColourPreviousMove(newMove);
                                 previousMoves.Add(newMove);
+                                test = newMove;
                             }
                         }
                         if (movegen.legalMoves(position).Count == 0)
@@ -152,7 +153,8 @@ namespace Chess
                 delegate(object o, ProgressChangedEventArgs args)
                 {
                     this.SetPosition(position);
-
+                    board.UnColourBorders();
+                    ColourPreviousMove(test);
                     OnRaiseControllerEvent(new ControllerEvent());
                 }
             );
@@ -160,7 +162,7 @@ namespace Chess
                 delegate(object o, RunWorkerCompletedEventArgs args)
                 {
                     this.SetPosition(position);
-                    Console.WriteLine("Checkmate bruv.");
+                    Console.WriteLine("Computer vs Computer game completed.");
                 });
 
             bw.RunWorkerAsync();
@@ -195,7 +197,7 @@ namespace Chess
             if (position.getEpSquare() == current.destination && (originPiece == PieceType.p || originPiece == PieceType.P))
             {
                 // EN PASSANT!
-                Move last = (Move)this.previousMoves[this.previousMoves.Count];
+                Move last = (Move)this.previousMoves[this.previousMoves.Count-1];
                 Square enPassantPawn = board.getSquareForNumber(last.destination);
                 enPassantPawn.setPiece(PieceType.Empty);
                 enPassantPawn.clearPieceImage();
@@ -204,7 +206,6 @@ namespace Chess
             if (MoveParser.moveObjectToString(current, this.position).Contains("O-O"))
             {
                 // CASTLING!
-                board.ColourBoard();
                 Console.WriteLine("Castling");
 
                 Image img;
@@ -709,6 +710,12 @@ namespace Chess
         {
             get { return this.showOnlyDefendedPiecesUnderAttack; }
             set { this.showOnlyDefendedPiecesUnderAttack = value; }
+        }
+
+        public bool EndCvCGame
+        {
+            get { return this.endCvCGame; }
+            set { this.endCvCGame = value; }
         }
 
         internal void printPosition()

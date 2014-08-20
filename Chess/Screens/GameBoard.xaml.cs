@@ -62,6 +62,7 @@ namespace Chess.Screens
 
         private void PVP_Click(object sender, RoutedEventArgs e)
         {
+            this.gameController.EndCvCGame = true;
             this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition), false, false);
             ResetDialogs();
 
@@ -71,6 +72,7 @@ namespace Chess.Screens
 
         private void PVC_Click(object sender, RoutedEventArgs e)
         {
+            this.gameController.EndCvCGame = true;
             this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition), true, false);
             ResetDialogs();
 
@@ -80,6 +82,7 @@ namespace Chess.Screens
 
         private void CVC_Click(object sender, RoutedEventArgs e)
         {
+            this.gameController.EndCvCGame = true;
             this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition), true, true);
             ResetDialogs();
 
