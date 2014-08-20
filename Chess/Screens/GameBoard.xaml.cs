@@ -25,26 +25,50 @@ namespace Chess.Screens
     public partial class GameBoard : Screen
     {
         GameController gameController;
-        GameInfoDialog gameInfoDialog;
-        GameSettingsDialog gameSettingsDialog;
+        GameInfoDialog gameInfoDialogBottom;
+        GameSettingsDialog gameSettingsDialogBottom;
+
+        GameInfoDialog gameInfoDialogTop;
+        GameSettingsDialog gameSettingsDialogTop;
 
         public GameBoard(ScreenControl parentWindow) : base(parentWindow)
         {
             InitializeComponent();
 
-            this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition));
+            this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition), false, false);
             ResetDialogs();
+            SetTopDialogs();
         }
 
         private void ResetDialogs()
         {
-            this.gameInfoDialog = new GameInfoDialog(gameController);
-            this.gameSettingsDialog = new GameSettingsDialog(gameController);
+            this.gameInfoDialogBottom = new GameInfoDialog(gameController);
+            this.gameSettingsDialogBottom = new GameSettingsDialog(gameController, true);
 
-            BottomCenterControl.Content = this.gameInfoDialog;
-            BottomRightControl.Content = this.gameSettingsDialog;
+            BottomCenterControl.Content = this.gameInfoDialogBottom;
+            BottomRightControl.Content = this.gameSettingsDialogBottom;
 
             BoardArea.Content = gameController.board;
+        }
+
+        private void SetTopDialogs()
+        {
+            this.gameInfoDialogTop = new GameInfoDialog(gameController);
+            this.gameSettingsDialogTop = new GameSettingsDialog(gameController, false);
+
+            RotateTransform rotateInfo = new RotateTransform(180, 300, 30);
+            RotateTransform rotateSettings = new RotateTransform(180, 170, 180);
+
+            this.gameInfoDialogTop.RenderTransform = rotateInfo;
+            this.gameSettingsDialogTop.RenderTransform = rotateSettings;
+
+            TopCenterControl.Content = this.gameInfoDialogTop;
+            TopLeftControl.Content = this.gameSettingsDialogTop;
+        }
+
+        private void ClearTopDialogs()
+        {
+
         }
 
         private void Go_Back_Click(object sender, RoutedEventArgs e)
@@ -64,6 +88,7 @@ namespace Chess.Screens
         {
             this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition), false, false);
             ResetDialogs();
+            SetTopDialogs();
 
             this.New_Game_Buttons.Height = 0;
             this.New_Game_Buttons.Visibility = Visibility.Collapsed;
@@ -73,6 +98,7 @@ namespace Chess.Screens
         {
             this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition), true, false);
             ResetDialogs();
+            ClearTopDialogs();
 
             this.New_Game_Buttons.Height = 0;
             this.New_Game_Buttons.Visibility = Visibility.Collapsed;
@@ -82,6 +108,7 @@ namespace Chess.Screens
         {
             this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition), true, true);
             ResetDialogs();
+            ClearTopDialogs();
 
             this.New_Game_Buttons.Height = 0;
             this.New_Game_Buttons.Visibility = Visibility.Collapsed;

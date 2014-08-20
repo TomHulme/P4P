@@ -129,6 +129,11 @@ namespace Chess
 
                             if(MoveParser.isMoveValid(newMove, position))
                             {
+                                if (MoveParser.isMoveCapture(newMove, position))
+                                {
+                                    Console.WriteLine("Computer captured something");
+                                    b.ReportProgress(1, newMove);
+                                }
                                 position.makeMove(newMove, new UnMakeInfo());
                                 previousMoves.Add(newMove);
                             }
@@ -150,9 +155,17 @@ namespace Chess
             bw.ProgressChanged += new ProgressChangedEventHandler(
                 delegate(object o, ProgressChangedEventArgs args)
                 {
-                    this.SetPosition(position);
+                    if (args.ProgressPercentage == 1)
+                    {
+                        Move move = args.UserState as Move;
+                        OnRaiseControllerEvent(new ControllerEvent(board.getSquareForNumber(move.destination).getPiece()));
+                    }
+                    else
+                    {
+                        this.SetPosition(position);
 
-                    OnRaiseControllerEvent(new ControllerEvent());
+                        OnRaiseControllerEvent(new ControllerEvent());
+                    }
                 }
             );
             bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(
@@ -489,7 +502,7 @@ namespace Chess
                 this.promotePiece(board.getSquareForNumber(current.origin), current.promoteTo);
             }
             OnRaiseBoardEvent(new BoardEvent(current, board.getSquareForNumber(current.origin).getName() + board.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
-            if (board.getSquareForNumber(current.destination).getPiece() != PieceType.Empty)
+            if (MoveParser.isMoveCapture(current, position))
             {
                 OnRaiseControllerEvent(new ControllerEvent(board.getSquareForNumber(current.destination).getPiece()));
             }
@@ -711,20 +724,17 @@ namespace Chess
 
     public class ControllerEvent : EventArgs
     {
-        //private bool AIMoved;
-        public ControllerEvent()//bool AIMoved)
+        internal PieceType p;
+        
+        public ControllerEvent()
         {
-            //this.AIMoved = AIMoved;
+            p = PieceType.Empty;
         }
 
         public ControllerEvent(PieceType p)
         {
+            this.p = p;
             Console.WriteLine(p.ToString() + " captured");
         }
-
-        /*public bool AIMoveCompleted
-        {
-            get { return AIMoved; }
-        }*/
     }
 }

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GameLogic;
 
 namespace Chess.Screens.Dialogs
 {
@@ -25,44 +26,164 @@ namespace Chess.Screens.Dialogs
         ArrayList BishopList;
         ArrayList KnightList;
         GameController gameController;
+        Boolean isWhite;
 
-        public GameSettingsDialog(GameController gameController)
+        public GameSettingsDialog(GameController gameController, Boolean isWhite)
         {
             InitializeComponent();
 
             this.gameController = gameController;
+            this.isWhite = isWhite;
+
+            this.gameController.RaiseControllerEvent += new EventHandler<ControllerEvent>(gameController_RaiseControllerEvent);
 
             PopulatePawnList();
             PopulateRookList();
             PopulateBishopList();
             PopulateKnightList();
 
-            foreach (TextBlock t in PawnList)
+            foreach (Border b in PawnList)
             {
-                t.Background = Brushes.DarkGray;
-                t.Text = "P";
+                b.Background = isWhite ? Brushes.DarkGray : Brushes.WhiteSmoke;
+                b.Visibility = Visibility.Hidden;
             }
 
-            foreach (TextBlock t in RookList)
+            foreach (Border b in RookList)
             {
-                t.Background = Brushes.DarkGray;
-                t.Text = "R";
+                b.Background = isWhite ? Brushes.DarkGray : Brushes.WhiteSmoke;
+                b.Visibility = Visibility.Hidden;
             }
 
-            foreach (TextBlock t in BishopList)
+            foreach (Border b in BishopList)
             {
-                t.Background = Brushes.DarkGray;
-                t.Text = "B";
+                b.Background = isWhite ? Brushes.DarkGray : Brushes.WhiteSmoke;
+                b.Visibility = Visibility.Hidden;
             }
 
-            foreach (TextBlock t in KnightList)
+            foreach (Border b in KnightList)
             {
-                t.Background = Brushes.DarkGray;
-                t.Text = "N";
+                b.Background = isWhite ? Brushes.DarkGray : Brushes.WhiteSmoke;
+                b.Visibility = Visibility.Hidden;
             }
 
-            Queen.Background = Brushes.DarkGray;
-            Queen.Text = "Q";
+            Queen.Background = isWhite ? Brushes.DarkGray : Brushes.WhiteSmoke;
+            Queen.Visibility = Visibility.Hidden;
+
+            if (!isWhite)
+            {
+                HighlightMoves.Background = Brushes.WhiteSmoke;
+                Attacked.Background = Brushes.WhiteSmoke;
+                Defended.Background = Brushes.WhiteSmoke;
+
+                Title.Background = Brushes.WhiteSmoke;
+            }
+        }
+
+        void gameController_RaiseControllerEvent(object sender, ControllerEvent e)
+        {
+            if (!isWhite)
+            {
+                switch (e.p)
+                {
+                    case (PieceType.P):
+                        foreach (Border b in PawnList)
+                        {
+                            if (b.Visibility == Visibility.Hidden)
+                            {
+                                b.Visibility = Visibility.Visible;
+                                return;
+                            }
+                        }
+                        break;
+                    case (PieceType.R):
+                        foreach (Border b in RookList)
+                        {
+                            if (b.Visibility == Visibility.Hidden)
+                            {
+                                b.Visibility = Visibility.Visible;
+                                return;
+                            }
+                        }
+                        break;
+                    case (PieceType.B):
+                        foreach (Border b in BishopList)
+                        {
+                            if (b.Visibility == Visibility.Hidden)
+                            {
+                                b.Visibility = Visibility.Visible;
+                                return;
+                            }
+                        }
+                        break;
+                    case (PieceType.N):
+                        foreach (Border b in KnightList)
+                        {
+                            if (b.Visibility == Visibility.Hidden)
+                            {
+                                b.Visibility = Visibility.Visible;
+                                return;
+                            }
+                        }
+                        break;
+                    case (PieceType.Q):
+                        Queen.Visibility = Visibility.Visible;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                switch (e.p)
+                {
+                    case (PieceType.p):
+                        foreach (Border b in PawnList)
+                        {
+                            if (b.Visibility == Visibility.Hidden)
+                            {
+                                b.Visibility = Visibility.Visible;
+                                return;
+                            }
+                        }
+                        break;
+                    case (PieceType.r):
+                        foreach (Border b in RookList)
+                        {
+                            if (b.Visibility == Visibility.Hidden)
+                            {
+                                b.Visibility = Visibility.Visible;
+                                return;
+                            }
+                        }
+                        break;
+                    case (PieceType.b):
+                        foreach (Border b in BishopList)
+                        {
+                            if (b.Visibility == Visibility.Hidden)
+                            {
+                                b.Visibility = Visibility.Visible;
+                                return;
+                            }
+                        }
+                        break;
+                    case (PieceType.n):
+                        foreach (Border b in KnightList)
+                        {
+                            if (b.Visibility == Visibility.Hidden)
+                            {
+                                b.Visibility = Visibility.Visible;
+                                return;
+                            }
+                        }
+                        break;
+                    case (PieceType.q):
+                        Queen.Visibility = Visibility.Visible;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
         }
 
         internal void PopulatePawnList() 
