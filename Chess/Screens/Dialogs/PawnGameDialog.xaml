@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="Chess.Screens.Dialogs.PawnGameDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="120" d:DesignWidth="1010" xmlns:my="http://schemas.microsoft.com/surface/2008">
+    <Grid Background="DarkGray" Height="120" Width="1010">
+        <my:SurfaceButton Content="VS Computer" Height="35" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="12,73,0,0" MinHeight="10" MinWidth="10" Name="VSComputer_Button" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="181" Click="VSComputer_Button_Click" TouchDown="VSComputer_Button_Click" />
+        <my:SurfaceButton Content="VS Player" Height="35" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="12,32,0,0" MinHeight="10" MinWidth="10" Name="VSPlayer_Button" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="181" Click="VSPlayer_Button_Click" TouchDown="VSPlayer_Button_Click" />
+        <my:SurfaceButton Content="Show Moves" Height="35" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="817,32,0,0" MinHeight="10" MinWidth="10" Name="ShowMoves_Button" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="181" Click="ShowMoves_Button_Click" TouchDown="ShowMoves_Button_Click" />
+        <my:SurfaceButton Content="Show Attacked Pieces" Height="35" HorizontalAlignment="Right" HorizontalContentAlignment="Center" Margin="0,73,12,0" MinHeight="10" MinWidth="10" Name="ShowAttacked_Button" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="181" Click="ShowAttacked_Button_Click" TouchDown="ShowAttacked_Button_Click"/>
+
+        <TextBlock Height="47" HorizontalAlignment="Center" Margin="208,73,208,0" Name="PawnGameText" Text="White To Move" VerticalAlignment="Top" Width="595" FontSize="20" Padding="5" TextAlignment="Center" />
+
+        <TextBlock FontSize="16" Height="47" HorizontalAlignment="Center" Margin="207,0,208,0" Name="PawnGameInfo" Padding="5" Text="As the white player, your goal is to navigate one of your pawns to one of the squares in the last rank." TextAlignment="Center" VerticalAlignment="Top" Width="595" />
+
+        <Rectangle Height="120" HorizontalAlignment="Left" Margin="204,0,0,0" Name="rectangle1" VerticalAlignment="Top" Width="4" Fill="Black" Stroke="Transparent"></Rectangle>
+        <Rectangle Height="120" HorizontalAlignment="Right" Margin="0,0,204,0" Name="rectangle2" VerticalAlignment="Top" Width="4" Fill="Black" Stroke="Transparent"></Rectangle>
+
+        <Label Content="New Game" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Height="40" HorizontalAlignment="Left" Margin="12,0,0,0" Name="label1" VerticalAlignment="Top" Width="181" />
+        <Label Content="Hints" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Height="40" HorizontalAlignment="Left" Margin="817,0,0,0" Name="label2" VerticalAlignment="Top" Width="181" />
+        
+    </Grid>
+</UserControl>

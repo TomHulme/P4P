@@ -68,7 +68,11 @@ namespace Chess.Screens
 
         private void ClearTopDialogs()
         {
+            this.gameInfoDialogTop = null;
+            this.gameSettingsDialogTop = null;
 
+            TopCenterControl.Content = this.gameInfoDialogTop;
+            TopLeftControl.Content = this.gameSettingsDialogTop;
         }
 
         private void Go_Back_Click(object sender, RoutedEventArgs e)

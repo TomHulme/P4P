@@ -719,6 +719,11 @@ namespace Chess
             get { return this.showOnlyDefendedPiecesUnderAttack; }
             set { this.showOnlyDefendedPiecesUnderAttack = value; }
         }
+
+        public void setBlackIsAI(Boolean b)
+        {
+            blackIsAI = b;
+        }
     }
     
 

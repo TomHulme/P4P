@@ -258,11 +258,14 @@ namespace Chess.Screens
         /// <param name="e"></param>
         private void Start_Pawn_Game_Click(object sender, RoutedEventArgs e)
         {
-            Dialog.Content = null;
+            currentMode = GameMode.Tutorial;
+            gameController.tutorialFlag = false;
 
             PawnGame pawnGame = new PawnGame();
 
-            gameController.SetPosition(pawnGame.GetPosition());
+            Dialog.Content = new PawnGameDialog(this, pawnGame);
+
+            ResetButton.Visibility = Visibility.Hidden;
         }
 
         /// <summary>
@@ -280,7 +283,9 @@ namespace Chess.Screens
         /// </summary>
         private void UpdateBoard()
         {
-            gameController.SetPosition(tutorialOne.GetPosition());
+            gameController = new GameController(false, tutorialOne.GetPosition());
+            BoardArea.Content = gameController.board;
+            ResetButton.Visibility = Visibility.Visible;
         }
     }
 }

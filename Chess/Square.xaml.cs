@@ -62,6 +62,7 @@ namespace Chess
             rectangle.Height = squareSize;
             rectangle.Stroke = Brushes.Black;
             rectangle.StrokeThickness = 1;
+            rectangle.Opacity = 0.5;
             colourRectangle(Brushes.Transparent);
         }
 
@@ -210,7 +211,6 @@ namespace Chess
             foreach(XmlNode node in nodes){
                 TagVisualizationDefinition tagDef = new TagVisualizationDefinition();
                 // The tag value and series that this definition will respond to.
-                Console.WriteLine(node.Attributes["Value"].Value);
                 tagDef.Value = TagValue.FromString(node.Attributes["Value"].Value);
                 tagDef.Series = TagValue.FromString(node.Attributes["Series"].Value);
 

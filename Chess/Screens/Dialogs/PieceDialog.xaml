@@ -8,7 +8,7 @@
     <Grid Background="DarkGray" Height="120" Width="1010">
         <my:SurfaceButton Content="Moves" Height="35" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="12,46,0,0" MinHeight="10" MinWidth="10" Name="surfaceButton1" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="181" Click="Moves_Click" />
         <my:SurfaceButton Content="Moving" Height="35" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="817,46,0,0" MinHeight="10" MinWidth="10" Name="surfaceButton2" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="181" Click="Moves_Quiz_Click" />
-        <TextBlock Height="120" HorizontalAlignment="Center" Margin="0,0,0,0" Name="DialogText" Text="" VerticalAlignment="Top" Width="595" FontSize="16" Padding="5" ForceCursor="False" TextAlignment="Justify" />
+        <TextBlock Height="120" HorizontalAlignment="Center" Margin="0,0,0,0" Name="DialogText" Text="" VerticalAlignment="Top" Width="595" FontSize="16" Padding="5" ForceCursor="False" TextAlignment="Center" />
 
         <Rectangle Height="120" HorizontalAlignment="Left" Margin="204,0,0,0" Name="rectangle1" VerticalAlignment="Top" Width="4" Fill="Black" Stroke="Transparent"></Rectangle>
         <Rectangle Height="120" HorizontalAlignment="Right" Margin="0,0,204,0" Name="rectangle2" VerticalAlignment="Top" Width="4" Fill="Black" Stroke="Transparent"></Rectangle>

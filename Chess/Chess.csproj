@@ -42,6 +42,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -84,6 +86,9 @@
     </Compile>
     <Compile Include="Screens\Dialogs\GameSettingsDialog.xaml.cs">
       <DependentUpon>GameSettingsDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\Dialogs\PawnGameDialog.xaml.cs">
+      <DependentUpon>PawnGameDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Screens\GameBoard.xaml.cs">
       <DependentUpon>GameBoard.xaml</DependentUpon>
@@ -135,6 +140,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Screens\Dialogs\GameSettingsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screens\Dialogs\PawnGameDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
