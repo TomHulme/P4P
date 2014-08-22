@@ -123,23 +123,66 @@ namespace Chess
 
         internal void ColourBoard()
         {
-            for (int i = 0; i < 8; i++)
+            if (!Chess.Properties.Settings.Default.WoodTextures)
             {
-                for (int j = 0; j < 8; j++)
+                for (int i = 0; i < 8; i++)
                 {
-                    if (this.flipped)
+                    for (int j = 0; j < 8; j++)
                     {
-                        if ((i + j) % 2 == 0) { this.squares[i * 8 + j].Background = Brushes.DarkGray; }
-                        else { this.squares[i * 8 + j].Background = Brushes.WhiteSmoke; }
+                        if (this.flipped)
+                        {
+                            if ((i + j) % 2 == 0) { this.squares[i * 8 + j].Background = Brushes.DarkGray; }
+                            else { this.squares[i * 8 + j].Background = Brushes.WhiteSmoke; }
+                        }
+                        else
+                        {
+                            if ((i + j) % 2 == 0) { this.squares[i * 8 + j].Background = Brushes.WhiteSmoke; }
+                            else { this.squares[i * 8 + j].Background = Brushes.DarkGray; }
+                        }
+                        this.squares[i * 8 + j].colourBorder(Brushes.Black);
                     }
-                    else
-                    {
-                        if ((i + j) % 2 == 0) { this.squares[i * 8 + j].Background = Brushes.WhiteSmoke; }
-                        else { this.squares[i * 8 + j].Background = Brushes.DarkGray; }
-                    }
-                    this.squares[i * 8 + j].colourBorder(Brushes.Black);
                 }
             }
+            else
+            {
+                Random r = new Random();
+                for (int i = 0; i < 8; i++)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        if (this.flipped)
+                        {
+                            if ((i + j) % 2 == 0) { this.squares[i * 8 + j].Background = getTextureImageBrush(false, r.Next(1, 6)); }
+                            else { this.squares[i * 8 + j].Background = getTextureImageBrush(true, r.Next(1, 6)); }
+                        }
+                        else
+                        {
+                            if ((i + j) % 2 == 0) { this.squares[i * 8 + j].Background = getTextureImageBrush(true, r.Next(1, 6)); }
+                            else { this.squares[i * 8 + j].Background = getTextureImageBrush(false, r.Next(1, 6)); }
+                        }
+                        this.squares[i * 8 + j].colourBorder(Brushes.Black);
+                    }
+                }
+            }
+        }
+
+        private ImageBrush getTextureImageBrush(bool isWhite, int imageNum){
+            // Create Image Element
+            Image myImage = new Image();
+            myImage.Width = 75;
+            myImage.Height = 75;
+
+            // Create source
+            BitmapImage myBitmapImage = new BitmapImage();
+
+            // BitmapImage.UriSource must be in a BeginInit/EndInit block
+            myBitmapImage.BeginInit();
+            myBitmapImage.UriSource = new Uri(App.getPath() + @"Images\SquareImages\" + (isWhite ? "W" : "B" ) + imageNum.ToString() + ".png");
+            myBitmapImage.DecodePixelWidth = 75;
+            myBitmapImage.EndInit();
+            myImage.Source = myBitmapImage;
+            myImage.IsHitTestVisible = false;
+            return new ImageBrush(myImage.Source);
         }
 
         internal void UnColourBoard(Brush colour)
@@ -150,6 +193,15 @@ namespace Chess
                 {
                     s.colourRectangle(Brushes.Transparent);
                 }
+            }
+        }
+
+        internal void UnColourBorders()
+        {
+            foreach (Square s in squares)
+            {
+                s.rectangle.StrokeThickness = 1;
+                s.rectangle.Stroke = Brushes.Black;
             }
         }
 
@@ -167,6 +219,7 @@ namespace Chess
 
         public void ColourSquareBorder(int square, Brush colour)
         {
+            getSquareForNumber(square).rectangle.StrokeThickness = 3;
             getSquareForNumber(square).colourBorder(colour);
         }
 
@@ -316,7 +369,7 @@ namespace Chess
 
             // BitmapImage.UriSource must be in a BeginInit/EndInit block
             myBitmapImage.BeginInit();
-            myBitmapImage.UriSource = new Uri(App.getPath() + @"Images\" + pieceString + ".jpg");
+            myBitmapImage.UriSource = new Uri(App.getPath() + @"Images\PieceImages\" + pieceString + ".jpg");
             myBitmapImage.DecodePixelWidth = 75;
             if (this.flipped & this.blackReverse & pieceString.StartsWith("b")) { myBitmapImage.Rotation = Rotation.Rotate270; }
             else if (this.blackReverse & pieceString.StartsWith("b")) { myBitmapImage.Rotation = Rotation.Rotate180; }

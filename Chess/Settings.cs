@@ -9,6 +9,7 @@
     internal sealed partial class Settings {
 
         int difficultySetting = 1;
+        bool woodTextures = false;
         
         public Settings() {
             // // To add event handlers for saving and changing settings, uncomment the lines below:
@@ -30,6 +31,12 @@
         internal int DifficultySetting{
             get{ return difficultySetting;}
             set{ difficultySetting = value;}
+        }
+
+        internal bool WoodTextures
+        {
+            get { return woodTextures; }
+            set { woodTextures = value; }
         }
     }
 }

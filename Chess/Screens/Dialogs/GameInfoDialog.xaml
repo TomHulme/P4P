@@ -7,11 +7,11 @@
              d:DesignHeight="60" d:DesignWidth="600">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="400" />
+            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
             
-        <TextBlock Name="GameInfoText" Foreground="Black" Grid.Column="1" Text="White To Move" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" FontSize="20"  />
+        <TextBlock Name="GameInfoText" Foreground="Black" Text="White To Move" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center" FontSize="20" Margin="0,17" Grid.Column="1" />
     </Grid>
 </UserControl>
