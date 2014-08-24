@@ -84,7 +84,7 @@ namespace Chess
         {
             PieceVisualization pv = (PieceVisualization)e.TagVisualization;
             pv.John.Fill = Brushes.Chartreuse;
-            Console.WriteLine(pv.VisualizedTag.Value);
+            //Console.WriteLine(pv.VisualizedTag.Value);
             Console.WriteLine("Tag in square " + name);
         }
 
