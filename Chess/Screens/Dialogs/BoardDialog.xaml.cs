@@ -294,7 +294,7 @@ namespace Chess.Screens.Dialogs
                                     //chose random rank
                                     int rank = (int)(randGen.NextDouble() * 8) + 1;
 
-                                    String text = "Pleaes tap a square from rank " + rank + ".";
+                                    String text = "Please tap a square from rank " + rank + ".";
 
                                     quiz.ReportProgress((questionNumber + 1) * 25 / 3, text);
 

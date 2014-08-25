@@ -62,7 +62,7 @@ namespace Chess.Screens.Dialogs
             switch (this.piece)
             {
                 case PieceType.P:
-                    DialogText.Text = "The Pawn moves forward exactly one space, or optionally, two spaces when on its starting square, toward the opponents side of the board. ";
+                    DialogText.Text = "The Pawn moves forward exactly one space, or optionally, two spaces when on its starting square, toward the opponent's side of the board. ";
                     DialogText.Text += "If the pawn reaches a square on the back rank of the opponent, it can be promoted to the player's choice of a Queen, Rook, Bishop, or Knight. ";
                     DialogText.Text += "A Pawn may capture an enemy piece one square diagonally ahead of the Pawn, either left or right.";
                     break;
