@@ -25,6 +25,8 @@ namespace Chess.Screens
         public MainMenu(ScreenControl parentWindow) : base(parentWindow)
         {
             InitializeComponent();
+            App.ReadOptionsFile();
+            App.EnsureOptionsSet();
             SetBackground();
         }
 
@@ -51,6 +53,7 @@ namespace Chess.Screens
         private void Settings_Button_Click(object sender, RoutedEventArgs e)
         {
             parentWindow.PushScreen(new Settings(parentWindow));
+            Console.WriteLine(Chess.Properties.Settings.Default.PreviousMove);
         }
 
         private void SetBackground()

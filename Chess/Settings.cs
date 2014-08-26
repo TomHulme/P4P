@@ -1,4 +1,5 @@
-﻿namespace Chess.Properties {
+﻿using System.Windows.Media;
+namespace Chess.Properties {
     
     
     // This class allows you to handle specific events on the settings class:
@@ -10,6 +11,11 @@
 
         int difficultySetting = 1;
         bool woodTextures = false;
+        Brush attackedPieces;
+        Brush defendedPieces;
+        Brush highlightMove;
+        Brush previousMove;
+        Brush takablePieces;
         
         public Settings() {
             // // To add event handlers for saving and changing settings, uncomment the lines below:
@@ -37,6 +43,36 @@
         {
             get { return woodTextures; }
             set { woodTextures = value; }
+        }
+
+        internal Brush AttackedPieces
+        {
+            get { return attackedPieces; }
+            set { attackedPieces = value; }
+        }
+
+        internal Brush DefendedPieces
+        {
+            get { return defendedPieces; }
+            set { defendedPieces = value; }
+        }
+
+        internal Brush HighlightMove
+        {
+            get { return highlightMove; }
+            set { highlightMove = value; }
+        }
+
+        internal Brush TakablePieces
+        {
+            get { return takablePieces; }
+            set { takablePieces = value; }
+        }
+
+        internal Brush PreviousMove
+        {
+            get { return previousMove; }
+            set { previousMove = value; }
         }
     }
 }

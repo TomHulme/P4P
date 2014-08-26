@@ -220,6 +220,7 @@ namespace Chess
                 tagDef.MaxCount = 32;
                 // The visualization stays for 2 seconds.
                 tagDef.LostTagTimeout = 100.0;
+                //tagDef.
                 // Orientation offset (default).
                 tagDef.OrientationOffsetFromTag = 0.0;
                 // Physical offset (horizontal inches, vertical inches).

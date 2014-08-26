@@ -42,7 +42,7 @@ namespace Chess
 
         internal Boolean tutorialFlag;
         internal volatile Queue<Square> tutorialQueue = new Queue<Square>();
-        public bool debugging = true;
+        public bool debugging = false;
 
         public GameController(bool b, Position pos)
         {
@@ -338,7 +338,7 @@ namespace Chess
                     {
                         // Same square tapped twice! DESELECT
                         //board.ColourBoard();
-                        board.UnColourBoard(Brushes.Blue);
+                        board.UnColourBoard(Chess.Properties.Settings.Default.HighlightMove);
                         this.oneClick = false;
                         return;
                     }
@@ -353,7 +353,7 @@ namespace Chess
                     else
                     {
                         moveQueue.Enqueue(dest);
-                        board.UnColourBoard(Brushes.Blue);
+                        board.UnColourBoard(Chess.Properties.Settings.Default.HighlightMove);
                         this.ColourLegalMoves(dest.getSquareNumber());
                     }
 
@@ -376,7 +376,7 @@ namespace Chess
                     !char.IsLower(board.getSquareForNumber(originSquare).getPiece().ToString()[0]) && position.whiteMove
                     )
                 {
-                    board.ColourSquare(originSquare, Brushes.Blue);
+                    board.ColourSquare(originSquare, Chess.Properties.Settings.Default.HighlightMove);
                 }
             }
             if (!showHighlightMoves) return;
@@ -386,16 +386,16 @@ namespace Chess
                 {
                     if (board.getSquareForNumber(x.destination).getPiece() != PieceType.Empty)
                     {
-                        board.ColourSquare(x.destination,Brushes.Red);
+                        board.ColourSquare(x.destination,Chess.Properties.Settings.Default.TakablePieces);
                     }
                     else if (x.destination == this.position.getEpSquare() && (board.getSquareForNumber(x.origin).getPiece() == PieceType.P || board.getSquareForNumber(x.origin).getPiece() == PieceType.p))
                     {
-                        board.ColourSquare(x.destination, Brushes.Red);
-                        board.ColourSquare(((Move)this.previousMoves[this.previousMoves.Count]).destination, Brushes.Red);
+                        board.ColourSquare(x.destination, Chess.Properties.Settings.Default.TakablePieces);
+                        board.ColourSquare(((Move)this.previousMoves[this.previousMoves.Count]).destination, Chess.Properties.Settings.Default.TakablePieces);
                     }
                     else
                     {
-                        board.ColourSquare(x.destination, Brushes.Blue);
+                        board.ColourSquare(x.destination, Chess.Properties.Settings.Default.HighlightMove);
                     }
                 }
             }
@@ -408,7 +408,7 @@ namespace Chess
             {
                 if (MoveGenerator.squareAttacked(position, i))
                 {
-                    board.ColourSquare(i, Brushes.IndianRed);
+                    board.ColourSquare(i, Chess.Properties.Settings.Default.AttackedPieces);
                 }
             }
         }
@@ -420,7 +420,7 @@ namespace Chess
             {
                 if (MoveGenerator.squareAttacked(position, i))
                 {
-                    board.ColourSquare(i, Brushes.DarkOliveGreen);
+                    board.ColourSquare(i, Chess.Properties.Settings.Default.DefendedPieces);
                 }
             }
         }
@@ -450,15 +450,15 @@ namespace Chess
                 tempPos.setWhiteMove(!position.whiteMove);
                 if (MoveGenerator.squareAttacked(tempPos, i))
                 {
-                    board.ColourSquare(i, Brushes.DarkOliveGreen);
+                    board.ColourSquare(i, Chess.Properties.Settings.Default.DefendedPieces);
                 }
             }
         }
 
         internal void ColourPreviousMove(int pos1, int pos2)
         {
-            board.ColourSquareBorder(pos1, Brushes.OrangeRed);
-            board.ColourSquareBorder(pos2, Brushes.OrangeRed);
+            board.ColourSquareBorder(pos1, Chess.Properties.Settings.Default.PreviousMove);
+            board.ColourSquareBorder(pos2, Chess.Properties.Settings.Default.PreviousMove);
         }
 
         internal void ColourPreviousMove(Move move)
@@ -512,7 +512,7 @@ namespace Chess
             this.position.makeMove(current, this.unmake);
             this.previousMoves.Add(current);
 
-            board.UnColourBoard(Brushes.Blue);
+            board.UnColourBoard(Chess.Properties.Settings.Default.HighlightMove);
             board.UnColourBorders();
             board.printNextTurn();
             ColourPreviousMove(current);

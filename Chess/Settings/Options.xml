@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+This file contains options to be used in the application for colouring
+-->
+<ss:ApplicationInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:ss="http://schemas.microsoft.com/Surface/2007/ApplicationMetadata">
+
+  <Application>
+    <Options>
+      <!-- 
+          Do not change Name fields.
+          Change Value Fields to any colour name from the default C# colours, found here: 
+          http://msdn.microsoft.com/en-us/library/ie/aa358802%28v=vs.85%29.aspx
+          Or to any hex string, such as "#FFFFFF"
+      -->
+      <Option Name="AttackedPieces" Value="IndianRed" />
+      <Option Name="TakablePieces" Value="Red" />
+      <Option Name="DefendedPieces" Value="DarkOliveGreen" />
+      <Option Name="HighlightMove" Value="Blue" />
+      <Option Name="PreviousMove" Value="OrangeRed" />
+    </Options>
+  </Application>
+</ss:ApplicationInfo>

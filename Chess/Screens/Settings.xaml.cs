@@ -58,8 +58,8 @@ namespace Chess.Screens
             Texture_Button_2.Fill = Brushes.DarkGray;
             Texture_Button_1.StrokeThickness = Chess.Properties.Settings.Default.WoodTextures ? 3 : 1;
             Texture_Button_2.StrokeThickness = Chess.Properties.Settings.Default.WoodTextures ? 1 : 3;
-            Texture_Button_1.Stroke = Chess.Properties.Settings.Default.WoodTextures ? Brushes.OrangeRed : Brushes.Black;
-            Texture_Button_2.Stroke = Chess.Properties.Settings.Default.WoodTextures ? Brushes.Black : Brushes.OrangeRed;
+            Texture_Button_1.Stroke = Chess.Properties.Settings.Default.WoodTextures ? Chess.Properties.Settings.Default.PreviousMove : Brushes.Black;
+            Texture_Button_2.Stroke = Chess.Properties.Settings.Default.WoodTextures ? Brushes.Black : Chess.Properties.Settings.Default.PreviousMove;
             Texture_Button_1.TouchDown += Texture_Button_1_Click;
             Texture_Button_2.TouchDown += Texture_Button_2_Click;
             Texture_Button_1.MouseDown += Texture_Button_1_Click;
