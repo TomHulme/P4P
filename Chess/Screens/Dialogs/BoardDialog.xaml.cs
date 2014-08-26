@@ -127,7 +127,7 @@ namespace Chess.Screens.Dialogs
                 //create animations
                 foreach (Square s in squareList)
                 {
-                    Storyboard highlight = (StoryBoardCreator.NewHighlighter(s, Brushes.Blue, e.ProgressPercentage));
+                    Storyboard highlight = (StoryBoardCreator.NewHighlighter(s, Chess.Properties.Settings.Default.HighlightMove, e.ProgressPercentage));
                     highlight.Begin();
                 }
             }

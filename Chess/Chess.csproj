@@ -220,6 +220,7 @@
     <Content Include="Chess.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Settings\Options.xml" />
     <Resource Include="Settings\Tags.xml">
       <SubType>Designer</SubType>
     </Resource>

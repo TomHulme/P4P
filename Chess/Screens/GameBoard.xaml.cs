@@ -38,6 +38,41 @@ namespace Chess.Screens
             this.gameController = new GameController(false, FENConverter.convertFENToPosition(FENConverter.startPosition), false, false);
             ResetDialogs();
             SetTopDialogs();
+            ColourBackgrounds();
+        }
+
+        private void ColourBackgrounds()
+        {
+            if (Chess.Properties.Settings.Default.WoodTextures)
+            {
+                this.TopPanel.Background = getTextureImageBrush(false);
+                this.BottomPanel.Background = getTextureImageBrush(true);
+            }
+            else
+            {
+                this.TopPanel.Background = Brushes.DarkGray;
+                this.BottomPanel.Background = Brushes.WhiteSmoke;
+            }
+        }
+
+        private ImageBrush getTextureImageBrush(bool isWhite)
+        {
+            // Create Image Element
+            Image myImage = new Image();
+            myImage.Width = 1280;
+            myImage.Height = 360;
+
+            // Create source
+            BitmapImage myBitmapImage = new BitmapImage();
+
+            // BitmapImage.UriSource must be in a BeginInit/EndInit block
+            myBitmapImage.BeginInit();
+            myBitmapImage.UriSource = new Uri(App.getPath() + @"Images\" + (isWhite ? "light" : "dark") + "wood.jpg");
+            myBitmapImage.DecodePixelWidth = 1280;
+            myBitmapImage.EndInit();
+            myImage.Source = myBitmapImage;
+            myImage.IsHitTestVisible = false;
+            return new ImageBrush(myImage.Source);
         }
 
         private void ResetDialogs()
