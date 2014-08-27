@@ -16,6 +16,7 @@ namespace Chess.Properties {
         Brush highlightMove;
         Brush previousMove;
         Brush takablePieces;
+        Brush suggestedMove;
         
         public Settings() {
             // // To add event handlers for saving and changing settings, uncomment the lines below:
@@ -73,6 +74,12 @@ namespace Chess.Properties {
         {
             get { return previousMove; }
             set { previousMove = value; }
+        }
+
+        internal Brush SuggestedMove
+        {
+            get { return suggestedMove; }
+            set { suggestedMove = value; }
         }
     }
 }

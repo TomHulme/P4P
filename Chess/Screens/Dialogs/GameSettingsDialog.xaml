@@ -6,15 +6,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="360" d:DesignWidth="340" xmlns:my="http://schemas.microsoft.com/surface/2008">
     <Grid>
-        <my:SurfaceButton Content="Highlight Moves" Height="34" HorizontalAlignment="Center" Margin="0,0,0,98" Name="HighlightMoves" VerticalAlignment="Bottom" Width="320" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="DarkGray" Click="HighlightMoves_Click" TouchDown="HighlightMoves_Click"/>
-        <my:SurfaceButton Content="Highlight Attacked Pieces" Height="34" HorizontalAlignment="Center" Margin="0,0,0,54" Name="Attacked" VerticalAlignment="Bottom" Width="320" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="DarkGray" Click="Attacked_Click" TouchDown="Attacked_Click"/>
-        <my:SurfaceButton Content="Highlight Defended Pieces" Height="34" HorizontalAlignment="Center" Margin="0,0,0,10" Name="Defended" VerticalAlignment="Bottom" Width="320" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="DarkGray" Click="Defended_Click" TouchDown="Defended_Click"/>
+        <my:SurfaceButton Content="Highlight Moves" Height="25" HorizontalAlignment="Center" Margin="0,0,0,72" Name="HighlightMoves" VerticalAlignment="Bottom" Width="320" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="DarkGray" Click="HighlightMoves_Click" TouchDown="HighlightMoves_Click" MinHeight="0" Padding="0"/>
+        <my:SurfaceButton Content="Highlight Attacked Pieces" Height="25" HorizontalAlignment="Center" Margin="0,0,0,41" Name="Attacked" VerticalAlignment="Bottom" Width="320" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="DarkGray" Click="Attacked_Click" TouchDown="Attacked_Click" MinHeight="0" Padding="0"/>
+        <my:SurfaceButton Content="Highlight Defended Pieces" Height="25" HorizontalAlignment="Center" Margin="0,0,0,10" Name="Defended" VerticalAlignment="Bottom" Width="320" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="DarkGray" Click="Defended_Click" TouchDown="Defended_Click" MinHeight="0" MinWidth="0" Padding="0"/>
+        <my:SurfaceButton Content="Suggest Move" Background="DarkGray" Height="25" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="0,0,0,103" Name="SuggestMove" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Width="320" MinHeight="0" Padding="0" Click="SuggestMove_Click" TouchDown="SuggestMove_Click" />
 
         <Rectangle Height="208" HorizontalAlignment="Center" Margin="0,10,0,0" Name="Border" VerticalAlignment="Top" Width="320" />
 
-        <Border BorderBrush="Black" >
+        <Border BorderBrush="Black" Height="208" Width="320" VerticalAlignment="Top" Margin="0,10,0,0" BorderThickness="2">
 
-            <Grid Height="208" HorizontalAlignment="Center" Margin="0,10,0,0" Name="grid1" VerticalAlignment="Top" Width="320">
+            <Grid Height="208" HorizontalAlignment="Center" Margin="0,0,0,0" Name="grid1" VerticalAlignment="Top" Width="320">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -95,5 +96,6 @@
 
             </Grid>
         </Border>
+        
     </Grid>
 </UserControl>

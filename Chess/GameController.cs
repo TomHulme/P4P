@@ -38,11 +38,12 @@ namespace Chess
         private bool showDefendedPieces = false;
         private bool showAttackedPieces = false;
         private bool showOnlyDefendedPiecesUnderAttack = false;
+        private bool suggestingMove = false; //true when we search for the best move before the players turn
         private bool endCvCGame = false;
 
         internal Boolean tutorialFlag;
         internal volatile Queue<Square> tutorialQueue = new Queue<Square>();
-        public bool debugging = false;
+        public bool debugging = true;
 
         public GameController(bool b, Position pos)
         {
@@ -723,6 +724,12 @@ namespace Chess
         {
             get { return this.showOnlyDefendedPiecesUnderAttack; }
             set { this.showOnlyDefendedPiecesUnderAttack = value; }
+        }
+
+        public bool SuggestingMove
+        {
+            get { return this.suggestingMove; }
+            set { this.suggestingMove = value; }
         }
 
         public bool EndCvCGame

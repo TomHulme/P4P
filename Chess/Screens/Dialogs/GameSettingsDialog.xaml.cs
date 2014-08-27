@@ -74,6 +74,7 @@ namespace Chess.Screens.Dialogs
                 HighlightMoves.Background = Brushes.WhiteSmoke;
                 Attacked.Background = Brushes.WhiteSmoke;
                 Defended.Background = Brushes.WhiteSmoke;
+                SuggestMove.Background = Brushes.WhiteSmoke;
 
                 Title.Background = Brushes.WhiteSmoke;
             }
@@ -227,16 +228,59 @@ namespace Chess.Screens.Dialogs
         private void HighlightMoves_Click(object sender, RoutedEventArgs e)
         {
             gameController.ShowHighlightedMoves = gameController.ShowHighlightedMoves ? false : true;
+
+            if (gameController.ShowHighlightedMoves)
+            {
+                HighlightMoves.Background = Chess.Properties.Settings.Default.HighlightMove;
+            }
+            else
+            {
+                HighlightMoves.Background = isWhite ? Brushes.DarkGray : Brushes.WhiteSmoke;
+            }
         }
 
         private void Attacked_Click(object sender, RoutedEventArgs e)
         {
             gameController.ShowAttackedPieces = gameController.ShowAttackedPieces ? false : true;
+
+            if (gameController.ShowAttackedPieces)
+            {
+                Attacked.Background = Chess.Properties.Settings.Default.AttackedPieces;
+            }
+            else
+            {
+                Attacked.Background = isWhite ? Brushes.DarkGray : Brushes.WhiteSmoke;
+            }
         }
 
         private void Defended_Click(object sender, RoutedEventArgs e)
         {
             gameController.ShowOnlyDefendedPiecesUnderAttack = gameController.ShowOnlyDefendedPiecesUnderAttack ? false : true;
+
+            if (gameController.ShowOnlyDefendedPiecesUnderAttack)
+            {
+                Defended.Background = Chess.Properties.Settings.Default.DefendedPieces;
+            }
+            else
+            {
+                Defended.Background = isWhite ? Brushes.DarkGray : Brushes.WhiteSmoke;
+            }
+        }
+
+        private void SuggestMove_Click(object sender, RoutedEventArgs e)
+        {
+            //this is where you run the engine to search for a best move
+            //and then colour the board
+            gameController.SuggestingMove = gameController.SuggestingMove ? false : true;
+
+            if (gameController.SuggestingMove)
+            {
+                SuggestMove.Background = Chess.Properties.Settings.Default.SuggestedMove;
+            }
+            else
+            {
+                SuggestMove.Background = isWhite ? Brushes.DarkGray : Brushes.WhiteSmoke;
+            }
         }
     }
 }

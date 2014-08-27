@@ -56,11 +56,29 @@ namespace Chess.Screens.Dialogs
         private void ShowAttacked_Button_Click(object sender, RoutedEventArgs e)
         {
             gameController.ShowAttackedPieces = gameController.ShowAttackedPieces ? false : true;
+
+            if (gameController.ShowAttackedPieces)
+            {
+                ShowAttacked_Button.Background = Chess.Properties.Settings.Default.AttackedPieces;
+            }
+            else
+            {
+                ShowAttacked_Button.Background = Brushes.DarkGray;
+            }
         }
 
         private void ShowMoves_Button_Click(object sender, RoutedEventArgs e)
         {
             gameController.ShowHighlightedMoves = gameController.ShowHighlightedMoves ? false : true;
+
+            if (gameController.ShowHighlightedMoves)
+            {
+                ShowMoves_Button.Background = Chess.Properties.Settings.Default.HighlightMove;
+            }
+            else
+            {
+                ShowMoves_Button.Background = Brushes.DarkGray;
+            }
         }
 
         private void VSPlayer_Button_Click(object sender, RoutedEventArgs e)

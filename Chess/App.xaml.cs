@@ -46,6 +46,9 @@ namespace Chess
                     case "TakablePieces":
                         Chess.Properties.Settings.Default.TakablePieces = colour;
                         break;
+                    case "SuggestedMove":
+                        Chess.Properties.Settings.Default.SuggestedMove = colour;
+                        break;
                     default:
                         Console.WriteLine("Error! Setting not recognised!");
                         break;

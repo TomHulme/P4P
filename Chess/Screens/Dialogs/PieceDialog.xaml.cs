@@ -90,41 +90,10 @@ namespace Chess.Screens.Dialogs
 
         private void Moves_Quiz_Click(object sender, RoutedEventArgs e)
         {
-            //gameController.ShowHighlightedMoves = false;
-
-            //Random random = new Random();
-            //squareList = new ArrayList();
-
-            //int iterations = 7;
-
-            //String initialPosition = FENConverter.convertPositionToFEN(gameController.position);
-
-            ////generate list of squares to visit
-            //while (iterations > 0)
-            //{
-            //    ArrayList generatedMoves = MoveGenerator.mgInstance.psuedoLegalMoves(gameController.position);
-
-            //    int moveIndex = (int)(random.NextDouble() * generatedMoves.Count);
-            //    Move selectedMove = (Move)generatedMoves.ToArray()[moveIndex];
-
-            //    squareList.Add(gameController.board.getSquareForNumber(selectedMove.destination));
-
-            //    gameController.position.setPiece(selectedMove.destination, gameController.position.getPiece(selectedMove.origin));
-
-            //    iterations--;
-            //}
-
-            ////reset the position to the initial starting position
-            //gameController.position = FENConverter.convertPiecePlacementToPosition(initialPosition);
-            //gameController.position.sameActiveColor = true;
-
-            //foreach (Square s in squareList)
-            //{
-            //    s.rectangle.Fill = Brushes.Green;
-            //}
             if (!quiz.IsBusy)
             {
                 quiz.RunWorkerAsync();
+                Moving.Background = Brushes.Green;
             }
         }
 
