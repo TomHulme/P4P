@@ -34,6 +34,13 @@ namespace Chess.Screens
             SetupTextureButtons();
             Difficulty_Slider.SetCurrentValue(SurfaceSlider.ValueProperty, (double)Chess.Properties.Settings.Default.DifficultySetting);
             setDifficultyLabel();
+            ObjRecSet();
+        }
+
+        private void ObjRecSet()
+        {
+            ObjRec_Button.Content = "Object Recognition: " + (Chess.Properties.Settings.Default.UseObjectRecognition ? "On" : "Off");
+            ObjRec_Button.Background = (Chess.Properties.Settings.Default.UseObjectRecognition ? Brushes.Green : Brushes.LightGray);
         }
 
         private void SetupTextureButtons()
@@ -70,6 +77,12 @@ namespace Chess.Screens
         private void Go_Back_Click(object sender, RoutedEventArgs e)
         {
             parentWindow.PopScreen();
+        }
+
+        private void ObjRec_Click(object sender, RoutedEventArgs e)
+        {
+            Chess.Properties.Settings.Default.UseObjectRecognition = !Chess.Properties.Settings.Default.UseObjectRecognition;
+            ObjRecSet();
         }
 
         private void Difficulty_Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

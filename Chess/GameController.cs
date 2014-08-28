@@ -29,8 +29,9 @@ namespace Chess
         private MoveGenerator movegen;
         internal event EventHandler<BoardEvent> RaiseBoardEvent;
         internal event EventHandler<ControllerEvent> RaiseControllerEvent;
-        private SFEngine engine;
+        private SFEngine engine = new SFEngine();
         private ComputerPlayer AI;
+        private ComputerPlayer TurnGenerator;
         internal BackgroundWorker bw;
         private bool playerHasMoved = false;
         private bool blackReversed = true;
@@ -40,6 +41,7 @@ namespace Chess
         private bool showOnlyDefendedPiecesUnderAttack = false;
         private bool suggestingMove = false; //true when we search for the best move before the players turn
         private bool endCvCGame = false;
+        private Move currentSuggestedMove = new Move(11,27,PieceType.Empty);
 
         internal Boolean tutorialFlag;
         internal volatile Queue<Square> tutorialQueue = new Queue<Square>();
@@ -66,21 +68,30 @@ namespace Chess
             this.movegen = new MoveGenerator();
             this.Subscribe(this);
 
-
             this.blackIsAI = blackIsAI;
             this.whiteIsAI = whiteIsAI;
-            if (blackIsAI | whiteIsAI)
-            {
-                this.engine = new SFEngine();
-                AI = new ComputerPlayer(engine.engineProcess.StandardOutput, engine.engineProcess.StandardInput);
-                ResetEngineDifficulty();
-            }
+
+            TurnGenerator = SetupTurnGenerator();
+            
+
             if (blackIsAI & whiteIsAI)
             {
                 bw = new BackgroundWorker();
                 bwSetup();
+            }else{
+                AI = new ComputerPlayer(engine.engineProcess.StandardOutput, engine.engineProcess.StandardInput);
+                ResetEngineDifficulty();
             }
             
+        }
+
+        private ComputerPlayer SetupTurnGenerator(){
+            SFEngine turnGenEngine = new SFEngine();
+            ComputerPlayer turnGen = new ComputerPlayer(turnGenEngine.engineProcess.StandardOutput, turnGenEngine.engineProcess.StandardInput);
+            turnGen.setMoveDepth(5);
+            //String s = GetAIMove(TurnGenerator);
+            //currentSuggestedMove = new Move(board.getSquareForName(s.Substring(0, 2)).getSquareNumber(), board.getSquareForName(s.Substring(2, 2)).getSquareNumber(), PieceType.Empty);
+            return turnGen;
         }
 
         private void ResetEngineDifficulty(){
@@ -339,7 +350,8 @@ namespace Chess
                     {
                         // Same square tapped twice! DESELECT
                         //board.ColourBoard();
-                        board.UnColourBoard(Chess.Properties.Settings.Default.HighlightMove);
+                        //board.UnColourBoard(Chess.Properties.Settings.Default.HighlightMove);
+                        DoColourations();
                         this.oneClick = false;
                         return;
                     }
@@ -354,7 +366,8 @@ namespace Chess
                     else
                     {
                         moveQueue.Enqueue(dest);
-                        board.UnColourBoard(Chess.Properties.Settings.Default.HighlightMove);
+                        //board.UnColourBoard(Chess.Properties.Settings.Default.HighlightMove);
+                        DoColourations();
                         this.ColourLegalMoves(dest.getSquareNumber());
                     }
 
@@ -467,6 +480,43 @@ namespace Chess
             ColourPreviousMove(move.origin, move.destination);
         }
 
+        internal void ColourSuggestedMove(int pos1, int pos2)
+        {
+            board.ColourSquareBorder(pos1, Chess.Properties.Settings.Default.SuggestedMove);
+            board.ColourSquareBorder(pos2, Chess.Properties.Settings.Default.SuggestedMove);
+        }
+
+        internal void ColourSuggestedMove(Move move)
+        {
+            ColourSuggestedMove(move.origin, move.destination);
+        }
+
+        internal void DoColourations()
+        {
+            board.UnColourBoard(Chess.Properties.Settings.Default.HighlightMove);
+            board.UnColourBoard(Chess.Properties.Settings.Default.AttackedPieces);
+            board.UnColourBoard(Chess.Properties.Settings.Default.DefendedPieces);
+            board.UnColourBoard(Chess.Properties.Settings.Default.SuggestedMove);
+            board.UnColourBoard(Chess.Properties.Settings.Default.TakablePieces);
+            board.UnColourBorders();
+            if (suggestingMove)
+            {
+                this.ColourSuggestedMove(currentSuggestedMove);
+            }
+            if (showOnlyDefendedPiecesUnderAttack)
+            {
+                this.ColourOnlyDefendedPiecesUnderAttack();
+            }
+            if (showAttackedPieces)
+            {
+                this.ColourPiecesUnderAttack();
+            }
+            if (showDefendedPieces)
+            {
+                this.ColourPiecesDefending();
+            }
+        }
+
 
         private List<int> getControlledSquares(Position position)
         {
@@ -512,27 +562,15 @@ namespace Chess
             this.movePiece(current);
             this.position.makeMove(current, this.unmake);
             this.previousMoves.Add(current);
-
-            board.UnColourBoard(Chess.Properties.Settings.Default.HighlightMove);
-            board.UnColourBorders();
+            String s = GetAIMove(TurnGenerator);
+            currentSuggestedMove = new Move(board.getSquareForName(s.Substring(0, 2)).getSquareNumber(), board.getSquareForName(s.Substring(2, 2)).getSquareNumber(), PieceType.Empty);
+            
             board.printNextTurn();
-            ColourPreviousMove(current);
             this.oneClick = false;
-            if (showOnlyDefendedPiecesUnderAttack)
-            {
-                this.ColourOnlyDefendedPiecesUnderAttack();
-            }
-            if (showAttackedPieces)
-            {
-                this.ColourPiecesUnderAttack();
-            }
-            if (showDefendedPieces)
-            {
-                this.ColourPiecesDefending();
-            }
+            DoColourations();
+            ColourPreviousMove(current);
             AsyncAIMoveCheck();
             OnRaiseControllerEvent(new ControllerEvent());
-
 
             Console.WriteLine(MoveParser.moveObjectToString(current));
         }
@@ -671,7 +709,9 @@ namespace Chess
         {
             this.SetPosition(position);
             OnRaiseControllerEvent(new ControllerEvent());
-            ColourPreviousMove((Move)previousMoves[previousMoves.Count-1]);
+            ColourPreviousMove((Move)previousMoves[previousMoves.Count - 1]);
+            String s = GetAIMove(TurnGenerator);
+            currentSuggestedMove = new Move(board.getSquareForName(s.Substring(0, 2)).getSquareNumber(), board.getSquareForName(s.Substring(2, 2)).getSquareNumber(), PieceType.Empty);
         }
 
         void worker_DoWork(object sender, DoWorkEventArgs e)

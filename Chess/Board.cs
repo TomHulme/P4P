@@ -394,7 +394,10 @@ namespace Chess
             {
                 Console.WriteLine(tapped.getPiece());
             }
-            this.gamecon.MoveHandler(tapped);
+            if (!Chess.Properties.Settings.Default.UseObjectRecognition)
+            {
+                this.gamecon.MoveHandler(tapped);
+            }
         }
 
         /*

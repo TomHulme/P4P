@@ -232,6 +232,7 @@ namespace Chess.Screens.Dialogs
             if (gameController.ShowHighlightedMoves)
             {
                 HighlightMoves.Background = Chess.Properties.Settings.Default.HighlightMove;
+                gameController.DoColourations();
             }
             else
             {
@@ -246,6 +247,7 @@ namespace Chess.Screens.Dialogs
             if (gameController.ShowAttackedPieces)
             {
                 Attacked.Background = Chess.Properties.Settings.Default.AttackedPieces;
+                gameController.DoColourations();
             }
             else
             {
@@ -260,6 +262,7 @@ namespace Chess.Screens.Dialogs
             if (gameController.ShowOnlyDefendedPiecesUnderAttack)
             {
                 Defended.Background = Chess.Properties.Settings.Default.DefendedPieces;
+                gameController.DoColourations();
             }
             else
             {
@@ -276,10 +279,12 @@ namespace Chess.Screens.Dialogs
             if (gameController.SuggestingMove)
             {
                 SuggestMove.Background = Chess.Properties.Settings.Default.SuggestedMove;
+                gameController.DoColourations();
             }
             else
             {
                 SuggestMove.Background = isWhite ? Brushes.DarkGray : Brushes.WhiteSmoke;
+                gameController.board.UnColourBorders();
             }
         }
     }

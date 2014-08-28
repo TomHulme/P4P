@@ -17,6 +17,7 @@ namespace Chess.Properties {
         Brush previousMove;
         Brush takablePieces;
         Brush suggestedMove;
+        bool useObjectRecognition = false;
         
         public Settings() {
             // // To add event handlers for saving and changing settings, uncomment the lines below:
@@ -80,6 +81,12 @@ namespace Chess.Properties {
         {
             get { return suggestedMove; }
             set { suggestedMove = value; }
+        }
+
+        internal bool UseObjectRecognition
+        {
+            get { return useObjectRecognition; }
+            set { useObjectRecognition = value; }
         }
     }
 }
