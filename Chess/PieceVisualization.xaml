@@ -4,6 +4,6 @@
     xmlns:s="http://schemas.microsoft.com/surface/2008"
     Loaded="PieceVisualization_Loaded">
     <Grid>
-        <Ellipse Name="John" Height="100" Width="100"></Ellipse>
+        <Ellipse Name="TagBase" Height="50" Width="50"></Ellipse>
     </Grid>
 </s:TagVisualization>

@@ -51,6 +51,7 @@ namespace Chess
             InitializeDefinitions();
             MyTagVisualizer.Height = squareSize;
             MyTagVisualizer.Width = squareSize;
+            MyTagVisualizer.SetCurrentValue(Panel.ZIndexProperty, 5);
             this.name = nam;
             this.number = num;
             this.piece = PieceType.Empty;
@@ -83,8 +84,9 @@ namespace Chess
 
         void tagVis_VisualizationAdded(object sender, TagVisualizerEventArgs e)
         {
+            // Adding the PieceVisulaization both helps identify squares with the objects AND makes it easier for the screen to see.
             PieceVisualization pv = (PieceVisualization)e.TagVisualization;
-            pv.John.Fill = Brushes.Chartreuse;
+            pv.TagBase.Fill = Brushes.WhiteSmoke;
             //Console.WriteLine(pv.VisualizedTag.Value);
             Console.WriteLine("Tag in square " + name);
         }
@@ -224,35 +226,12 @@ namespace Chess
                 // Orientation offset (default).
                 tagDef.OrientationOffsetFromTag = 0.0;
                 // Physical offset (horizontal inches, vertical inches).
-                tagDef.PhysicalCenterOffsetFromTag = new Vector(0.5, 0.5);
                 // Tag removal behavior (default).
                 //tagDef.TagRemovedBehavior = TagRemovedBehavior.Fade;
                 // Orient UI to tag? (default).
                 tagDef.UsesTagOrientation = true;
                 // Add the definition to the collection.
                 MyTagVisualizer.Definitions.Add(tagDef);
-            }
-        }
-
-
-        private void OnVisualizationAdded(object sender, TagVisualizerEventArgs e)
-        {
-            Console.WriteLine("BLEH");
-            PieceVisualization pv = (PieceVisualization)e.TagVisualization;
-            switch (pv.VisualizedTag.Value)
-            {
-                case 1:
-                    pv.John.Fill = Brushes.Chartreuse;
-                    break;
-                case 2:
-                    pv.John.Fill = Brushes.Chartreuse;
-                    break;
-                case 3:
-                    pv.John.Fill = Brushes.Chartreuse;
-                    break;
-                default:
-                    pv.John.Fill = Brushes.Orange;
-                    break;
             }
         }
     }

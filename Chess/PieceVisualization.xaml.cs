@@ -30,7 +30,6 @@ namespace Chess
         private void PieceVisualization_Loaded(object sender, RoutedEventArgs e)
         {
             //TODO: customize PieceVisualization's UI based on this.VisualizedTag here
-            Console.WriteLine("HOW DID WE GET HERE!??!! I USED TO KNOOOOW YOU SOOO WEEEEEELLLLLLLL");
         }
     }
 }
