@@ -96,7 +96,10 @@ namespace Chess.Screens
             currentMode = GameMode.Board;
 
             tutorialOne.ClearBoard();
-            UpdateBoard();
+
+            gameController.ignoreSuggestion = true;
+            BoardArea.Content = gameController.board;
+            ResetButton.Visibility = Visibility.Visible;
 
             Board_Button.Background = Brushes.SlateGray;
             Pawn_Button.Background = originalColour;
