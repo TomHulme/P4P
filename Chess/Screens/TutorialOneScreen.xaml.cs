@@ -42,8 +42,8 @@ namespace Chess.Screens
             tutorialOne = new TutorialOne();
             currentMode = GameMode.Tutorial;
 
-            gameController = new GameController(false, tutorialOne.GetPosition()); 
-
+            gameController = new GameController(false, tutorialOne.GetPosition());
+            gameController.ignoreSuggestion = true;
             BoardArea.Content = gameController.board;
 
             originalColour = Board_Button.Background;
@@ -284,6 +284,7 @@ namespace Chess.Screens
         private void UpdateBoard()
         {
             gameController = new GameController(false, tutorialOne.GetPosition());
+            gameController.ignoreSuggestion = true;
             BoardArea.Content = gameController.board;
             ResetButton.Visibility = Visibility.Visible;
         }

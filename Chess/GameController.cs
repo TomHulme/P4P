@@ -44,6 +44,7 @@ namespace Chess
         private Move currentSuggestedMove = new Move(11,27,PieceType.Empty);
 
         internal Boolean tutorialFlag;
+        internal Boolean ignoreSuggestion = false;
         internal volatile Queue<Square> tutorialQueue = new Queue<Square>();
         public bool debugging = true;
 
@@ -562,9 +563,11 @@ namespace Chess
             this.movePiece(current);
             this.position.makeMove(current, this.unmake);
             this.previousMoves.Add(current);
-            String s = GetAIMove(TurnGenerator);
-            currentSuggestedMove = new Move(board.getSquareForName(s.Substring(0, 2)).getSquareNumber(), board.getSquareForName(s.Substring(2, 2)).getSquareNumber(), PieceType.Empty);
-            
+            if (!ignoreSuggestion)
+            {
+                String s = GetAIMove(TurnGenerator);
+                currentSuggestedMove = new Move(board.getSquareForName(s.Substring(0, 2)).getSquareNumber(), board.getSquareForName(s.Substring(2, 2)).getSquareNumber(), PieceType.Empty);
+            }
             board.printNextTurn();
             this.oneClick = false;
             DoColourations();
