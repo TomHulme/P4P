@@ -562,7 +562,7 @@ namespace Chess
             this.movePiece(current);
             this.position.makeMove(current, this.unmake);
             this.previousMoves.Add(current);
-            if (!ignoreSuggestion)
+            if (!ignoreSuggestion && movegen.legalMoves(position).Count != 0)
             {
                 String s = GetAIMove(TurnGenerator);
                 currentSuggestedMove = new Move(board.getSquareForName(s.Substring(0, 2)).getSquareNumber(), board.getSquareForName(s.Substring(2, 2)).getSquareNumber(), PieceType.Empty);
