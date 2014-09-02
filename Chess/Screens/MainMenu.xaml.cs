@@ -27,6 +27,7 @@ namespace Chess.Screens
             InitializeComponent();
             App.ReadOptionsFile();
             App.EnsureOptionsSet();
+            App.CreateChessEngine();
             SetBackground();
         }
 

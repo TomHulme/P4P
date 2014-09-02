@@ -29,7 +29,7 @@ namespace Chess
         private MoveGenerator movegen;
         internal event EventHandler<BoardEvent> RaiseBoardEvent;
         internal event EventHandler<ControllerEvent> RaiseControllerEvent;
-        private SFEngine engine = new SFEngine();
+        private SFEngine engine = Chess.Properties.Settings.Default.ChessEngine;
         private ComputerPlayer AI;
         private ComputerPlayer TurnGenerator;
         internal BackgroundWorker bw;
@@ -46,7 +46,7 @@ namespace Chess
         internal Boolean tutorialFlag;
         internal Boolean ignoreSuggestion = false;
         internal volatile Queue<Square> tutorialQueue = new Queue<Square>();
-        public bool debugging = true;
+        public bool debugging = false;
 
         public GameController(bool b, Position pos)
         {
@@ -87,8 +87,7 @@ namespace Chess
         }
 
         private ComputerPlayer SetupTurnGenerator(){
-            SFEngine turnGenEngine = new SFEngine();
-            ComputerPlayer turnGen = new ComputerPlayer(turnGenEngine.engineProcess.StandardOutput, turnGenEngine.engineProcess.StandardInput);
+            ComputerPlayer turnGen = new ComputerPlayer(engine.engineProcess.StandardOutput, engine.engineProcess.StandardInput);
             turnGen.setMoveDepth(5);
             //String s = GetAIMove(TurnGenerator);
             //currentSuggestedMove = new Move(board.getSquareForName(s.Substring(0, 2)).getSquareNumber(), board.getSquareForName(s.Substring(2, 2)).getSquareNumber(), PieceType.Empty);

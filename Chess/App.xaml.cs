@@ -86,5 +86,10 @@ namespace Chess
                 Chess.Properties.Settings.Default.TakablePieces = Brushes.Red;
             }
         }
+
+        internal static void CreateChessEngine()
+        {
+            Chess.Properties.Settings.Default.ChessEngine = new global::EngineLogic.SFEngine();
+        }
     }
 }

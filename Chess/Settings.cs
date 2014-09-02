@@ -1,4 +1,5 @@
 ﻿using System.Windows.Media;
+using EngineLogic;
 namespace Chess.Properties {
     
     
@@ -18,6 +19,8 @@ namespace Chess.Properties {
         Brush takablePieces;
         Brush suggestedMove;
         bool useObjectRecognition = false;
+
+        SFEngine chessEngine;
         
         public Settings() {
             // // To add event handlers for saving and changing settings, uncomment the lines below:
@@ -87,6 +90,12 @@ namespace Chess.Properties {
         {
             get { return useObjectRecognition; }
             set { useObjectRecognition = value; }
+        }
+
+        internal SFEngine ChessEngine
+        {
+            get { return chessEngine; }
+            set { chessEngine = value; }
         }
     }
 }
