@@ -38,6 +38,7 @@ namespace Chess.Screens
             pawnMower = new PawnMower(userPiece, count);
 
             gameController = new GameController(false, pawnMower.GetPosition());
+            gameController.ignoreSuggestion = true;
             BoardArea.Content = gameController.board;
 
             Dialog.Content = new PawnMowerDialog(this);

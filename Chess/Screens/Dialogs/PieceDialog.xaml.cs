@@ -73,7 +73,7 @@ namespace Chess.Screens.Dialogs
                     DialogText.Text = "The Rook can move any number of vacant squares forwards, backwards, left, or right in a straight line. ";
                     break;
                 case PieceType.B:
-                    DialogText.Text = "The Bishop can move any number of vacant sqaures diagonally in a straight line. ";
+                    DialogText.Text = "The Bishop can move any number of vacant squares diagonally in a straight line. ";
                     DialogText.Text += "Consequently, a Bishop stays on the squares of the same colour throughout the game. ";
                     DialogText.Text += "The two Bishops each player starts with move on squares of opposite colours.";
                     break;

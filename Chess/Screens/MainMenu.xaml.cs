@@ -75,6 +75,68 @@ namespace Chess.Screens
             myImage.Source = myBitmapImage;
             myImage.IsHitTestVisible = false;
             MainMenuScreen.Background = new ImageBrush(myImage.Source);
+            
+
+
+
+            // Create Image Element
+            myImage = new Image();
+            myImage.Width = 62;
+            myImage.Height = 62;
+
+            // Create source
+            myBitmapImage = new BitmapImage();
+
+            // BitmapImage.UriSource must be in a BeginInit/EndInit block
+            myBitmapImage.BeginInit();
+            myBitmapImage.UriSource = new Uri(App.getPath() + @"Images\Icons\game.png");
+            myBitmapImage.DecodePixelWidth = 500;
+            myBitmapImage.EndInit();
+            myImage.Source = myBitmapImage;
+            myImage.IsHitTestVisible = false;
+            Start_Icon.Background = new ImageBrush(myImage.Source);
+            Start_Icon.IsHitTestVisible = false;
+
+
+
+
+            // Create Image Element
+            myImage = new Image();
+            myImage.Width = 62;
+            myImage.Height = 62;
+
+            // Create source
+            myBitmapImage = new BitmapImage();
+
+            // BitmapImage.UriSource must be in a BeginInit/EndInit block
+            myBitmapImage.BeginInit();
+            myBitmapImage.UriSource = new Uri(App.getPath() + @"Images\Icons\learn.png");
+            myBitmapImage.DecodePixelWidth = 500;
+            myBitmapImage.EndInit();
+            myImage.Source = myBitmapImage;
+            myImage.IsHitTestVisible = false;
+            Learn_Icon.Background = new ImageBrush(myImage.Source);
+            Learn_Icon.IsHitTestVisible = false;
+
+
+
+            // Create Image Element
+            myImage = new Image();
+            myImage.Width = 62;
+            myImage.Height = 62;
+
+            // Create source
+            myBitmapImage = new BitmapImage();
+
+            // BitmapImage.UriSource must be in a BeginInit/EndInit block
+            myBitmapImage.BeginInit();
+            myBitmapImage.UriSource = new Uri(App.getPath() + @"Images\Icons\settings.png");
+            myBitmapImage.DecodePixelWidth = 500;
+            myBitmapImage.EndInit();
+            myImage.Source = myBitmapImage;
+            myImage.IsHitTestVisible = false;
+            Settings_Icon.Background = new ImageBrush(myImage.Source);
+            Settings_Icon.IsHitTestVisible = false;
         }
     }
 }

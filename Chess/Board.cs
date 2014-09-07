@@ -369,7 +369,7 @@ namespace Chess
 
             // BitmapImage.UriSource must be in a BeginInit/EndInit block
             myBitmapImage.BeginInit();
-            myBitmapImage.UriSource = new Uri(App.getPath() + @"Images\PieceImages\" + pieceString + ".jpg");
+            myBitmapImage.UriSource = new Uri(App.getPath() + @"Images\PieceImages\" + pieceString + ".png");
             myBitmapImage.DecodePixelWidth = 75;
             if (this.flipped & this.blackReverse & pieceString.StartsWith("b")) { myBitmapImage.Rotation = Rotation.Rotate270; }
             else if (this.blackReverse & pieceString.StartsWith("b")) { myBitmapImage.Rotation = Rotation.Rotate180; }

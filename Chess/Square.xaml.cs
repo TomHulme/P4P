@@ -86,7 +86,7 @@ namespace Chess
         {
             // Adding the PieceVisulaization both helps identify squares with the objects AND makes it easier for the screen to see.
             PieceVisualization pv = (PieceVisualization)e.TagVisualization;
-            pv.TagBase.Fill = Brushes.WhiteSmoke;
+            pv.TagBase.Fill = Brushes.DarkTurquoise;
             //Console.WriteLine(pv.VisualizedTag.Value);
             Console.WriteLine("Tag in square " + name);
         }
@@ -221,7 +221,7 @@ namespace Chess
                 // The maximum number for this tag value.
                 tagDef.MaxCount = 32;
                 // The visualization stays for 2 seconds.
-                tagDef.LostTagTimeout = 100.0;
+                tagDef.LostTagTimeout = 1000.0;
                 //tagDef.
                 // Orientation offset (default).
                 tagDef.OrientationOffsetFromTag = 0.0;
@@ -234,5 +234,10 @@ namespace Chess
                 MyTagVisualizer.Definitions.Add(tagDef);
             }
         }
+    }
+
+    class SquareVisualization : TagVisualizationDefinition
+    {
+        //public RoutedEventHandler
     }
 }

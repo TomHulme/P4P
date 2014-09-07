@@ -8,10 +8,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1280">
     <Viewbox>
-        <Grid Name="MainMenuScreen" Height="720" Width="1280">
+        <Grid Name="MainMenuScreen" Panel.ZIndex="1" Height="720" Width="1280">
             <my:SurfaceButton Panel.ZIndex ="5" Margin="208,440,233,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="312" Height="62" Content="Start Chess Game!" Click="Start_Button_Click" TouchDown="Start_Button_Click" Name="Start_Button" />
             <my:SurfaceButton Panel.ZIndex ="5" Margin="208,507,233,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="312" Height="62" Content="Learn Chess!" Click="Learn_Button_Click" TouchDown="Learn_Button_Click" Name="Learn_Button" />
-            <my:SurfaceButton Panel.ZIndex ="5" Margin="12,578,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Height="40" Click="Settings_Button_Click" TouchDown="Settings_Button_Click" Name="Settings_Button" />
+            <my:SurfaceButton Panel.ZIndex ="5" Margin="208,574,233,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="312" Height="62" Content="Settings" Click="Settings_Button_Click" TouchDown="Settings_Button_Click" Name="Settings_Button" />
+            <my:SurfaceButton Panel.ZIndex ="7" Margin="472,440,746,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="62" Height="62" Name="Start_Icon" />
+            <my:SurfaceButton Panel.ZIndex ="7" Margin="472,507,746,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="62" Height="62" Name="Learn_Icon" />
+            <my:SurfaceButton Panel.ZIndex ="7" Margin="472,574,746,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Width="62" Height="62" Name="Settings_Icon" />
         </Grid>
     </Viewbox>
 </view:Screen>

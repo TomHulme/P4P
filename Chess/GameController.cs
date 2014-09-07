@@ -713,7 +713,9 @@ namespace Chess
             OnRaiseControllerEvent(new ControllerEvent());
             ColourPreviousMove((Move)previousMoves[previousMoves.Count - 1]);
             String s = GetAIMove(TurnGenerator);
+            if(!s.Equals("(none)")){
             currentSuggestedMove = new Move(board.getSquareForName(s.Substring(0, 2)).getSquareNumber(), board.getSquareForName(s.Substring(2, 2)).getSquareNumber(), PieceType.Empty);
+            }
         }
 
         void worker_DoWork(object sender, DoWorkEventArgs e)
