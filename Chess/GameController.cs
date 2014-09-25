@@ -18,36 +18,53 @@ namespace Chess
 {
     public class GameController
     {
-        private bool blackIsAI = false;
-        private bool whiteIsAI = false;
-        private Queue<Square> moveQueue = new Queue<Square>();
-        private ArrayList previousMoves = new ArrayList();
+		// Debug Option
+        public bool debugging = false;
+		
+		/* * * * * * * * * *\
+		 * Class Variables *
+		\* * * * * * * * * */
         internal Board board;
-        private bool oneClick = false;
-        private UnMakeInfo unmake = new UnMakeInfo();
         internal Position position;
         private MoveGenerator movegen;
-        internal event EventHandler<BoardEvent> RaiseBoardEvent;
-        internal event EventHandler<ControllerEvent> RaiseControllerEvent;
+		
+		// AI Related
+        private bool blackIsAI = false;
+        private bool whiteIsAI = false;
         private SFEngine engine = Chess.Properties.Settings.Default.ChessEngine;
         private ComputerPlayer AI;
         private ComputerPlayer TurnGenerator;
         internal BackgroundWorker bw;
+        private bool endCvCGame = false;
+		
+		// Move Related
+        internal event EventHandler<BoardEvent> RaiseBoardEvent;
+        internal event EventHandler<ControllerEvent> RaiseControllerEvent;
+        private Queue<Square> moveQueue = new Queue<Square>();
+        private ArrayList previousMoves = new ArrayList();
+        private bool oneClick = false;
+        private UnMakeInfo unmake = new UnMakeInfo();
+		
+		// Help Related
         private bool playerHasMoved = false;
-        private bool blackReversed = true;
         private bool showHighlightMoves = false;
         private bool showDefendedPieces = false;
         private bool showAttackedPieces = false;
         private bool showOnlyDefendedPiecesUnderAttack = false;
         private bool suggestingMove = false; //true when we search for the best move before the players turn
-        private bool endCvCGame = false;
         private Move currentSuggestedMove = new Move(11,27,PieceType.Empty);
 
+		// Other
         internal Boolean tutorialFlag;
+        private bool blackReversed = true;
         internal Boolean ignoreSuggestion = false;
         internal volatile Queue<Square> tutorialQueue = new Queue<Square>();
-        public bool debugging = false;
+		
 
+		/**
+		 * GameController Constructors
+		 * Create and Setup Board, initialise class variables.
+		 */
         public GameController(bool b, Position pos)
         {
             this.board = new Board(b, pos, this);
@@ -86,14 +103,18 @@ namespace Chess
             
         }
 
+		/**
+		 * Get a Turn Generator using the ComputerPlayer class
+		 */
         private ComputerPlayer SetupTurnGenerator(){
             ComputerPlayer turnGen = new ComputerPlayer(engine.engineProcess.StandardOutput, engine.engineProcess.StandardInput);
             turnGen.setMoveDepth(5);
-            //String s = GetAIMove(TurnGenerator);
-            //currentSuggestedMove = new Move(board.getSquareForName(s.Substring(0, 2)).getSquareNumber(), board.getSquareForName(s.Substring(2, 2)).getSquareNumber(), PieceType.Empty);
             return turnGen;
         }
 
+		/**
+		 * Reset the skill level based on the Difficulty set in the Settings
+		 */
         private void ResetEngineDifficulty(){
             if (engine != null)
             {
@@ -105,6 +126,10 @@ namespace Chess
             }
         }
 
+		/**
+		 * Computer vs Computer Background Worker
+		 * Used to Asynchronously play a Computer vs Computer game.
+		 */
         private void bwSetup()
         {
             bw.WorkerReportsProgress = true;
@@ -154,6 +179,7 @@ namespace Chess
                         }
                         if (movegen.legalMoves(position).Count == 0)
                         {
+							// Checkmate Condition
                             i = 100;
                             gameCompleted = true;
                         }
@@ -193,11 +219,18 @@ namespace Chess
             bw.RunWorkerAsync();
         }
 
+		/**
+		 * Subscribe to the Handler
+		 */
         private void Subscribe(GameController gc)
         {
             gc.RaiseControllerEvent += HandleControllerEvent;
         }
 
+		/**
+		 * Get the piece type of the piece being promoted.
+		 * Always a Queen. TODO: Underpromotion.
+		 */ 
         private PieceType getPromotion(PieceType piece)
         {
 
@@ -209,9 +242,12 @@ namespace Chess
             {
                 return PieceType.Q;
             }
-            //return PieceType.Empty;
         }
 
+		/**
+		 * Move a piece based of an inputted Move object.
+		 * Also deals with moving the actual piece image
+		 */
         public void movePiece(Move current)
         {
             Square originSquare = board.getSquareForNumber(current.origin);
@@ -269,22 +305,18 @@ namespace Chess
             }
         }
 
+		/**
+		 * Promotes a piece by redrawing it.
+		 */
         private void promotePiece(Square sq, PieceType p)
         {
             sq.Children.Clear();
             board.drawPiece(p, sq);
         }
 
-        public void MoveHandler(string MoveString)
-        {
-            if (ParseMove(MoveString))
-            {
-                Square orig = board.getSquareForName(MoveString.Substring(0,2));
-                Square dest = board.getSquareForName(MoveString.Substring(2,2));
-                this.MoveHandler(orig,dest);
-            }
-        }
-
+		/**
+		 * Takes a string and parses whether it is valid. For use in the MoveHandler
+		 */
         private static Boolean ParseMove(String input)
         {
             if (input.Length > 5)
@@ -311,6 +343,22 @@ namespace Chess
             else return true;
         }
 
+		/**
+		 * Performs a move based on a move string. Used to play AI moves
+		 */
+        public void MoveHandler(string MoveString)
+        {
+            if (ParseMove(MoveString))
+            {
+                Square orig = board.getSquareForName(MoveString.Substring(0,2));
+                Square dest = board.getSquareForName(MoveString.Substring(2,2));
+                this.MoveHandler(orig,dest);
+            }
+        }
+
+		/**
+		 * Performs a move based on the origin and destination squares
+		 */
         public void MoveHandler(Square orig, Square dest)
         {
             PieceType promoteTo = ((dest.getSquareNumber() <= 7 | dest.getSquareNumber() > 55) & (orig.getPiece().Equals(PieceType.p) | orig.getPiece().Equals(PieceType.P))) ? getPromotion(orig.getPiece()) : PieceType.Empty;
@@ -322,19 +370,28 @@ namespace Chess
             }
         }
 
+		/**
+		 * Two Part MoveHandler
+		 * First Square received is pushed onto a stack.
+		 * Second Square is then received, and the First Square gets popped. They are combined to create a move.
+		 * If the Move is valid it is played. If it is not, the Second Square gets pushed onto the stack, and the cycle repeats.
+		 */
         public void MoveHandler(Square tapped){
 
             if (tutorialFlag)
             {
+				// Play differently if in tutorial mode
                 Console.WriteLine("Tutorial square " + tapped.Name + " tapped");
                 tutorialQueue.Enqueue(tapped);
             }
             else if (blackIsAI && whiteIsAI)
             {
+				// Ignore non-AI input
                 Console.WriteLine("Both players AI, square tap ignored.");
             }
             else if ((blackIsAI && !position.whiteMove) || (whiteIsAI & position.whiteMove))
             {
+				// Ignore input during AI turn
                 Console.WriteLine("Safety ignore.");
             }
             else
@@ -348,9 +405,6 @@ namespace Chess
 
                     if (orig.getSquareNumber() == dest.getSquareNumber())
                     {
-                        // Same square tapped twice! DESELECT
-                        //board.ColourBoard();
-                        //board.UnColourBoard(Chess.Properties.Settings.Default.HighlightMove);
                         DoColourations();
                         this.oneClick = false;
                         return;
@@ -366,7 +420,6 @@ namespace Chess
                     else
                     {
                         moveQueue.Enqueue(dest);
-                        //board.UnColourBoard(Chess.Properties.Settings.Default.HighlightMove);
                         DoColourations();
                         this.ColourLegalMoves(dest.getSquareNumber());
                     }
@@ -379,8 +432,43 @@ namespace Chess
                 }
             }
         }
+		
+		/**
+		 * Performs a move on the internal position, based on a Move object.
+		 * Updates are resyncs the Board.
+		 */
+        protected void performMove(Move current)
+        {
+            if (current.promoteTo != PieceType.Empty)
+            {
+                this.promotePiece(board.getSquareForNumber(current.origin), current.promoteTo);
+            }
+            OnRaiseBoardEvent(new BoardEvent(current, board.getSquareForNumber(current.origin).getName() + board.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
+            if (MoveParser.isMoveCapture(current, position))
+            {
+                OnRaiseControllerEvent(new ControllerEvent(board.getSquareForNumber(current.destination).getPiece()));
+            }
+            this.movePiece(current);
+            this.position.makeMove(current, this.unmake);
+            this.previousMoves.Add(current);
+            if (!ignoreSuggestion && movegen.legalMoves(position).Count != 0)
+            {
+                String s = GetAIMove(TurnGenerator);
+                currentSuggestedMove = new Move(board.getSquareForName(s.Substring(0, 2)).getSquareNumber(), board.getSquareForName(s.Substring(2, 2)).getSquareNumber(), PieceType.Empty);
+            }
+            board.printNextTurn();
+            this.oneClick = false;
+            DoColourations();
+            ColourPreviousMove(current);
+            AsyncAIMoveCheck();
+            OnRaiseControllerEvent(new ControllerEvent());
 
+            Console.WriteLine(MoveParser.moveObjectToString(current));
+        }
 
+		/**
+		 * Colours the Legal Moves based from the selected Square
+		 */
         private void ColourLegalMoves(int originSquare)
         {
             if(board.getSquareForNumber(originSquare).getPiece() != PieceType.Empty)
@@ -415,6 +503,9 @@ namespace Chess
             }
         }
 
+		/**
+		 * Colours the Pieces currently under attack based on the whos turn it is
+		 */
         internal void ColourPiecesUnderAttack()
         {
             List<int> controlledSquares = getControlledSquares(position);
@@ -427,6 +518,9 @@ namespace Chess
             }
         }
 
+		/**
+		 * Colours the Pieces currently being defended based on the whos turn it is
+		 */
         internal void ColourPiecesDefending()
         {
             List<int> enemyControlledSquares = getEnemyControlledSquares(position);
@@ -439,6 +533,9 @@ namespace Chess
             }
         }
 
+		/**
+		 * Colours the Pieces currently being defended IFF they are attackable
+		 */
         internal void ColourOnlyDefendedPiecesUnderAttack()
         {
             List<int> enemyControlledSquares = getEnemyControlledSquares(position);
@@ -469,28 +566,43 @@ namespace Chess
             }
         }
 
+		/**
+		 * Colours the borders to show the last 2 Squares involved in the previous move played. Uses 2 square numbers
+		 */
         internal void ColourPreviousMove(int pos1, int pos2)
         {
             board.ColourSquareBorder(pos1, Chess.Properties.Settings.Default.PreviousMove);
             board.ColourSquareBorder(pos2, Chess.Properties.Settings.Default.PreviousMove);
         }
 
+		/**
+		 * Colours the borders to show the last 2 Squares involved in the previous move played. Uses 1 Move object
+		 */
         internal void ColourPreviousMove(Move move)
         {
             ColourPreviousMove(move.origin, move.destination);
         }
 
+		/**
+		 * Colours the Suggested Move to show the best move to play. Uses 2 square numbers
+		 */
         internal void ColourSuggestedMove(int pos1, int pos2)
         {
             board.ColourSquareBorder(pos1, Chess.Properties.Settings.Default.SuggestedMove);
             board.ColourSquareBorder(pos2, Chess.Properties.Settings.Default.SuggestedMove);
         }
 
+		/**
+		 * Colours the Suggested Move to show the best move to play. Uses 1 Move object
+		 */
         internal void ColourSuggestedMove(Move move)
         {
             ColourSuggestedMove(move.origin, move.destination);
         }
 
+		/**
+		 * Invokes all the Colouration methods based on the options set to enable/disable them.
+		 */
         internal void DoColourations()
         {
             board.UnColourBoard(Chess.Properties.Settings.Default.HighlightMove);
@@ -517,7 +629,9 @@ namespace Chess
             }
         }
 
-
+		/**
+		 * Gets a list of all the Square numbers of Sqaures controlled by the current player
+		 */
         private List<int> getControlledSquares(Position position)
         {
             List<int> controlledSquares = new List<int>();
@@ -533,6 +647,9 @@ namespace Chess
             return controlledSquares;
         }
 
+		/**
+		 * Gets a list of all the Square numbers of Sqaures controlled by the enemy player
+		 */
         private List<int> getEnemyControlledSquares(Position position)
         {
             List<int> controlledSquares = new List<int>();
@@ -548,35 +665,9 @@ namespace Chess
             return controlledSquares;
         }
 
-        protected void performMove(Move current)
-        {
-            if (current.promoteTo != PieceType.Empty)
-            {
-                this.promotePiece(board.getSquareForNumber(current.origin), current.promoteTo);
-            }
-            OnRaiseBoardEvent(new BoardEvent(current, board.getSquareForNumber(current.origin).getName() + board.getSquareForNumber(current.destination).getName(), (movegen.legalMoves(this.position).Count == 0)));
-            if (MoveParser.isMoveCapture(current, position))
-            {
-                OnRaiseControllerEvent(new ControllerEvent(board.getSquareForNumber(current.destination).getPiece()));
-            }
-            this.movePiece(current);
-            this.position.makeMove(current, this.unmake);
-            this.previousMoves.Add(current);
-            if (!ignoreSuggestion && movegen.legalMoves(position).Count != 0)
-            {
-                String s = GetAIMove(TurnGenerator);
-                currentSuggestedMove = new Move(board.getSquareForName(s.Substring(0, 2)).getSquareNumber(), board.getSquareForName(s.Substring(2, 2)).getSquareNumber(), PieceType.Empty);
-            }
-            board.printNextTurn();
-            this.oneClick = false;
-            DoColourations();
-            ColourPreviousMove(current);
-            AsyncAIMoveCheck();
-            OnRaiseControllerEvent(new ControllerEvent());
-
-            Console.WriteLine(MoveParser.moveObjectToString(current));
-        }
-
+		/**
+		 * If this method is called, it will get a turn for a computer player and execute it.
+		 */
         private void checkAITurn()
         {
             Console.WriteLine("Getting AI Move");
@@ -603,16 +694,23 @@ namespace Chess
             }
         }
 
+		/**
+		 * Checks if a Move is legal
+		 */
         private bool MoveCheck(Move m)
         {
             return (movegen.legalMoves(this.position).Contains(m));
         }
 
+		// Calls the GetAIMove method with the default AI input
         private String GetAIMove()
         {
             return GetAIMove(AI);
         }
 
+		/**
+		 * Gets the best move playable by an AI player.
+		 */
         private String GetAIMove(ComputerPlayer AIPlayer)
         {
             AIPlayer.UpdatePosition(previousMoves);
@@ -656,8 +754,8 @@ namespace Chess
 
 
         
-        /* Event handling best practice from http://msdn.microsoft.com/en-us/library/w369ty8x.aspx
-         * 
+        /* 
+		 * Event handling best practice from http://msdn.microsoft.com/en-us/library/w369ty8x.aspx
          */
         protected virtual void OnRaiseBoardEvent(BoardEvent e)
         {
@@ -676,8 +774,8 @@ namespace Chess
 
 
 
-        /* Event handling best practice from http://msdn.microsoft.com/en-us/library/w369ty8x.aspx
-         * 
+        /* 
+		 * Event handling best practice from http://msdn.microsoft.com/en-us/library/w369ty8x.aspx
          */
         protected virtual void OnRaiseControllerEvent(ControllerEvent e)
         {
@@ -694,10 +792,16 @@ namespace Chess
             }
         }
 
+		/**
+		 * DEPRECATED. Obviously no longer in use, but not deleted so we can easily implement it again.
+		 */
         void HandleControllerEvent(object sender, ControllerEvent e)
         {
         }
 
+		/**============================================================================================
+		 * Background Worker for Player vs Computer Games.
+		 */
         private BackgroundWorker WorkerSetup()
         {
             BackgroundWorker worker = new BackgroundWorker();
@@ -745,7 +849,13 @@ namespace Chess
             }
             ((BackgroundWorker)sender).ReportProgress(100);
         }
-
+		/**============================================================================================
+		 * End of PvC
+		 */
+		
+		/*
+		 * Getters/Setters for Class Variables
+		 */
         public bool ShowHighlightedMoves
         {
             get { return this.showHighlightMoves; }
@@ -782,6 +892,9 @@ namespace Chess
             set { this.endCvCGame = value; }
         }
 
+		/**
+		 * Debug method to print the position
+		 */ 
         internal void printPosition()
         {
             Console.WriteLine(FENConverter.convertPositionToFEN(position));
@@ -791,6 +904,10 @@ namespace Chess
         }
     }
     
+	
+	/***
+	 ** Controller Event Class
+	 **/
     public class ControllerEvent : EventArgs
     {
         internal PieceType p;

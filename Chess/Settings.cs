@@ -10,6 +10,9 @@ namespace Chess.Properties {
     //  The SettingsSaving event is raised before the setting values are saved.
     internal sealed partial class Settings {
 
+		/**
+		 * SETTINGS. 
+		 */
         int difficultySetting = 1;
         bool woodTextures = false;
         Brush attackedPieces;
@@ -19,7 +22,6 @@ namespace Chess.Properties {
         Brush takablePieces;
         Brush suggestedMove;
         bool useObjectRecognition = false;
-
         SFEngine chessEngine;
         
         public Settings() {
@@ -39,6 +41,9 @@ namespace Chess.Properties {
             // Add code to handle the SettingsSaving event here.
         }
 
+		/**
+		 ** GETTERS AND SETTERS FOR THE SETTINGS
+		 **/
         internal int DifficultySetting{
             get{ return difficultySetting;}
             set{ difficultySetting = value;}

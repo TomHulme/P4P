@@ -22,19 +22,24 @@ namespace Chess
 {
     /// <summary>
     /// Interaction logic for Square.xaml
+	/// Defines internal workings of Square class
     /// </summary>
     public partial class Square : Canvas
     {
-
+		/**
+		 * Class Variables
+		 */
         string name;
         int number;
         int squareSize = 75;
         int pieceChildrenNumber = -1;
         internal TagVisualizer tagVis;
         Image image;
-
         PieceType piece;
 
+		/**
+		 * Constructors
+		 */
         public Square()
         {
             InitializeComponent();
@@ -48,17 +53,22 @@ namespace Chess
         public Square(string nam, int num)
         {
             InitializeComponent();
+			// Init Obj Rec
             InitializeDefinitions();
+			// Set Square Size
             MyTagVisualizer.Height = squareSize;
             MyTagVisualizer.Width = squareSize;
+			// Bring TagVisualizer to the top
             MyTagVisualizer.SetCurrentValue(Panel.ZIndexProperty, 5);
+			// Set internal information
             this.name = nam;
             this.number = num;
             this.piece = PieceType.Empty;
             this.Width = squareSize;
             this.Height = squareSize;
+			// Set the Square in the middle
             this.SetCurrentValue(Panel.ZIndexProperty, 3);
-
+			// Add the Rectangle Layer
             rectangle.Width = squareSize;
             rectangle.Height = squareSize;
             rectangle.Stroke = Brushes.Black;
@@ -67,21 +77,32 @@ namespace Chess
             colourRectangle(Brushes.Transparent);
         }
 
+		/**
+		 * Colour the Rectangle the inputted colour
+		 */
         public void colourRectangle(Brush colour)
         {
             rectangle.Fill = colour;
         }
 
+		/**
+		 * Colour the Border the inputted colour
+		 */
         public void colourBorder(Brush colour)
         {
             rectangle.Stroke = colour;
         }
 
+		/****
+		 * Tag Visualization add/remove events.
+		 * Happen when tags enter/leave this square.
+		 */
+		 // Removed
         void tagVis_VisualizationRemoved(object sender, TagVisualizerEventArgs e)
         {
             Console.WriteLine("Tag left square " + name);
         }
-
+		// Added
         void tagVis_VisualizationAdded(object sender, TagVisualizerEventArgs e)
         {
             // Adding the PieceVisulaization both helps identify squares with the objects AND makes it easier for the screen to see.
@@ -91,16 +112,25 @@ namespace Chess
             Console.WriteLine("Tag in square " + name);
         }
 
+		/**
+		 * Set the piece inside the Square
+		 */
         public void setPiece(PieceType p)
         {
             this.piece = p;
         }
 
+		/**
+		 * Get the piece inside the Square
+		 */
         public PieceType getPiece()
         {
             return this.piece;
         }
 
+		/**
+		 * Getters for the Squares Name and Number
+		 */
         public string getName()
         {
             return this.name;
@@ -113,23 +143,35 @@ namespace Chess
 
         public String Name { get { return this.name; } }
 
+		/**
+		 * VITAL!!! Overridder OnPreviewTouchDown method
+		 * Ignores all non-finger/tag input (i.e. blobs etc.)
+		 * This helps tremendously with performance.
+		 */
         protected override void OnPreviewTouchDown(TouchEventArgs e)
         {
             bool isFinger = e.TouchDevice.GetIsFingerRecognized();
             bool isTag = e.TouchDevice.GetIsTagRecognized();
             if (isFinger == false && isTag == false)//
             {
+				// Tell the throwing class that the event was handled.
                 e.Handled = true;
                 return;
             }
             base.OnPreviewTouchDown(e);
         }
 
+		/**
+		 * Add a tag to the TagVisualizer's definitions
+		 */
         internal void AddTagVisualisation(TagVisualizationDefinition tag)
         {
             tagVis.Definitions.Add(tag);
         }
 
+		/**
+		 * Clear the piece image from a Square
+		 */
         internal void clearPieceImage()
         {
             if (pieceChildrenNumber != -1 && image != null)
@@ -139,6 +181,9 @@ namespace Chess
             }
         }
 
+		/**
+		 * Get the piece image from a Square
+		 */
         internal Image getPieceImage()
         {
             if (pieceChildrenNumber == -1) { return new Image(); }
@@ -148,6 +193,9 @@ namespace Chess
             return (Image)x.Current;
         }
 
+		/**
+		 * Set the piece image in a Square
+		 */
         internal void setPieceImage(Image img)
         {
             if (pieceChildrenNumber != -1)
@@ -159,6 +207,9 @@ namespace Chess
             pieceChildrenNumber = this.Children.IndexOf(img);
         }
 
+		/**
+		 * Get the size of a Square
+		 */
         internal int getSquareSize()
         {
             return squareSize;
@@ -182,28 +233,16 @@ namespace Chess
             return square.getName();
         }
 
-
-        /*internal void ClearPiece(){
-            foreach (object x in this.Children)
-            {
-                if (x.GetType() == typeof(TagVisualizer))
-                {
-                    continue;
-                }
-                else
-                {
-                    this.Children.RemoveAt(this.Children.IndexOf((UIElement)x));
-                }
-            }
-        }*/
-
-
-
+		// DEPRECATED
         private void Square_Loaded(object sender, RoutedEventArgs e)
         {
             //TODO: customize Square's UI based on this.VisualizedTag here
         }
 
+		/**
+		 * Setup the Tag definitions by readinf them from the Tags.xml file in the settings folder.
+		 * Allows customisation of Tags used by the owner.
+		 */
         private void InitializeDefinitions()
         {
             XmlDocument xmldoc = new XmlDocument();

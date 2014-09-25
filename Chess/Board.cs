@@ -27,23 +27,21 @@ namespace Chess
         private bool blackReverse = false;
         
 
-        /*
-         * Constructor
+        /**
+         * Constructors for the Board Class
          */
         public Board(bool b, Position pos, GameController gc)
         {
-            this.flipped = b;
+            this.flipped = b; // Not implemented. Would be used to change the orientation of the game board.
             this.position = pos;
             this.gamecon = gc;
-            //BoardThread = new Thread(
         }
-
         public Board(bool b, Position pos, GameController gc, bool blkRev) : this(b, pos, gc)
         {
             blackReverse = blkRev;
         }
 
-        /*
+        /**
          * Public Interface
          */
         public PieceType getPieceForSquareNumber(int square)
@@ -52,8 +50,8 @@ namespace Chess
         }
 
 
-        /*
-         * internal Methods
+        /**
+         * Sets the board, drawing Squares and placing pieces.
          */
         internal void setup()
         {
@@ -61,7 +59,11 @@ namespace Chess
             this.placePieces();
             this.printNextTurn();
         }
-
+		
+		/**
+		 * Draws the Board. 600x600 Pixels.
+		 * Adds EventHandlers to the Squares
+		 */
         internal void drawBoard()
         {
             this.Width = 600;
@@ -93,24 +95,8 @@ namespace Chess
                     Canvas.SetLeft(squares[i + j * 8], i * 75);
                 }
             }
-
-            /*/create tag visualizations
-            for (byte k = 0; k <= 10; k++)
-            {
-                TagVisualizationDefinition tag = new TagVisualizationDefinition();
-                tag.LostTagTimeout = 2000.0;
-                tag.TagRemovedBehavior = TagRemovedBehavior.Fade;
-                tag.Value = k;
-                tag.MaxCount = 32;
-                tag.Source = new Uri("PieceVisualization.xaml", UriKind.Relative);
-                //iterate through squares and add visualizations to visualizers
-                foreach (Square s in squares)
-                {
-                    s.AddTagVisualisation(tag);
-                    
-                }
-            }*/
-
+			
+			// Add TagVisalizers to the Squares, routing to the RecognizedSquare method
             foreach (Square s in squares)
             {
                 
@@ -121,10 +107,15 @@ namespace Chess
             this.ColourBoard();
         }
 
+		/**
+		 * Colours the Board to its set texture
+		 * Wood Textures decided at random from list of wood square textures
+		 */
         internal void ColourBoard()
         {
             if (!Chess.Properties.Settings.Default.WoodTextures)
             {
+				// Grey/White Squares
                 for (int i = 0; i < 8; i++)
                 {
                     for (int j = 0; j < 8; j++)
@@ -145,6 +136,7 @@ namespace Chess
             }
             else
             {
+				// Wood Textures
                 Random r = new Random();
                 for (int i = 0; i < 8; i++)
                 {
@@ -165,8 +157,13 @@ namespace Chess
                 }
             }
         }
-
+		
+		/**
+		 * Gets a texture brush for a texture image for the selected square colour.
+		 * Currently the directory only contains Wooden Textures
+		 */
         private ImageBrush getTextureImageBrush(bool isWhite, int imageNum){
+			// From http://msdn.microsoft.com/en-us/library/vstudio/aa970269(v=vs.100).aspx
             // Create Image Element
             Image myImage = new Image();
             myImage.Width = 75;
@@ -185,6 +182,10 @@ namespace Chess
             return new ImageBrush(myImage.Source);
         }
 
+		/**
+		 * Removes colours from the Rectangle layer of Squares.
+		 * Does not affect the Canvas Background which is used for the background texture.
+		 */
         internal void UnColourBoard(Brush colour)
         {
             foreach (Square s in squares)
@@ -196,6 +197,9 @@ namespace Chess
             }
         }
 
+		/**
+		 * Removes colours from the Borders of all squares.
+		 */
         internal void UnColourBorders()
         {
             foreach (Square s in squares)
@@ -205,6 +209,10 @@ namespace Chess
             }
         }
 
+		/**
+		 * Sets the internal position of the Board
+		 * Resets piece images to match this change
+		 */
         internal void SetPosition(Position position)
         {
             this.position = position;
@@ -212,17 +220,26 @@ namespace Chess
             this.printNextTurn();
         }
 
+		/**
+		 * Colour a square a certain colour based off its number.
+		 */
         public void ColourSquare(int square, Brush colour)
         {
             getSquareForNumber(square).colourRectangle(colour);
         }
 
+		/**
+		 * Colour a square's border a certain colour based off its number.
+		 */
         public void ColourSquareBorder(int square, Brush colour)
         {
             getSquareForNumber(square).rectangle.StrokeThickness = 3;
             getSquareForNumber(square).colourBorder(colour);
         }
 
+		/**
+		 * Gets the algebraic name for a square based on its row/coloumn on the Board.
+		 */
         internal string getSquareName(int row, int col)
         {
             int rank, file;
@@ -244,6 +261,9 @@ namespace Chess
             return name;
         }
 
+		/**
+		 * Gets the algebraic name for a square based on its square number.
+		 */
         internal string getSquareName(int squareNum)
         {
             int row, col;
@@ -261,6 +281,9 @@ namespace Chess
             return getSquareName(row, col);
         }
 
+		/**
+		 * Gets the number for a square based on its position in the squares array
+		 */
         internal int getSquareNumber(int i, int j)
         {
             if (this.flipped)
@@ -273,6 +296,9 @@ namespace Chess
             }
         }
 
+		/**
+		 * Sets the pieces on the board. Removes pieces if they should not be there.
+		 */
         internal void placePieces()
         {
             for (int i = 7; i >= 0; i--)
@@ -293,6 +319,9 @@ namespace Chess
             }
         }
 
+		/**
+		 * Gets the instance of a Square based off its Square Number
+		 */
         internal Square getSquareForNumber(int square)
         {
             foreach (Square s in squares)
@@ -302,6 +331,9 @@ namespace Chess
             throw new Exception("ERROR! Could not find square.");
         }
 
+		/**
+		 * Gets the instance of a Square based off its algebraic name
+		 */
         internal Square getSquareForName(string name)
         {
             foreach (Square s in squares)
@@ -311,10 +343,14 @@ namespace Chess
             throw new Exception("ERROR! Could not find square.");
         }
 
+		/**
+		 * Draws the image for a Piece on top of a Square
+		 */
         internal void drawPiece(PieceType piece, Square sq)
         {
             string[] pieces = { "black_king", "black_queen", "black_rook", "black_bishop", "black_knight", "black_pawn", "white_king", "white_queen", "white_rook", "white_bishop", "white_knight", "white_pawn" };
             string pieceString = "";
+			// Get the Piece String (filename) for the piece given
             switch (piece)
             {
                 case PieceType.k:
@@ -356,10 +392,11 @@ namespace Chess
             }
             if (pieceString.Length == 0) 
             {
+				// None of the above, set as empty and return.
                 sq.setPiece(PieceType.Empty);
                 return;
             }
-            // From site
+            // From site http://msdn.microsoft.com/en-us/library/vstudio/aa970269(v=vs.100).aspx
             // Create Image Element
             Image myImage = new Image();
             myImage.Width = 75;
@@ -377,15 +414,15 @@ namespace Chess
             myBitmapImage.EndInit();
             myImage.Source = myBitmapImage;
             myImage.IsHitTestVisible = false;
-            //myImage.
             sq.setPieceImage(myImage);
             sq.setPiece(piece);
             myImage.SetValue(TextBlock.TextProperty, pieceString);
             
         }
 
-        /*
+        /**
          * Square Tapped Event
+		 * Routes tapped square events to GameController
          */
         internal void TappedSquare(object sender, RoutedEventArgs e)
         {
@@ -400,9 +437,9 @@ namespace Chess
             }
         }
 
-        /*
-         * Square Tapped Event
-         * CHANGE THIS TO FIX
+        /**
+         * Square with Object Recognized Event
+		 * Routes square to GameController
          */
         internal void RecognizedSquare(object sender, RoutedEventArgs e)
         {
@@ -420,34 +457,30 @@ namespace Chess
             Console.WriteLine(this.position.whiteMove ? "White to move." : "Black to move.");
         }
 
-
-        /*
-         * 
-         *
-        protected void Surscribe(GameController gameController)
-        {
-            gameController.RaiseControllerEvent += HandleControllerEvent;
-        }
-
-        void HandleControllerEvent(object sender, ControllerEvent e)
-        {
-            Console.WriteLine("Controller " + e.Name + " is talking!");
-        }*/
     }
 }
 
+/*** DEPRECATED
+ ** BoardEvent Class 
+ ** WAS Used to give information on Board Events
+ **/
 public class BoardEvent : EventArgs
 {
+	// Board Event Constructor
     public BoardEvent(Move m, String ms, Boolean cm)
     {
         move = m;
         moveString = ms;
         checkMate = cm;
     }
+	// Class Variables
     private Move move;
     private String moveString;
     private Boolean checkMate;
 
+	/*
+	 Getters and Setters
+	*/
     public Boolean CheckMate
     {
         get { return checkMate; }

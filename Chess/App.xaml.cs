@@ -12,13 +12,18 @@ namespace Chess
 {
     /// <summary>
     /// Interaction logic for App.xaml
+	/// Contains methods which need to be accessed across the entire application.
     /// </summary>
     public partial class App : Application
     {
-
+		// Screen Dimensions. Will not change unless hardware changes.
         public static readonly int Height = 720;
         public static readonly int Width = 1280;
 
+		/**
+		 * ReadOptionsFile will read the Options.xml file in the Settings folder.
+		 * Sets up colour options
+		 */
         public static void ReadOptionsFile()
         {
             XmlDocument xmldoc = new XmlDocument();
@@ -56,6 +61,9 @@ namespace Chess
             }
         }
 
+		/**
+		 * Gets the Absolute Path of the Chess Application
+		 */
         public static string getPath(){
             string PATH = System.Reflection.Assembly.GetAssembly(typeof(App)).Location;
             int index = PATH.LastIndexOf("bin\\Debug\\Chess.exe");
@@ -63,6 +71,9 @@ namespace Chess
             return p;
         }
 
+		/**
+		 * Ensures all options have been set. If any option is left unset, set it to default values.
+		 */
         internal static void EnsureOptionsSet()
         {
             if (Chess.Properties.Settings.Default.AttackedPieces == null)
@@ -87,6 +98,9 @@ namespace Chess
             }
         }
 
+		/**
+		 * Creates a Chess Engine process
+		 */
         internal static void CreateChessEngine()
         {
             Chess.Properties.Settings.Default.ChessEngine = new global::EngineLogic.SFEngine();
