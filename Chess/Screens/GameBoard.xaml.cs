@@ -40,7 +40,10 @@ namespace Chess.Screens
             SetTopDialogs();
             ColourBackgrounds();
         }
-
+    
+        /// <summary>
+        /// Colours the background panels of the game interface
+        /// </summary>
         private void ColourBackgrounds()
         {
             if (Chess.Properties.Settings.Default.WoodTextures)
@@ -74,7 +77,10 @@ namespace Chess.Screens
             myImage.IsHitTestVisible = false;
             return new ImageBrush(myImage.Source);
         }
-
+        
+        /// <summary>
+        /// Creates new dialogs for a new game of chess
+        /// </summary>
         private void ResetDialogs()
         {
             this.gameInfoDialogBottom = new GameInfoDialog(gameController);
@@ -122,7 +128,10 @@ namespace Chess.Screens
             this.New_Game_Buttons.Visibility = Visibility.Visible;
             expandButton.Begin();
         }
-
+        
+        /// <summary>
+        /// Starts a new game, player versus player
+        /// </summary>
         private void PVP_Click(object sender, RoutedEventArgs e)
         {
             this.gameController.EndCvCGame = true;
@@ -133,7 +142,10 @@ namespace Chess.Screens
             this.New_Game_Buttons.Height = 0;
             this.New_Game_Buttons.Visibility = Visibility.Collapsed;
         }
-
+        
+        /// <summary>
+        /// Starts a new game, player versus computer
+        /// </summary>
         private void PVC_Click(object sender, RoutedEventArgs e)
         {
             this.gameController.EndCvCGame = true;
@@ -144,7 +156,10 @@ namespace Chess.Screens
             this.New_Game_Buttons.Height = 0;
             this.New_Game_Buttons.Visibility = Visibility.Collapsed;
         }
-
+        
+        /// <summary>
+        /// Starts a new game, computer versus computer
+        /// </summary>
         private void CVC_Click(object sender, RoutedEventArgs e)
         {
             this.gameController.EndCvCGame = true;
