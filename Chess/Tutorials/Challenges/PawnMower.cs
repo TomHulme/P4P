@@ -79,11 +79,6 @@ namespace Tutorials.Challenges
                 }
             }
 
-            //Place last pawn at destination square
-            currentPosition.setPiece(destinationSquare, PieceType.p);
-
-            //7. Place piece on the first move's origin square
-            currentPosition.setPiece(startSquare, userPiece);
         }
 
         /**
